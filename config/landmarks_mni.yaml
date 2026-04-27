@@ -1,0 +1,97 @@
+# landmarks_mni.yaml — Canonical MNI152 anatomical landmark coordinates.
+#
+# All coordinates are in MNI152 standard space (mm), using RAS convention
+# (x+ = Right, y+ = Anterior, z+ = Superior).
+#
+# Sources:
+#   Brainstem/thalamus:  Talairach & Tournoux (1988)
+#   Ventricles:          Mazziotta et al. (2001) MNI Atlas
+#   Cortical landmarks:  Eickhoff et al. (2005) SPM Anatomy Toolbox
+#
+# These are used by AnatomicalLandmarkDetector to project canonical
+# coordinates into patient space via ANTsPy inverse registration.
+# Each entry has:
+#   mni_ras   : [x, y, z] in MNI152 RAS mm
+#   label     : display name shown in the 3D viewer
+#   color     : rendering colour (CSS name or hex)
+#   radius_mm : sphere radius for 3D display
+
+landmarks:
+
+  brainstem:
+    mni_ras: [0.0, -32.0, -38.0]
+    label: "Brainstem"
+    color: "orange"
+    radius_mm: 8.0
+    description: "Midbrain / pons / medulla continuum"
+
+  left_ventricle:
+    mni_ras: [-14.0, 2.0, 14.0]
+    label: "Left Lateral Ventricle"
+    color: "dodgerblue"
+    radius_mm: 5.0
+    description: "Body of left lateral ventricle"
+
+  right_ventricle:
+    mni_ras: [14.0, 2.0, 14.0]
+    label: "Right Lateral Ventricle"
+    color: "dodgerblue"
+    radius_mm: 5.0
+    description: "Body of right lateral ventricle"
+
+  corpus_callosum:
+    mni_ras: [0.0, 2.0, 24.0]
+    label: "Corpus Callosum"
+    color: "mediumpurple"
+    radius_mm: 6.0
+    description: "Body of corpus callosum (genu-splenium midpoint)"
+
+  third_ventricle:
+    mni_ras: [0.0, -6.0, 4.0]
+    label: "3rd Ventricle"
+    color: "steelblue"
+    radius_mm: 3.0
+    description: "Third ventricle midline"
+
+  left_thalamus:
+    mni_ras: [-12.0, -16.0, 8.0]
+    label: "Left Thalamus"
+    color: "goldenrod"
+    radius_mm: 6.0
+    description: "Centre of left thalamus"
+
+  right_thalamus:
+    mni_ras: [12.0, -16.0, 8.0]
+    label: "Right Thalamus"
+    color: "goldenrod"
+    radius_mm: 6.0
+    description: "Centre of right thalamus"
+
+  left_putamen:
+    mni_ras: [-26.0, 2.0, 4.0]
+    label: "Left Putamen"
+    color: "salmon"
+    radius_mm: 5.0
+    description: "Centre of left putamen"
+
+  right_putamen:
+    mni_ras: [26.0, 2.0, 4.0]
+    label: "Right Putamen"
+    color: "salmon"
+    radius_mm: 5.0
+    description: "Centre of right putamen"
+
+# Subset shown by default in the Surgical 3D Viewer (others available
+# but off by default to reduce scene clutter)
+default_visible:
+  - brainstem
+  - left_ventricle
+  - right_ventricle
+  - corpus_callosum
+  - left_thalamus
+  - right_thalamus
+
+# Distance threshold for proximity warnings (mm)
+# If a surgical trajectory passes within this distance of a landmark,
+# a warning is raised in the Trajectory Planner.
+proximity_warning_mm: 8.0

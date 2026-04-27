@@ -1,0 +1,68 @@
+# Anatom AI — Phase 5 Docker image
+# Multi-stage build: deps layer cached separately from source.
+#
+# Build:
+#   docker build -t anatomai:latest .
+#
+# Run API server:
+#   docker run -p 8000:8000 anatomai:latest
+#
+# Run dashboard:
+#   docker run -p 8501:8501 anatomai:latest streamlit run src/ui/app.py --server.port 8501
+
+FROM python:3.12-slim AS base
+
+# System dependencies for OpenCV, SimpleITK, matplotlib + VTK/PyVista headless rendering
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libgl1 \
+        libglib2.0-0 \
+        libgomp1 \
+        # VTK/PyVista headless rendering (off-screen via Xvfb)
+        xvfb \
+        libx11-6 \
+        libxrender1 \
+        libxext6 \
+        libgl1-mesa-glx \
+        libgl1-mesa-dri \
+        # ANTsPy build dependency
+        libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# ---------------------------------------------------------------------------
+# Dependency layer (cached unless requirements.txt changes)
+# ---------------------------------------------------------------------------
+FROM base AS deps
+
+COPY requirements.txt .
+
+# Upgrade pip quietly and install all project dependencies
+RUN pip install --upgrade pip --quiet && \
+    pip install --no-cache-dir -r requirements.txt && \
+    pip install --no-cache-dir \
+        uvicorn[standard]>=0.29.0 \
+        fastapi>=0.110.0 \
+        httpx>=0.27.0 \
+        reportlab>=4.2.0 \
+        pydicom>=3.0.0
+
+# ---------------------------------------------------------------------------
+# Runtime image
+# ---------------------------------------------------------------------------
+FROM deps AS runtime
+
+# Copy only source (no data, no checkpoints)
+COPY src/      ./src/
+COPY scripts/  ./scripts/
+COPY config/   ./config/
+
+# Non-root user for security
+RUN useradd --create-home --shell /bin/bash anatomai
+USER anatomai
+
+# Expose API and dashboard ports
+EXPOSE 8000 8501
+
+# Default: start FastAPI inference server
+CMD ["uvicorn", "src.serving.api:app", "--host", "0.0.0.0", "--port", "8000"]

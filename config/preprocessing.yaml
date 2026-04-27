@@ -1,0 +1,66 @@
+# Anatom AI — Preprocessing Configuration
+# All pipeline hyperparameters are centralised here.
+# Modify values here; do NOT hardcode them in source files.
+
+# --- Spatial ---
+target_spacing: [1.0, 1.0, 1.0]   # mm³ — isotropic resampling target
+target_size: [240, 240, 155]        # Voxels — BraTS canonical volume size
+
+# --- Intensity normalization ---
+clip_percentiles: [1.0, 99.0]       # Clip outlier intensities before z-score
+normalization_method: "zscore"       # Options: "zscore" | "minmax" | "whitestripe"
+
+# --- Bias field correction (N4ITK) ---
+bias_correction:
+  enabled: true
+  n_iterations: [50, 50, 50, 50]    # Iterations per resolution level
+  convergence_threshold: 0.001
+
+# --- Skull stripping ---
+skull_strip:
+  method: "otsu"                     # Options: "otsu" | "triangle"
+  closing_radius: 5                  # Morphological closing radius (voxels)
+  min_brain_coverage: 0.05           # QC: brain mask must cover ≥5% of volume
+
+# --- Multi-modal registration ---
+registration:
+  enabled: true
+  reference_modality: "t1ce"         # All other modalities registered to this
+  interpolator: "linear"             # Options: "linear" | "bspline" | "nearest"
+  register_to_mni: true              # MNI152 atlas registration — enables landmark
+                                     # detection in the Surgical 3D Viewer.
+                                     # Uses ANTsPy Rigid transform (~30s per subject).
+                                     # Set to false to skip for faster preprocessing.
+
+# --- Data augmentation ---
+augmentation:
+  enabled: true
+  flips:
+    axial: true
+    sagittal: true
+    coronal: true
+  rotation_range_deg: 15             # ± degrees per axis
+  scale_range: [0.9, 1.1]
+  elastic:
+    enabled: true
+    sigma: 5                         # Smoothness of deformation field
+    alpha: 40                        # Magnitude of deformation
+  gamma_range: [0.7, 1.5]           # Intensity gamma augmentation
+
+# --- Patch extraction (for U-Net training) ---
+patch:
+  size: [128, 128, 128]
+  overlap: 0.5                       # Fraction overlap between patches
+  min_tumor_voxels: 10               # Skip patches with fewer tumor voxels
+
+# --- Pipeline steps (toggle individual stages) ---
+pipeline:
+  run_qc_pre: true
+  run_bias_correction: true
+  run_skull_strip: true
+  run_registration: true
+  run_normalization: true
+  run_resampling: true
+  run_qc_post: true
+  save_intermediates: false          # Save outputs of each stage (debug mode)
+  log_level: "INFO"                  # Options: "DEBUG" | "INFO" | "WARNING"

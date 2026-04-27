@@ -1,0 +1,174 @@
+{#
+  narrative_report.j2 — NeuroMapper AI Clinical Impression Template
+  Rendered by src/reporting/narrative_report.py via Jinja2.
+
+  Variables injected:
+    subject_id       : str
+    scan_date        : str
+    institution      : str
+    wt_mm3           : float — Whole Tumour volume
+    tc_mm3           : float — Tumour Core volume
+    et_mm3           : float — Enhancing Tumour volume
+    ncr_mm3          : float — Necrotic Core volume
+    ed_mm3           : float — Peritumoral Edema volume
+    rano_category    : str or None
+    rano_pct_change  : float or None
+    days_elapsed     : float or None
+    risk_score       : int or None (0–100)
+    risk_interp      : str or None ("Low" | "Moderate" | "High" | "Very High")
+    top_factors      : list[str] or None
+    sphericity       : float or None (ET sphericity)
+    has_longitudinal : bool
+    has_risk         : bool
+    has_radiomics    : bool
+    trajectory_best  : dict or None {length_mm, safety_score, warnings}
+#}
+NEUROMAPPER — AI CLINICAL IMPRESSION
+Subject: {{ subject_id }}   Date: {{ scan_date }}   Institution: {{ institution }}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+§ 1  FINDINGS SUMMARY
+
+MRI-based volumetric segmentation of subject {{ subject_id }} identifies a
+{% if wt_mm3 > 30000 %}large{% elif wt_mm3 > 10000 %}moderate{% elif wt_mm3 > 1000 %}small{% else %}very small{% endif %}
+intra-axial lesion with a total Whole Tumour (WT) volume of
+{{ "%.1f"|format(wt_mm3) }} mm³ ({{ "%.2f"|format(wt_mm3 / 1000) }} cm³).
+The Tumour Core (TC = NCR + ET) measures {{ "%.1f"|format(tc_mm3) }} mm³,
+representing {{ "%.1f"|format((tc_mm3 / (wt_mm3 + 0.001)) * 100) }}% of the whole
+tumour volume.  The gadolinium-enhancing component (ET) accounts for
+{{ "%.1f"|format(et_mm3) }} mm³{% if et_mm3 > 5000 %}, which is clinically significant
+and consistent with active blood–brain barrier disruption{% else %}, which is within
+a range consistent with a lower-burden enhancing core{% endif %}.
+Peritumoral edema (ED) measures {{ "%.1f"|format(ed_mm3) }} mm³.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+§ 2  SUB-REGION ANALYSIS
+
+  · Necrotic Core (NCR):         {{ "%.1f"|format(ncr_mm3) }} mm³
+  · Peritumoral Edema (ED):      {{ "%.1f"|format(ed_mm3) }} mm³
+  · Gadolinium-Enhancing (ET):   {{ "%.1f"|format(et_mm3) }} mm³
+  · Whole Tumour (WT):           {{ "%.1f"|format(wt_mm3) }} mm³
+  · Tumour Core (TC):            {{ "%.1f"|format(tc_mm3) }} mm³
+
+{% if ed_mm3 / (wt_mm3 + 0.001) > 0.5 %}
+The extensive edema component ({{ "%.0f"|format(ed_mm3 / (wt_mm3 + 0.001) * 100) }}% of WT) suggests
+active perilesional invasion and may indicate an infiltrative growth pattern.
+Close attention to the T2/FLAIR boundary is recommended.
+{% elif ed_mm3 / (wt_mm3 + 0.001) > 0.25 %}
+Edema accounts for {{ "%.0f"|format(ed_mm3 / (wt_mm3 + 0.001) * 100) }}% of the whole
+tumour volume, consistent with moderate perilesional reactive change.
+{% else %}
+Edema is proportionally limited ({{ "%.0f"|format(ed_mm3 / (wt_mm3 + 0.001) * 100) }}% of WT),
+suggesting a relatively contained lesion without extensive perilesional involvement.
+{% endif %}
+{% if ncr_mm3 / (tc_mm3 + 0.001) > 0.6 %}
+The necrotic core constitutes {{ "%.0f"|format(ncr_mm3 / (tc_mm3 + 0.001) * 100) }}% of the
+tumour core, which is a feature associated with high-grade glioma and may indicate
+central hypoxia and rapid proliferation.
+{% endif %}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{% if has_longitudinal %}
+§ 3  LONGITUDINAL RESPONSE (RANO)
+
+{% if rano_category %}
+RANO Response Classification: {{ rano_category }}
+{% if rano_pct_change is not none %}
+  Whole Tumour volume change: {{ "%+.1f"|format(rano_pct_change) }}%
+  over {{ "%.0f"|format(days_elapsed) }} days ({{ "%.1f"|format(days_elapsed / 30.44) }} months).
+{% endif %}
+{% if rano_category == "CR" %}
+Complete Response has been achieved. Continued surveillance imaging is
+recommended at standard intervals to detect early recurrence.
+{% elif rano_category == "PR" %}
+Partial Response indicates a meaningful reduction in tumour burden, consistent
+with treatment efficacy. Continuation of current therapeutic strategy is supported.
+{% elif rano_category == "SD" %}
+Stable Disease is noted. The lesion has not demonstrated significant growth or
+shrinkage by RANO criteria. Clinical correlation with symptoms is advised.
+{% elif rano_category == "PD" %}
+Progressive Disease has been detected. Tumour volume has increased beyond RANO
+thresholds.  Multidisciplinary review and consideration of alternative therapeutic
+strategies are strongly recommended.
+{% endif %}
+{% endif %}
+
+{% else %}
+§ 3  LONGITUDINAL RESPONSE
+
+No prior timepoint data was provided. Longitudinal RANO comparison requires
+a baseline segmentation with an annotated scan interval.
+
+{% endif %}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{% if has_radiomics %}
+§ 4  RADIOMIC ANALYSIS
+{% if sphericity is not none %}
+Tumour Shape:  ET sphericity = {{ "%.3f"|format(sphericity) }}
+{% if sphericity > 0.80 %}
+  A high sphericity value indicates a well-circumscribed, regular boundary,
+  which may correlate with a more favourable surgical resectability profile.
+{% elif sphericity > 0.55 %}
+  A moderate sphericity value suggests some degree of boundary irregularity.
+  Margin delineation should account for possible micro-infiltration.
+{% else %}
+  A low sphericity value reflects a highly irregular tumour boundary consistent
+  with infiltrative growth beyond the visible MRI enhancement margin.
+  Surgical planning should consider a generous safety margin.
+{% endif %}
+{% endif %}
+
+{% endif %}
+{% if has_risk %}
+§ {{ "5" if has_radiomics else "4" }}  RECURRENCE RISK ASSESSMENT (RESEARCH PROTOTYPE)
+
+Estimated Recurrence Risk Score: {{ risk_score }}/100 — {{ risk_interp }}
+
+{% if top_factors %}
+Primary contributing factors:
+{% for factor in top_factors %}
+  · {{ factor }}
+{% endfor %}
+{% endif %}
+
+⚠  DISCLAIMER: This risk score is generated by a heuristic research model and
+has not been prospectively validated in a clinical cohort.  It must not be used
+to guide treatment decisions without independent oncological review.
+
+{% endif %}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+§ {{ loop_section }}  IMPRESSION & RECOMMENDATION
+
+{% if risk_interp == "Very High" or rano_category == "PD" %}
+The imaging features described above are concerning for an aggressive or
+progressive lesion.  Urgent multidisciplinary neuro-oncology review is
+recommended.  Neurosurgical consultation for re-resection or biopsy should
+be considered where clinically appropriate.
+{% elif risk_interp == "High" %}
+The volumetric and radiomic profile of this lesion suggests an elevated risk
+of early recurrence.  Close interval follow-up imaging (6–8 weeks) is
+recommended.  Discussion of adjuvant therapeutic escalation at the next
+multidisciplinary meeting is advised.
+{% elif risk_interp == "Moderate" or rano_category == "SD" %}
+The current imaging findings are consistent with moderate disease activity.
+Standard follow-up at 8–12 week intervals is suggested.  Clinical correlation
+with neurological examination findings is recommended.
+{% else %}
+The imaging findings are consistent with a favourable treatment response.
+Routine surveillance at standard 12-week intervals is appropriate.  Continue
+current therapeutic protocol with close monitoring.
+{% endif %}
+
+All findings in this report are generated by NeuroMapper AI-assisted analysis
+and require validation by a qualified radiologist or neuro-oncologist prior to
+any clinical action.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Generated by NeuroMapper Surgical Planning Platform v4.0
+{{ institution }} · {{ scan_date }}
+INVESTIGATIONAL USE ONLY — NOT FOR CLINICAL DECISION-MAKING

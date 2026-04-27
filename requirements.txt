@@ -1,0 +1,91 @@
+# Anatom AI — Phase 1–7 Dependencies (Surgical Planning Platform + AI Copilot)
+
+# Core scientific stack
+numpy>=1.26.0
+scipy>=1.12.0
+
+# NIfTI / Medical imaging I/O
+nibabel>=5.2.0
+
+# Image processing
+opencv-python>=4.9.0
+scikit-image>=0.22.0
+
+# ITK-based registration, resampling, bias correction
+SimpleITK>=2.3.0
+
+# Typed dataclasses / validation
+pydantic>=2.0.0
+
+# Async SQLite (Phase 2 — Health Profile System)
+aiosqlite>=0.20.0
+
+# AI Medical Interpreter (Phase 3 — Gemini API)
+google-generativeai>=0.7.0
+python-multipart>=0.0.9
+
+# Configuration
+pyyaml>=6.0
+
+# Visualization (QC slice previewer)
+matplotlib>=3.8.0
+
+# Deep learning (Phase 2)
+torch>=2.1.0
+torchvision>=0.16.0
+
+# Interactive UI (Phase 4)
+streamlit>=1.32.0
+plotly>=5.20.0
+
+# Medical Reporting & Deployment (Phase 5)
+reportlab>=4.2.0
+pydicom>=3.0.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+httpx>=0.27.0
+
+# Testing
+pytest>=8.0.0
+pytest-cov>=5.0.0
+
+# ── Image I/O (used by PyVista PNG export) ───────────────────────────────────
+Pillow>=10.0.0
+
+# ── Surgical Rendering Engine (Phase 0+) ──────────────────────────────────────
+# PyVista/VTK for clinical-grade off-screen 3D rendering
+pyvista>=0.44.0
+vtk>=9.3.0
+# Mesh post-processing: decimation, smoothing, repair, ray intersection
+trimesh>=4.3.0
+
+# ── Biological Realism & Atlas Registration (Phase 1/3) ──────────────────────
+# ANTsPy for MNI152 atlas registration and landmark projection
+antspy>=0.4.2
+
+# ── Radiomics & Risk Scoring (Phase 5) ───────────────────────────────────────
+# IBSI-compliant radiomic feature extraction
+pyradiomics>=3.1.0
+
+# ── Trajectory Planning (Phase 4) ────────────────────────────────────────────
+# Graph algorithms for optimal path scoring
+networkx>=3.3
+
+# ── AI Narrative Reporting (Phase 5) ─────────────────────────────────────────
+# Jinja2 template engine for clinical impression generation
+jinja2>=3.1.0
+
+# ── CareConnect AI (Phase 6 — Doctor Recommendation & Report Sharing) ─────────
+# QR code generation for PDF reports
+qrcode[pil]>=7.4
+
+# ── Auth System (Phase 8 — Authentication & Account Management) ───────────────
+# JWT token encoding / decoding
+python-jose[cryptography]>=3.3.0
+# Password hashing (bcrypt backend)
+passlib[bcrypt]>=1.7.4
+# Rate limiting for FastAPI
+slowapi>=0.1.9
+
+# AI Copilot — Phase 7 (FAISS vector search for RAG)
+faiss-cpu>=1.7.4
