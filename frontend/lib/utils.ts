@@ -231,9 +231,8 @@ export function getReportTypeLabel(type: string): string {
 }
 
 // ── Local storage helpers ─────────────────────
-export function getLocalUserId(): string | null {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem("anatom_user_id");
+export function generateUserId(): string {
+  return `user_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
 }
 
 export function setLocalUserId(id: string): void {
@@ -241,6 +240,15 @@ export function setLocalUserId(id: string): void {
   localStorage.setItem("anatom_user_id", id);
 }
 
-export function generateUserId(): string {
-  return `user_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
+/**
+ * Always returns a string user-id — auto-generates and persists one if none
+ * exists yet. This removes the need for `string | null` guards across the app.
+ */
+export function getLocalUserId(): string {
+  if (typeof window === "undefined") return "ssr_placeholder";
+  const stored = localStorage.getItem("anatom_user_id");
+  if (stored) return stored;
+  const fresh = generateUserId();
+  localStorage.setItem("anatom_user_id", fresh);
+  return fresh;
 }
