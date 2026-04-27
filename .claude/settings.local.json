@@ -176,7 +176,15 @@
       "PowerShell(Set-Location \"C:\\\\Users\\\\Vaibhav\\\\OneDrive\\\\Desktop\\\\NeuroMapper 3D Brain Tumor Segmentation & Volume Tracking\\\\frontend\"; node .\\\\node_modules\\\\typescript\\\\bin\\\\tsc --noEmit 2>&1 | Where-Object { $_ -match \"app/page|layout/Sidebar|dashboard/|ui/GlassCard|ui/NeonButton|ui/PageHeader|ui/StatusBadge|ui/AlertBox\" } | Select-Object -First 20)",
       "PowerShell(Set-Location \"C:\\\\Users\\\\Vaibhav\\\\OneDrive\\\\Desktop\\\\NeuroMapper 3D Brain Tumor Segmentation & Volume Tracking\\\\frontend\"; $result = node .\\\\node_modules\\\\typescript\\\\bin\\\\tsc --noEmit 2>&1; Write-Output \"Exit: $LASTEXITCODE\"; $result | Select-String \"error TS\" | Select-Object -First 15)",
       "Bash(awk '{print $9}')",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(git add *)",
+      "Bash(gh auth *)",
+      "PowerShell(gh auth status 2>&1)",
+      "Bash(git commit --amend -m ' *)",
+      "Bash(git branch *)",
+      "Bash(git config *)",
+      "Bash(git commit *)",
+      "Bash(git remote *)"
     ]
   }
 }
