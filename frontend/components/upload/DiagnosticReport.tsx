@@ -277,7 +277,7 @@ export function DiagnosticReport({
         .map((o) => resolveOrganKey(o))
         .filter((k): k is string => k !== null)
     );
-    const organ_keys = [...new Set([...fromOrgans, ...fromConditions])];
+    const organ_keys = Array.from(new Set([...fromOrgans, ...fromConditions]));
 
     const worstSeverity = initialAnalysis.findings.some((f) => f.severity === "critical")
       ? "severe"

@@ -149,7 +149,7 @@ export default function ResultsPage() {
       .map((o) => resolveOrganKey(o))
       .filter((k): k is string => k !== null);
 
-    const organ_keys = [...new Set([...fromRegions, ...fromConditions, ...fromOrgans])];
+    const organ_keys = Array.from(new Set([...fromRegions, ...fromConditions, ...fromOrgans]));
     const risk = diagData?.risk_level ?? report.risk_level ?? "low";
     const worstSeverity = interp.findings.some((f) => f.severity === "critical")
       ? "severe"
