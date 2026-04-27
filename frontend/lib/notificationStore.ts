@@ -5,6 +5,7 @@ export type NotificationType =
   | "report_analyzed"
   | "report_generated"
   | "plan_generated"
+  | "plan_error"
   | "symptom_logged"
   | "medication_added"
   | "dose_logged"
