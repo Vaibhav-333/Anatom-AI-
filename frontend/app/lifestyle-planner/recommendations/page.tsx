@@ -50,7 +50,7 @@ export default function RecommendationsPage() {
 
       {latestPlan && (
         <>
-          <PreventiveCareCard items={latestPlan.preventive_care} />
+          <PreventiveCareCard items={latestPlan.preventive_care ?? []} />
           {latestPlan.ai_notes && (
             <div className="rounded-2xl p-5"
               style={{ background: "rgba(167,139,250,0.08)", border: "1px solid rgba(167,139,250,0.2)" }}>

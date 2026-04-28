@@ -92,7 +92,7 @@ export default function LifestylePlannerHub() {
 
           <div className="grid grid-cols-3 gap-3 text-center">
             <div className="rounded-xl py-3" style={{ background: "rgba(255,184,0,0.08)" }}>
-              <p className="text-lg font-bold text-amber-400">{latestPlan.daily_nutrition.calories}</p>
+              <p className="text-lg font-bold text-amber-400">{latestPlan.daily_nutrition?.calories ?? "—"}</p>
               <p className="text-xs text-gray-500">kcal / day</p>
             </div>
             <div className="rounded-xl py-3" style={{ background: "rgba(0,255,136,0.08)" }}>

@@ -8,17 +8,18 @@ import * as THREE from "three";
 // ── Organ → standalone GLB map ────────────────────────────────────────────────
 // Bladder shares stomach.glb — closest available sac-shaped model.
 // Kidney, intestine, pancreas, spleen have no standalone file — graceful skip.
+// v=2 query params bust the browser cache from prior deployments that served LFS pointer text
 export const ORGAN_MODEL_MAP: Record<string, string> = {
-  heart:            "/assets/anatomy/realistic_human_heart.glb",
-  lung:             "/assets/anatomy/realistic_human_lungs.glb",
-  brain:            "/assets/anatomy/Brain.glb",
-  stomach:          "/assets/anatomy/stomach.glb",
-  liver:            "/assets/anatomy/human_liver_and_gallbladder.glb",
-  bladder:          "/assets/anatomy/stomach.glb",         // closest sac-shaped model available
-  kidney:           "/assets/anatomy/Kidney.glb",
-  eye:              "/assets/anatomy/eye.glb",
-  vertebral_column: "/assets/anatomy/vertebral_column.glb",
-  mouth:            "/assets/anatomy/mouth.glb",
+  heart:            "/assets/anatomy/realistic_human_heart.glb?v=2",
+  lung:             "/assets/anatomy/realistic_human_lungs.glb?v=2",
+  brain:            "/assets/anatomy/Brain.glb?v=2",
+  stomach:          "/assets/anatomy/stomach.glb?v=2",
+  liver:            "/assets/anatomy/human_liver_and_gallbladder.glb?v=2",
+  bladder:          "/assets/anatomy/stomach.glb?v=2",     // closest sac-shaped model available
+  kidney:           "/assets/anatomy/Kidney.glb?v=2",
+  eye:              "/assets/anatomy/eye.glb?v=2",
+  vertebral_column: "/assets/anatomy/vertebral_column.glb?v=2",
+  mouth:            "/assets/anatomy/mouth.glb?v=2",
 };
 
 // ── Preload all unique paths once at module load — zero cost on repeated clicks ─

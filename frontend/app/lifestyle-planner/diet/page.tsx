@@ -40,7 +40,7 @@ export default function DietPage() {
         </div>
       </PageHero>
 
-      <NutritionSummaryBar nutrition={latestPlan.daily_nutrition} />
+      {latestPlan.daily_nutrition && <NutritionSummaryBar nutrition={latestPlan.daily_nutrition} />}
 
       {/* Meal inspiration banner */}
       <div className="relative rounded-2xl overflow-hidden h-40">
@@ -59,9 +59,9 @@ export default function DietPage() {
             <p className="text-slate-400 text-sm mt-1.5 max-w-xs leading-snug">Every meal crafted around your dietary preferences and daily calorie targets.</p>
           </div>
           <div className="ml-auto shrink-0 text-right">
-            <p className="text-2xl font-bold text-amber-400">{latestPlan.daily_nutrition.calories}</p>
+            <p className="text-2xl font-bold text-amber-400">{latestPlan.daily_nutrition?.calories ?? "—"}</p>
             <p className="text-xs text-slate-500">kcal / day</p>
-            <p className="text-lg font-semibold text-green-400 mt-1">{latestPlan.daily_nutrition.protein_g}g</p>
+            <p className="text-lg font-semibold text-green-400 mt-1">{latestPlan.daily_nutrition?.protein_g ?? "—"}g</p>
             <p className="text-xs text-slate-500">protein</p>
           </div>
         </div>
@@ -75,7 +75,7 @@ export default function DietPage() {
         })}
       </div>
 
-      <AvoidListCard items={latestPlan.avoid_list} />
+      {(latestPlan.avoid_list?.length ?? 0) > 0 && <AvoidListCard items={latestPlan.avoid_list} />}
     </div>
   );
 }

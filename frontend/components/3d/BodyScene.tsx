@@ -21,10 +21,11 @@ type SystemKey = "all" | "cardiovascular" | "respiratory" | "digestive" | "repro
 // myology.glb is 153 MB — too large for GitHub (>100 MB hard limit) and
 // Vercel static assets (>100 MB). In production set NEXT_PUBLIC_MYOLOGY_GLB_URL
 // to a CDN URL (e.g. a GitHub Release asset). Locally it falls back to public/.
+// v=2 query params bust the browser cache from prior deployments that served LFS pointer text
 const MODEL_PATH_MAP: Record<ModelKey, string> = {
-  full:       "/assets/anatomy/full_body.glb",
-  neurology:  "/assets/anatomy/neurology.glb",
-  arthrology: "/assets/anatomy/arthrology.glb",
+  full:       "/assets/anatomy/full_body.glb?v=2",
+  neurology:  "/assets/anatomy/neurology.glb?v=2",
+  arthrology: "/assets/anatomy/arthrology.glb?v=2",
   myology:    process.env.NEXT_PUBLIC_MYOLOGY_GLB_URL ?? "/assets/anatomy/myology.glb",
 };
 

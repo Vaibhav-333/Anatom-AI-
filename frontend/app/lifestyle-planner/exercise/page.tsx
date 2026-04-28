@@ -59,7 +59,7 @@ export default function ExercisePage() {
           <div>
             <p className="text-[11px] text-green-400 font-semibold uppercase tracking-widest mb-1">Your Workout Plan</p>
             <h3 className="text-white font-bold text-lg leading-tight">
-              {latestPlan.activity_level.charAt(0).toUpperCase() + latestPlan.activity_level.slice(1)} Intensity Training
+              {(latestPlan.activity_level ?? "").charAt(0).toUpperCase() + (latestPlan.activity_level ?? "").slice(1)} Intensity Training
             </h3>
             <p className="text-slate-400 text-sm mt-1.5">Tailored exercises matched to your fitness level and health conditions.</p>
           </div>
@@ -72,7 +72,7 @@ export default function ExercisePage() {
         </div>
       </div>
 
-      <ExercisePlanCard exercises={latestPlan.exercises} activityLevel={latestPlan.activity_level} />
+      <ExercisePlanCard exercises={latestPlan.exercises ?? []} activityLevel={latestPlan.activity_level ?? ""} />
 
       {(latestPlan.avoid_list ?? []).length > 0 && (
         <div className="rounded-2xl p-5" style={{ background: "rgba(255,59,59,0.06)", border: "1px solid rgba(255,59,59,0.2)" }}>
