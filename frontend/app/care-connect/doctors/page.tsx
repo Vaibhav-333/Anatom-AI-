@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, SlidersHorizontal, Users, Bookmark } from "lucide-react";
@@ -26,7 +26,7 @@ const MODE_OPTIONS = [
   { label: "In-Clinic", value: "offline" },
 ];
 
-export default function DoctorsPage() {
+function DoctorsPageContent() {
   const searchParams = useSearchParams();
   const tab = searchParams.get("tab") ?? "all";
 
@@ -231,5 +231,13 @@ export default function DoctorsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function DoctorsPage() {
+  return (
+    <Suspense fallback={null}>
+      <DoctorsPageContent />
+    </Suspense>
   );
 }
