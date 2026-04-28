@@ -17,15 +17,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libgl1 \
         libglib2.0-0 \
         libgomp1 \
-        # VTK/PyVista headless rendering (off-screen via Xvfb)
         xvfb \
         libx11-6 \
         libxrender1 \
         libxext6 \
-        libgl1-mesa-glx \
-        libgl1-mesa-dri \
-        # ANTsPy build dependency
-        libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
