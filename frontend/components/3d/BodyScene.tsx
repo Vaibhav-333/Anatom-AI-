@@ -18,11 +18,14 @@ import { ExtractedOrgan, ORGAN_MODEL_MAP } from "./ExtractedOrgan";
 type ModelKey = "full" | "neurology" | "arthrology" | "myology";
 type SystemKey = "all" | "cardiovascular" | "respiratory" | "digestive" | "reproductive" | "excretory";
 
+// myology.glb is 153 MB — too large for GitHub (>100 MB hard limit) and
+// Vercel static assets (>100 MB). In production set NEXT_PUBLIC_MYOLOGY_GLB_URL
+// to a CDN URL (e.g. a GitHub Release asset). Locally it falls back to public/.
 const MODEL_PATH_MAP: Record<ModelKey, string> = {
   full:       "/assets/anatomy/sekeleton_with_heart,stomach,liver,gallbladder,lungs,brain.glb",
   neurology:  "/assets/anatomy/neurology.glb",
   arthrology: "/assets/anatomy/arthrology.glb",
-  myology:    "/assets/anatomy/myology.glb",
+  myology:    process.env.NEXT_PUBLIC_MYOLOGY_GLB_URL ?? "/assets/anatomy/myology.glb",
 };
 
 const MODEL_LABELS: Record<ModelKey, string> = {
