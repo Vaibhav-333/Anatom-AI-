@@ -17,12 +17,15 @@ interface Props {
 
 export default function InsightsSummaryPanel({ insights, compact }: Props) {
   const badge = TREND_BADGE[insights.trend] ?? TREND_BADGE.stable;
-  const topAlerts = compact ? insights.alerts.slice(0, 2) : insights.alerts;
+  const alerts = insights.alerts ?? [];
+  const correlationNotes = insights.correlation_notes ?? [];
+  const suggestions = insights.suggestions ?? [];
+  const topAlerts = compact ? alerts.slice(0, 2) : alerts;
 
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4 flex-wrap">
-        <WeeklyScoreRing score={Math.round(insights.weekly_score)} size="md" trend={insights.trend} label="Weekly Score" />
+        <WeeklyScoreRing score={Math.round(insights.weekly_score ?? 0)} size="md" trend={insights.trend} label="Weekly Score" />
         <div className="flex flex-col gap-2">
           <span
             className="px-3 py-1 rounded-full text-xs font-semibold"
@@ -30,7 +33,7 @@ export default function InsightsSummaryPanel({ insights, compact }: Props) {
           >
             {badge.label}
           </span>
-          {insights.correlation_notes.slice(0, 2).map((note, i) => (
+          {correlationNotes.slice(0, 2).map((note, i) => (
             <p key={i} className="text-xs text-gray-400">{note}</p>
           ))}
         </div>
@@ -42,14 +45,14 @@ export default function InsightsSummaryPanel({ insights, compact }: Props) {
         </div>
       )}
 
-      {!compact && insights.suggestions.length > 0 && (
+      {!compact && suggestions.length > 0 && (
         <div className="rounded-xl p-4" style={{ background: "rgba(0,212,255,0.06)", border: "1px solid rgba(0,212,255,0.15)" }}>
           <div className="flex items-center gap-2 mb-2">
             <Lightbulb size={14} className="text-cyan-400" />
             <span className="text-xs font-semibold text-cyan-400">Suggestions</span>
           </div>
           <ul className="space-y-1">
-            {insights.suggestions.map((s, i) => (
+            {suggestions.map((s, i) => (
               <li key={i} className="text-xs text-gray-300 flex gap-2"><span className="text-cyan-500">•</span>{s}</li>
             ))}
           </ul>

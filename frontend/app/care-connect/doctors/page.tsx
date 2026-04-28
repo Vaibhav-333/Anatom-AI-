@@ -49,9 +49,11 @@ function DoctorsPageContent() {
       careConnectApi.listDoctors(),
       careConnectApi.getSavedDoctors(userId),
     ]).then(([all, savedDocs]) => {
-      setDoctors(all);
-      setSaved(savedDocs);
-      setSavedDoctorIds(savedDocs.map((d) => d.id));
+      const safeAll   = Array.isArray(all)       ? all       : [];
+      const safeSaved = Array.isArray(savedDocs) ? savedDocs : [];
+      setDoctors(safeAll);
+      setSaved(safeSaved);
+      setSavedDoctorIds(safeSaved.map((d) => d.id));
     }).catch(() => {}).finally(() => setLoading(false));
   }, []);
 

@@ -30,12 +30,21 @@ export default function HistoryPage() {
     const userId = getLocalUserId() ?? "anonymous";
 
     fetch(`/api/history/${userId}`)
-      .then((r) => {
-        if (!r.ok) throw new Error("Failed to load history");
+      .then(async (r) => {
+        if (!r.ok) throw new Error("Backend not connected — start your local server to view history.");
+        const ct = r.headers.get("content-type") ?? "";
+        if (!ct.includes("application/json")) throw new Error("Backend not connected — start your local server to view history.");
         return r.json();
       })
-      .then(setReports)
-      .catch((e) => setError(e.message))
+      .then((data) => setReports(Array.isArray(data) ? data : []))
+      .catch((e) => {
+        const msg: string = e?.message ?? "";
+        setError(
+          msg.includes("Unexpected token") || msg.includes("<!DOCTYPE")
+            ? "Backend not connected — start your local server to view history."
+            : msg
+        );
+      })
       .finally(() => setLoading(false));
   }, []);
 

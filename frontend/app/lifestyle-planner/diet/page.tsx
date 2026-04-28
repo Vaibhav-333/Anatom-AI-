@@ -69,7 +69,7 @@ export default function DietPage() {
 
       <div className="space-y-3">
         {MEAL_SLOTS.map((slot) => {
-          const meals = latestPlan.meals[slot] ?? [];
+          const meals = latestPlan.meals?.[slot] ?? [];
           if (!meals.length) return null;
           return <MealPlanCard key={slot} mealType={slot} meals={meals} />;
         })}

@@ -14,10 +14,10 @@ interface Props {
 }
 
 export default function BadgeGrid({ badges }: Props) {
-  if (!badges.length) return null;
+  if (!badges?.length) return null;
   return (
     <div className="flex flex-wrap gap-2">
-      {badges.map((key) => {
+      {(badges ?? []).map((key) => {
         const meta = BADGE_META[key] ?? { label: key, icon: "🏅", color: "#8899AA" };
         return (
           <motion.div
