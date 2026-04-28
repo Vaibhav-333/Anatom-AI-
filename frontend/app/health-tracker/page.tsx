@@ -32,8 +32,8 @@ export default function HealthTrackerHub() {
           healthTrackerApi.getInsights(userId, 14),
           healthTrackerApi.getScores(userId, 4),
         ]);
-        setInsights(insRes.data);
-        setWeeklyScores(scoreRes.data);
+        if (insRes.data && typeof insRes.data === "object") setInsights(insRes.data);
+        setWeeklyScores(Array.isArray(scoreRes.data) ? scoreRes.data : []);
       } catch { /* no data yet */ }
       finally { setLoading(false); }
     })();

@@ -127,14 +127,14 @@ export default function ProfilePage() {
         try {
           const profile = await getProfile(userId);
           const loaded: FormState = {
-            name: profile.name,
-            age: profile.age,
-            gender: profile.gender as FormState["gender"],
-            height_cm: profile.height_cm,
-            weight_kg: profile.weight_kg,
+            name: profile.name ?? "",
+            age: profile.age ?? 30,
+            gender: (profile.gender as FormState["gender"]) ?? "male",
+            height_cm: profile.height_cm ?? 170,
+            weight_kg: profile.weight_kg ?? 70,
             blood_type: profile.blood_type ?? "O+",
-            conditions: profile.conditions,
-            medications: profile.medications,
+            conditions: Array.isArray(profile.conditions) ? profile.conditions : [],
+            medications: Array.isArray(profile.medications) ? profile.medications : [],
           };
           setForm(loaded);
           setServerScore(profile.health_score);

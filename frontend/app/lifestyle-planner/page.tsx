@@ -36,7 +36,7 @@ export default function LifestylePlannerHub() {
       addNotification(
         "plan_generated",
         "Lifestyle Plan Generated",
-        `Your personalised ${res.data.goal.replace("_", " ")} plan with diet and exercise is ready.`
+        `Your personalised ${(res.data.goal ?? "").replace("_", " ")} plan with diet and exercise is ready.`
       );
     } catch {
       addNotification(
@@ -74,7 +74,7 @@ export default function LifestylePlannerHub() {
             <div>
               <p className="text-xs text-gray-400">Current Plan · {latestPlan.plan_date}</p>
               <h2 className="text-lg font-bold text-white capitalize mt-0.5">
-                {latestPlan.goal.replace("_", " ")} — {latestPlan.activity_level} activity
+                {(latestPlan.goal ?? "").replace("_", " ")} — {latestPlan.activity_level} activity
               </h2>
             </div>
             <button onClick={() => handleGenerate({
@@ -96,11 +96,11 @@ export default function LifestylePlannerHub() {
               <p className="text-xs text-gray-500">kcal / day</p>
             </div>
             <div className="rounded-xl py-3" style={{ background: "rgba(0,255,136,0.08)" }}>
-              <p className="text-lg font-bold text-green-400">{latestPlan.exercises.reduce((s, e) => s + e.duration_min, 0)}</p>
+              <p className="text-lg font-bold text-green-400">{(latestPlan.exercises ?? []).reduce((s, e) => s + e.duration_min, 0)}</p>
               <p className="text-xs text-gray-500">min exercise</p>
             </div>
             <div className="rounded-xl py-3" style={{ background: "rgba(0,212,255,0.08)" }}>
-              <p className="text-lg font-bold text-cyan-400">{latestPlan.avoid_list.length}</p>
+              <p className="text-lg font-bold text-cyan-400">{(latestPlan.avoid_list ?? []).length}</p>
               <p className="text-xs text-gray-500">things to avoid</p>
             </div>
           </div>

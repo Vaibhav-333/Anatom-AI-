@@ -17,7 +17,7 @@ const MODE_COLORS: Record<string, string> = {
 
 export function DoctorCard({ doctor }: { doctor: Doctor }) {
   const { savedDoctorIds, toggleSaveDoctor } = useCareConnectStore();
-  const saved = savedDoctorIds.has(doctor.id);
+  const saved = savedDoctorIds.includes(doctor.id);
   const [saving, setSaving] = useState(false);
 
   const handleSave = async (e: React.MouseEvent) => {

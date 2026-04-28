@@ -66,11 +66,11 @@ export default function InsightsPage() {
             <InsightsSummaryPanel insights={insights} />
           </div>
 
-          {insights.correlation_notes.length > 0 && (
+          {(insights.correlation_notes?.length ?? 0) > 0 && (
             <CorrelationCard notes={insights.correlation_notes} />
           )}
 
-          {trendData.length >= 3 && (
+          {(trendData?.length ?? 0) >= 3 && (
             <PredictionMiniChart
               historical={trendData}
               prediction={insights.prediction_next_3_days}
@@ -78,12 +78,12 @@ export default function InsightsPage() {
           )}
 
           {/* Suggestions detail */}
-          {insights.suggestions.length > 0 && (
+          {(insights.suggestions?.length ?? 0) > 0 && (
             <div className="rounded-2xl p-5"
               style={{ background: "rgba(13,22,39,0.8)", border: "1px solid rgba(0,212,255,0.12)" }}>
               <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider mb-3">Recommendations</h3>
               <ul className="space-y-2">
-                {insights.suggestions.map((s, i) => (
+                {(insights.suggestions ?? []).map((s, i) => (
                   <li key={i} className="flex gap-3 text-sm text-gray-300">
                     <span className="text-cyan-500 mt-0.5">→</span>
                     <span>{s}</span>

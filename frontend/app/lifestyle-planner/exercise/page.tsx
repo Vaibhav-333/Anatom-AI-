@@ -25,7 +25,7 @@ export default function ExercisePage() {
     );
   }
 
-  const totalMin = latestPlan.exercises.reduce((s, e) => s + e.duration_min, 0);
+  const totalMin = (latestPlan.exercises ?? []).reduce((s, e) => s + e.duration_min, 0);
 
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">
@@ -66,7 +66,7 @@ export default function ExercisePage() {
           <div className="ml-auto shrink-0 text-right">
             <p className="text-2xl font-bold text-green-400">{totalMin}</p>
             <p className="text-xs text-slate-500">min / session</p>
-            <p className="text-lg font-semibold text-cyan-400 mt-1">{latestPlan.exercises.length}</p>
+            <p className="text-lg font-semibold text-cyan-400 mt-1">{(latestPlan.exercises ?? []).length}</p>
             <p className="text-xs text-slate-500">exercises</p>
           </div>
         </div>
@@ -74,11 +74,11 @@ export default function ExercisePage() {
 
       <ExercisePlanCard exercises={latestPlan.exercises} activityLevel={latestPlan.activity_level} />
 
-      {latestPlan.avoid_list.length > 0 && (
+      {(latestPlan.avoid_list ?? []).length > 0 && (
         <div className="rounded-2xl p-5" style={{ background: "rgba(255,59,59,0.06)", border: "1px solid rgba(255,59,59,0.2)" }}>
           <p className="text-sm font-semibold text-red-400 mb-2">Activities to avoid</p>
           <div className="flex flex-wrap gap-2">
-            {latestPlan.avoid_list.filter((item) =>
+            {(latestPlan.avoid_list ?? []).filter((item) =>
               ["strenuous","heavy lifting","running","swimming","gym"].some((kw) => item.toLowerCase().includes(kw))
             ).map((item, i) => (
               <span key={i} className="px-3 py-1 rounded-full text-xs"
@@ -86,9 +86,9 @@ export default function ExercisePage() {
                 {item}
               </span>
             ))}
-            {latestPlan.avoid_list.filter((item) =>
+            {(latestPlan.avoid_list ?? []).filter((item) =>
               !["strenuous","heavy lifting","running","swimming","gym"].some((kw) => item.toLowerCase().includes(kw))
-            ).length === latestPlan.avoid_list.length && (
+            ).length === (latestPlan.avoid_list ?? []).length && (
               <p className="text-xs text-gray-500">No specific activity restrictions.</p>
             )}
           </div>

@@ -35,7 +35,7 @@ export default function DietPage() {
         <div className="p-5">
           <h1 className="text-2xl font-bold text-white">Diet Plan</h1>
           <p className="text-sm text-gray-400 mt-1">
-            {latestPlan.dietary_pref.replace("_", " ")} · {latestPlan.plan_date}
+            {(latestPlan.dietary_pref ?? "").replace("_", " ")} · {latestPlan.plan_date}
           </p>
         </div>
       </PageHero>

@@ -25,7 +25,7 @@ interface CareConnectStore {
   historyLoaded: boolean;
 
   // Saved doctors
-  savedDoctorIds: Set<string>;
+  savedDoctorIds: string[];
 
   // Actions
   setWizardStep: (step: 1 | 2 | 3) => void;
@@ -56,7 +56,7 @@ export const useCareConnectStore = create<CareConnectStore>((set) => ({
   currentDoctors: [],
   reportHistory: [],
   historyLoaded: false,
-  savedDoctorIds: new Set(),
+  savedDoctorIds: [],
 
   setWizardStep: (step) => set({ wizardStep: step }),
   setWizardData: (data) =>
@@ -69,13 +69,12 @@ export const useCareConnectStore = create<CareConnectStore>((set) => ({
   setReportHistory: (history) =>
     set({ reportHistory: history, historyLoaded: true }),
   toggleSaveDoctor: (doctorId) =>
-    set((s) => {
-      const next = new Set(s.savedDoctorIds);
-      if (next.has(doctorId)) next.delete(doctorId);
-      else next.add(doctorId);
-      return { savedDoctorIds: next };
-    }),
-  setSavedDoctorIds: (ids) => set({ savedDoctorIds: new Set(ids) }),
+    set((s) => ({
+      savedDoctorIds: s.savedDoctorIds.includes(doctorId)
+        ? s.savedDoctorIds.filter((id) => id !== doctorId)
+        : [...s.savedDoctorIds, doctorId],
+    })),
+  setSavedDoctorIds: (ids) => set({ savedDoctorIds: ids }),
   clearCurrentReport: () =>
     set({ currentReport: null, currentDoctors: [], wizardStep: 1, wizardData: defaultWizardData }),
 }));

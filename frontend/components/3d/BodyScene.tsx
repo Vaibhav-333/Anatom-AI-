@@ -22,7 +22,7 @@ type SystemKey = "all" | "cardiovascular" | "respiratory" | "digestive" | "repro
 // Vercel static assets (>100 MB). In production set NEXT_PUBLIC_MYOLOGY_GLB_URL
 // to a CDN URL (e.g. a GitHub Release asset). Locally it falls back to public/.
 const MODEL_PATH_MAP: Record<ModelKey, string> = {
-  full:       "/assets/anatomy/sekeleton_with_heart,stomach,liver,gallbladder,lungs,brain.glb",
+  full:       "/assets/anatomy/full_body.glb",
   neurology:  "/assets/anatomy/neurology.glb",
   arthrology: "/assets/anatomy/arthrology.glb",
   myology:    process.env.NEXT_PUBLIC_MYOLOGY_GLB_URL ?? "/assets/anatomy/myology.glb",

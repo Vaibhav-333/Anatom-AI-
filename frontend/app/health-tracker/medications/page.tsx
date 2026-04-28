@@ -28,14 +28,16 @@ export default function MedicationsPage() {
 
   useEffect(() => {
     (async () => {
-      const [medRes, adhRes, calRes] = await Promise.all([
-        healthTrackerApi.getMedications(userId),
-        healthTrackerApi.getAdherence(userId),
-        healthTrackerApi.getMedCalendar(userId, now.getFullYear(), now.getMonth() + 1),
-      ]);
-      setMedications(medRes.data);
-      setAdherenceStats(adhRes.data);
-      setCalendarData(calRes.data);
+      try {
+        const [medRes, adhRes, calRes] = await Promise.all([
+          healthTrackerApi.getMedications(userId),
+          healthTrackerApi.getAdherence(userId),
+          healthTrackerApi.getMedCalendar(userId, now.getFullYear(), now.getMonth() + 1),
+        ]);
+        setMedications(Array.isArray(medRes.data) ? medRes.data : []);
+        setAdherenceStats(Array.isArray(adhRes.data) ? adhRes.data : []);
+        setCalendarData(Array.isArray(calRes.data) ? calRes.data : []);
+      } catch { /* API not available */ }
     })();
   }, [userId]);
 

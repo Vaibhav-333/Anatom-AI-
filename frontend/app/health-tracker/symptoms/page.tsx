@@ -28,14 +28,16 @@ export default function SymptomsPage() {
   const addNotification = useNotificationStore((s) => s.addNotification);
 
   const loadAll = async () => {
-    const [logsRes, trendRes, heatRes] = await Promise.all([
-      healthTrackerApi.getSymptoms(userId, { limit: 50 }),
-      healthTrackerApi.getTrends(userId, { period: trendPeriod }),
-      healthTrackerApi.getHeatmap(userId, heatmapYear, heatmapMonth),
-    ]);
-    setSymptomLogs(logsRes.data);
-    setTrendData(trendRes.data);
-    setHeatmapData(heatRes.data);
+    try {
+      const [logsRes, trendRes, heatRes] = await Promise.all([
+        healthTrackerApi.getSymptoms(userId, { limit: 50 }),
+        healthTrackerApi.getTrends(userId, { period: trendPeriod }),
+        healthTrackerApi.getHeatmap(userId, heatmapYear, heatmapMonth),
+      ]);
+      setSymptomLogs(Array.isArray(logsRes.data) ? logsRes.data : []);
+      setTrendData(Array.isArray(trendRes.data) ? trendRes.data : []);
+      setHeatmapData(Array.isArray(heatRes.data) ? heatRes.data : []);
+    } catch { /* API not available */ }
   };
 
   useEffect(() => { loadAll(); }, [trendPeriod, heatmapYear, heatmapMonth]);
