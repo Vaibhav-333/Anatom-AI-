@@ -1,10 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // ── Output mode ─────────────────────────────────────────────────────────────
-  // "standalone" bundles only the files needed to run the server — smaller
-  // Docker image and faster Railway cold-starts.
-  output: "standalone",
-
   // ── Compression ─────────────────────────────────────────────────────────────
   // Next.js compresses responses with gzip automatically in production.
   compress: true,
