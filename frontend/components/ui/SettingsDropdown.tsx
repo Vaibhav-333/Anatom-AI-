@@ -202,7 +202,7 @@ export function SettingsDropdown() {
               {
                 label: "NeuroMapper Engine",
                 detail: "PyVista renderer",
-                status: neuroStatus,
+                status: neuroStatus ?? ("offline" as const),
               },
             ].map((sys) => (
               <div
