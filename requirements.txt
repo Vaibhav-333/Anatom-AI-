@@ -63,8 +63,7 @@ trimesh>=4.3.0
 # antspy>=0.4.2  # No Python 3.12 wheel on PyPI — install manually for local research use only
 
 # ── Radiomics & Risk Scoring (Phase 5) ───────────────────────────────────────
-# IBSI-compliant radiomic feature extraction
-pyradiomics>=3.1.0
+# pyradiomics>=3.1.0  # Source-only; mistagged on PyPI for Py3.12 — install manually for local research use
 
 # ── Trajectory Planning (Phase 4) ────────────────────────────────────────────
 # Graph algorithms for optimal path scoring
