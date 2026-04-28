@@ -32,6 +32,10 @@ const TYPE_CONFIG: Record<
     icon: Leaf, color: "text-green-400",
     bg: "bg-green-400/10", border: "border-green-400/25",
   },
+  plan_error: {
+    icon: X, color: "text-red-400",
+    bg: "bg-red-400/10", border: "border-red-400/25",
+  },
   symptom_logged: {
     icon: Activity, color: "text-cyan",
     bg: "bg-cyan/10", border: "border-cyan/25",
