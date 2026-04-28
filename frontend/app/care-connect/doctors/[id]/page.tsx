@@ -30,7 +30,7 @@ export default function DoctorProfilePage() {
     careConnectApi.getDoctor(id).then(setDoctor).catch(() => {}).finally(() => setLoading(false));
   }, [id]);
 
-  const saved = savedDoctorIds.has(id);
+  const saved = savedDoctorIds.includes(id);
 
   const handleSave = async () => {
     if (saving) return;
