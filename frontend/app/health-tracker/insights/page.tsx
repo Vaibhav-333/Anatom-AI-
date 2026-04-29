@@ -65,7 +65,7 @@ export default function InsightsPage() {
           alerts: Array.isArray(insights.alerts) ? insights.alerts : [],
           correlation_notes: Array.isArray(insights.correlation_notes) ? insights.correlation_notes : [],
           suggestions: Array.isArray(insights.suggestions) ? insights.suggestions : [],
-          prediction_next_3_days: Array.isArray(insights.prediction_next_3_days) ? insights.prediction_next_3_days : [],
+          prediction_next_3_days: insights.prediction_next_3_days ?? { pain: 0, mood: 0 },
           weekly_score: insights.weekly_score ?? 0,
           trend: insights.trend ?? "stable",
         };
