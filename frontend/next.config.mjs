@@ -33,18 +33,11 @@ const nextConfig = {
   },
 
   // ── API proxy rewrites ───────────────────────────────────────────────────────
-  // In production NEXT_PUBLIC_API_URL is set to the Railway backend URL.
-  // In development it falls back to localhost:8000.
-  async rewrites() {
-    const backendUrl =
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${backendUrl}/:path*`,
-      },
-    ];
-  },
+  // NOTE: /api/* is now handled by app/api/[...path]/route.ts (Edge runtime).
+  // That handler reads the backend URL at REQUEST TIME (not build time), which
+  // is essential for ngrok tunnels whose URLs change on every restart.
+  // The rewrite below is intentionally removed — the route handler takes
+  // priority and is more robust for dynamic ngrok URLs.
 
   // ── Security headers ────────────────────────────────────────────────────────
   async headers() {
