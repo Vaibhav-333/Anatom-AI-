@@ -183,6 +183,16 @@ async function consumeSSE(
 ) {
   const decoder = new TextDecoder();
   let buffer = "";
+  // Guard so onDone is called exactly once — either from the SSE "done"
+  // event OR when the stream closes naturally without sending that event.
+  let doneCalled = false;
+
+  const callDone = () => {
+    if (!doneCalled) {
+      doneCalled = true;
+      callbacks.onDone();
+    }
+  };
 
   try {
     while (true) {
@@ -205,15 +215,21 @@ async function consumeSSE(
             case "init":      callbacks.onInit(payload.conversation_id); break;
             case "token":     callbacks.onToken(payload.content ?? ""); break;
             case "suggested": callbacks.onSuggested(payload.questions ?? []); break;
-            case "done":      callbacks.onDone(); break;
+            case "done":      callDone(); break;
             case "error":     callbacks.onError(payload.message ?? "Unknown AI error."); break;
           }
         } catch { /* skip malformed SSE chunk */ }
       }
     }
+    // Stream closed naturally (done === true from reader) — if the backend
+    // never sent a {"type":"done"} event, finalise here so the typing
+    // indicator doesn't spin forever.
+    callDone();
   } catch (err: any) {
     if (err?.name !== "AbortError")
       callbacks.onError(err?.message ?? "Stream read error.");
+    else
+      callDone(); // AbortError means user navigated away — still finalise
   }
 }
 
