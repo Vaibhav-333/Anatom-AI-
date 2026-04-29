@@ -243,10 +243,29 @@ async def stream_chat(
     # 5. Stream Gemini response
     # generate_content(stream=True) uses a synchronous iterator that blocks.
     # We run it in a thread and bridge tokens into the async generator via a queue.
-    model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash",
-        system_instruction=system_prompt,
-    )
+
+    # Safety settings: health / medical content legitimately mentions symptoms,
+    # medications, and anatomy — lower the sensitivity so Gemini doesn't refuse
+    # these queries under DANGEROUS_CONTENT or HARASSMENT categories.
+    try:
+        from google.generativeai.types import HarmCategory, HarmBlockThreshold
+        _safety = {
+            HarmCategory.HARM_CATEGORY_HARASSMENT:        HarmBlockThreshold.BLOCK_ONLY_HIGH,
+            HarmCategory.HARM_CATEGORY_HATE_SPEECH:       HarmBlockThreshold.BLOCK_ONLY_HIGH,
+            HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+            HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+        }
+    except Exception:
+        _safety = None  # older SDK — skip safety override
+
+    model_kwargs: dict = {
+        "model_name": "gemini-1.5-flash",
+        "system_instruction": system_prompt,
+    }
+    if _safety:
+        model_kwargs["safety_settings"] = _safety
+
+    model = genai.GenerativeModel(**model_kwargs)
 
     _SENTINEL = object()
     token_queue: queue.Queue = queue.Queue()
@@ -255,8 +274,14 @@ async def stream_chat(
         try:
             response = model.generate_content(full_query, stream=True)
             for chunk in response:
-                if chunk.text:
-                    token_queue.put(chunk.text)
+                # chunk.text raises ValueError when a chunk is blocked by a
+                # safety filter — catch per-chunk so the rest still streams.
+                try:
+                    text = chunk.text
+                    if text:
+                        token_queue.put(text)
+                except ValueError:
+                    pass  # blocked chunk — skip and continue
         except Exception as exc:
             log.error("Gemini error: %s: %s", type(exc).__name__, exc)
             token_queue.put(exc)
