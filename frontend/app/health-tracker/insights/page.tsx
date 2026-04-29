@@ -24,8 +24,8 @@ export default function InsightsPage() {
         healthTrackerApi.getInsights(userId, 14),
         healthTrackerApi.getTrends(userId),
       ]);
-      setInsights(insRes.data);
-      setTrendData(trendRes.data);
+      if (insRes.data && typeof insRes.data === "object") setInsights(insRes.data);
+      setTrendData(Array.isArray(trendRes.data) ? trendRes.data : []);
       if (insRes.data) {
         addNotification(
           "insights_ready",
@@ -33,7 +33,7 @@ export default function InsightsPage() {
           `Pattern analysis complete — ${insRes.data.suggestions?.length ?? 0} recommendation(s) generated.`
         );
       }
-    } finally { setLoading(false); }
+    } catch { /* API not available */ } finally { setLoading(false); }
   };
 
   useEffect(() => { load(); }, [userId]);
@@ -59,41 +59,53 @@ export default function InsightsPage() {
         </div>
       )}
 
-      {insights && (
-        <div className="space-y-6">
-          <div className="rounded-2xl p-6"
-            style={{ background: "rgba(13,22,39,0.85)", border: "1px solid rgba(0,212,255,0.15)" }}>
-            <InsightsSummaryPanel insights={insights} />
-          </div>
-
-          {(insights.correlation_notes?.length ?? 0) > 0 && (
-            <CorrelationCard notes={insights.correlation_notes} />
-          )}
-
-          {(trendData?.length ?? 0) >= 3 && (
-            <PredictionMiniChart
-              historical={trendData}
-              prediction={insights.prediction_next_3_days}
-            />
-          )}
-
-          {/* Suggestions detail */}
-          {(insights.suggestions?.length ?? 0) > 0 && (
-            <div className="rounded-2xl p-5"
-              style={{ background: "rgba(13,22,39,0.8)", border: "1px solid rgba(0,212,255,0.12)" }}>
-              <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider mb-3">Recommendations</h3>
-              <ul className="space-y-2">
-                {(insights.suggestions ?? []).map((s, i) => (
-                  <li key={i} className="flex gap-3 text-sm text-gray-300">
-                    <span className="text-cyan-500 mt-0.5">→</span>
-                    <span>{s}</span>
-                  </li>
-                ))}
-              </ul>
+      {insights && (() => {
+        const safeInsights = {
+          ...insights,
+          alerts: Array.isArray(insights.alerts) ? insights.alerts : [],
+          correlation_notes: Array.isArray(insights.correlation_notes) ? insights.correlation_notes : [],
+          suggestions: Array.isArray(insights.suggestions) ? insights.suggestions : [],
+          prediction_next_3_days: Array.isArray(insights.prediction_next_3_days) ? insights.prediction_next_3_days : [],
+          weekly_score: insights.weekly_score ?? 0,
+          trend: insights.trend ?? "stable",
+        };
+        const safeTrend = Array.isArray(trendData) ? trendData : [];
+        return (
+          <div className="space-y-6">
+            <div className="rounded-2xl p-6"
+              style={{ background: "rgba(13,22,39,0.85)", border: "1px solid rgba(0,212,255,0.15)" }}>
+              <InsightsSummaryPanel insights={safeInsights} />
             </div>
-          )}
-        </div>
-      )}
+
+            {safeInsights.correlation_notes.length > 0 && (
+              <CorrelationCard notes={safeInsights.correlation_notes} />
+            )}
+
+            {safeTrend.length >= 3 && (
+              <PredictionMiniChart
+                historical={safeTrend}
+                prediction={safeInsights.prediction_next_3_days}
+              />
+            )}
+
+            {/* Suggestions detail */}
+            {safeInsights.suggestions.length > 0 && (
+              <div className="rounded-2xl p-5"
+                style={{ background: "rgba(13,22,39,0.8)", border: "1px solid rgba(0,212,255,0.12)" }}>
+                <h3 className="text-sm font-semibold text-cyan-400 uppercase tracking-wider mb-3">Recommendations</h3>
+                <ul className="space-y-2">
+                  {safeInsights.suggestions.map((s, i) => (
+                    <li key={i} className="flex gap-3 text-sm text-gray-300">
+                      <span className="text-cyan-500 mt-0.5">→</span>
+                      <span>{s}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        );
+      })()}
     </div>
   );
 }

@@ -11,7 +11,9 @@
 import { useAuthStore } from "@/lib/authStore";
 import { CopilotConversation, CopilotMessage } from "@/lib/copilotStore";
 
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// Use the /api proxy (Next.js rewrites → backend) so browser requests are
+// same-origin — avoids CORS issues in production and works locally too.
+const BASE = "/api";
 const STORAGE_KEY = "anatom-auth"; // must match authStore persist name
 
 // ── Token helpers ─────────────────────────────────────────────────────────────

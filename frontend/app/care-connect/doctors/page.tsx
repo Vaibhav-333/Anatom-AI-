@@ -45,16 +45,21 @@ function DoctorsPageContent() {
 
   useEffect(() => {
     const userId = getLocalUserId();
-    Promise.all([
-      careConnectApi.listDoctors(),
-      careConnectApi.getSavedDoctors(userId),
-    ]).then(([all, savedDocs]) => {
-      const safeAll   = Array.isArray(all)       ? all       : [];
-      const safeSaved = Array.isArray(savedDocs) ? savedDocs : [];
-      setDoctors(safeAll);
-      setSaved(safeSaved);
-      setSavedDoctorIds(safeSaved.map((d) => d.id));
-    }).catch(() => {}).finally(() => setLoading(false));
+    // Separate error handling: getSavedDoctors may fail (e.g. anonymous user on Railway)
+    // and must NOT prevent the main doctors list from loading.
+    const docsP = careConnectApi.listDoctors()
+      .then((all) => (Array.isArray(all) ? all : []))
+      .catch((): Doctor[] => []);
+    const savedP = careConnectApi.getSavedDoctors(userId)
+      .then((s) => (Array.isArray(s) ? s : []))
+      .catch((): Doctor[] => []);
+    Promise.all([docsP, savedP])
+      .then(([all, savedDocs]) => {
+        setDoctors(all);
+        setSaved(savedDocs);
+        setSavedDoctorIds(savedDocs.map((d) => d.id));
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const filtered = (activeTab === "saved" ? saved : doctors).filter((d) => {

@@ -31,9 +31,11 @@ export default function HistoryPage() {
 
     fetch(`/api/history/${userId}`)
       .then(async (r) => {
-        if (!r.ok) throw new Error("Backend not connected — start your local server to view history.");
+        // 404 = endpoint exists but no history yet — return empty, not an error
+        if (r.status === 404) return [];
         const ct = r.headers.get("content-type") ?? "";
-        if (!ct.includes("application/json")) throw new Error("Backend not connected — start your local server to view history.");
+        if (!r.ok || !ct.includes("application/json"))
+          throw new Error("Backend not connected — start your local server to view history.");
         return r.json();
       })
       .then((data) => setReports(Array.isArray(data) ? data : []))
