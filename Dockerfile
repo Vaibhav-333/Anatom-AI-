@@ -12,15 +12,11 @@
 
 FROM python:3.12-slim AS base
 
-# System dependencies for OpenCV, SimpleITK, matplotlib + VTK/PyVista headless rendering
+# System dependencies for OpenCV, SimpleITK, matplotlib
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libgl1 \
         libglib2.0-0 \
         libgomp1 \
-        xvfb \
-        libx11-6 \
-        libxrender1 \
-        libxext6 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -34,13 +30,7 @@ COPY requirements.txt .
 
 # Upgrade pip quietly and install all project dependencies
 RUN pip install --upgrade pip --quiet && \
-    pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir \
-        uvicorn[standard]>=0.29.0 \
-        fastapi>=0.110.0 \
-        httpx>=0.27.0 \
-        reportlab>=4.2.0 \
-        pydicom>=3.0.0
+    pip install --no-cache-dir -r requirements.txt
 
 # ---------------------------------------------------------------------------
 # Runtime image

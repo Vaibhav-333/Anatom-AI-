@@ -30,12 +30,7 @@ pyyaml>=6.0
 # Visualization (QC slice previewer)
 matplotlib>=3.8.0
 
-# Deep learning (Phase 2)
-torch>=2.1.0
-torchvision>=0.16.0
-
 # Interactive UI (Phase 4)
-streamlit>=1.32.0
 plotly>=5.20.0
 
 # Medical Reporting & Deployment (Phase 5)
@@ -49,14 +44,10 @@ httpx>=0.27.0
 pytest>=8.0.0
 pytest-cov>=5.0.0
 
-# ── Image I/O (used by PyVista PNG export) ───────────────────────────────────
+# ── Image I/O ────────────────────────────────────────────────────────────────
 Pillow>=10.0.0
 
-# ── Surgical Rendering Engine (Phase 0+) ──────────────────────────────────────
-# PyVista/VTK for clinical-grade off-screen 3D rendering
-pyvista>=0.44.0
-vtk>=9.3.0
-# Mesh post-processing: decimation, smoothing, repair, ray intersection
+# ── Mesh post-processing: decimation, smoothing, repair, ray intersection ─────
 trimesh>=4.3.0
 
 # ── Biological Realism & Atlas Registration (Phase 1/3) ──────────────────────

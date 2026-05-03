@@ -1,0 +1,18 @@
+# Exclude large non-backend files from Docker build context
+.git/
+data/
+outputs/
+frontend/
+*.zip
+*.npy
+*.pdf
+*.png
+__pycache__/
+*.pyc
+*.pyo
+.env
+backend.log
+streamlit_test.log
+tests/
+.pytest_cache/
+.github/
