@@ -1,6 +1,6 @@
 [build]
-# Railway uses nixpacks by default — this tells it to use Python.
-builder = "nixpacks"
+# Use our Dockerfile so system libs (libgl1 for OpenCV) are included.
+builder = "dockerfile"
 
 [deploy]
 # Start the FastAPI server via Uvicorn with 2 workers.
