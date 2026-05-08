@@ -3,7 +3,8 @@
 builder = "dockerfile"
 
 [deploy]
-# CMD in Dockerfile handles startup with sh -c so $PORT expands correctly.
+# sh -c is required so $PORT (injected by Railway) gets shell-expanded.
+startCommand = "sh -c 'uvicorn src.serving.api:app --host 0.0.0.0 --port $PORT --workers 1'"
 healthcheckPath = "/health"
 healthcheckTimeout = 120
 restartPolicyType = "ON_FAILURE"
