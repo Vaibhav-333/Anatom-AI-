@@ -9,6 +9,7 @@ import {
   fetchSuggestedQuestions,
   deleteConversation,
   fetchConversations,
+  checkAuth,
 } from "@/lib/copilotApi";
 import { MessageBubble } from "./MessageBubble";
 import { TypingIndicator } from "./TypingIndicator";
@@ -37,6 +38,7 @@ export function ChatWindow() {
   } = useCopilotStore();
 
   const [input, setInput] = useState("");
+  const [notLoggedIn, setNotLoggedIn] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -61,6 +63,14 @@ export function ChatWindow() {
     async (text: string) => {
       const query = text.trim();
       if (!query || isStreaming) return;
+
+      // Gate on auth before doing anything visible
+      const authed = await checkAuth();
+      if (!authed) {
+        setNotLoggedIn(true);
+        return;
+      }
+      setNotLoggedIn(false);
 
       setInput("");
       abortRef.current?.abort();
@@ -90,14 +100,20 @@ export function ChatWindow() {
             fetchConversations().then(setConversations);
           },
           onError: (msg) => {
-            const isAuthError = msg.toLowerCase().includes("authentication") || msg.toLowerCase().includes("session");
-            appendStreamToken(
-              aiMsgId,
-              isAuthError
-                ? "Your session has expired. Please **log out and log back in** to continue chatting."
-                : `Sorry, something went wrong: ${msg}\n\n⚠️ This is health information, not medical advice.`
-            );
-            finalizeStreamingMessage(aiMsgId);
+            const isAuthError =
+              msg.toLowerCase().includes("authentication") ||
+              msg.toLowerCase().includes("session") ||
+              msg.toLowerCase().includes("unauthorized");
+            if (isAuthError) {
+              setNotLoggedIn(true);
+              finalizeStreamingMessage(aiMsgId);
+            } else {
+              appendStreamToken(
+                aiMsgId,
+                `Sorry, something went wrong: ${msg}\n\n⚠️ This is health information, not medical advice.`
+              );
+              finalizeStreamingMessage(aiMsgId);
+            }
           },
         },
         abortRef.current.signal
@@ -237,7 +253,32 @@ export function ChatWindow() {
               className="flex-1 overflow-y-auto px-4 py-4 space-y-1"
               style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(84,84,88,0.3) transparent" }}
             >
-              {messages.length === 0 && (
+              {/* Session expired / not logged in */}
+              {notLoggedIn && (
+                <div className="flex flex-col items-center justify-center h-full text-center gap-4 px-4">
+                  <div
+                    className="w-14 h-14 rounded-full flex items-center justify-center text-2xl"
+                    style={{ background: "rgba(255,69,58,0.12)" }}
+                  >
+                    🔒
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold text-sm mb-1">Session expired</p>
+                    <p className="text-[12px] leading-relaxed" style={{ color: "#8E8E93" }}>
+                      Please log in to continue chatting.
+                    </p>
+                  </div>
+                  <a
+                    href="/login"
+                    className="px-5 py-2 rounded-xl text-white text-sm font-semibold transition-colors"
+                    style={{ background: "#0A84FF" }}
+                  >
+                    Log in
+                  </a>
+                </div>
+              )}
+
+              {messages.length === 0 && !notLoggedIn && (
                 <div className="flex flex-col items-center justify-center h-full text-center gap-4">
                   <div
                     className="w-14 h-14 rounded-full flex items-center justify-center text-2xl"
@@ -279,11 +320,13 @@ export function ChatWindow() {
             )}
 
             {/* Disclaimer */}
-            <div className="px-4 py-1.5 shrink-0">
-              <p className="text-[11px] text-center" style={{ color: "#48484A" }}>
-                ⚠️ Health information only — not medical advice
-              </p>
-            </div>
+            {!notLoggedIn && (
+              <div className="px-4 py-1.5 shrink-0">
+                <p className="text-[11px] text-center" style={{ color: "#48484A" }}>
+                  ⚠️ Health information only — not medical advice
+                </p>
+              </div>
+            )}
 
             {/* Input */}
             <div className="px-3 pb-3 shrink-0">

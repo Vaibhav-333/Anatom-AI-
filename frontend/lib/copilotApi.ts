@@ -81,6 +81,12 @@ async function ensureFreshToken(): Promise<void> {
   }
 }
 
+/** True when the user has a valid (or refreshable) session. */
+export async function checkAuth(): Promise<boolean> {
+  if (currentToken() && !isTokenExpiredOrStale()) return true;
+  return tryRefresh();
+}
+
 function authHeader(token: string | null): Record<string, string> {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
