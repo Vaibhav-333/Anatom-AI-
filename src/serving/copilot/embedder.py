@@ -19,7 +19,9 @@ import numpy as np
 
 log = logging.getLogger(__name__)
 
-EMBED_DIR = Path("data/embeddings")
+# Use /tmp/embeddings so the non-root container user always has write access.
+# Override with EMBED_DIR env var if persistent storage is mounted elsewhere.
+EMBED_DIR = Path(os.getenv("EMBED_DIR", "/tmp/embeddings"))
 EMBED_DIR.mkdir(parents=True, exist_ok=True)
 
 CHUNK_SIZE = 400
