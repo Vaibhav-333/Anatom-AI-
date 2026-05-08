@@ -21,11 +21,14 @@ Usage
 from __future__ import annotations
 
 import aiosqlite
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import AsyncGenerator
 
-DATABASE_PATH = Path("data/anatom_ai.db")
+# Use /tmp so the non-root container user always has write access.
+# Override with DATABASE_PATH env var to point at a mounted volume.
+DATABASE_PATH = Path(os.getenv("DATABASE_PATH", "/tmp/data/anatom_ai.db"))
 
 # ---------------------------------------------------------------------------
 # Schema DDL
