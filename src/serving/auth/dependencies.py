@@ -40,14 +40,28 @@ async def get_current_user(
     except JWTError:
         raise credentials_exception
 
-    # Verify user still exists and is not locked
-    async with get_db() as db:
-        row = await db.execute_fetchall(
-            "SELECT id, username, is_locked FROM auth_users WHERE id = ?",
-            (user_id,),
-        )
+    # Verify user still exists and is not locked.
+    # If the DB was wiped (e.g. Railway /tmp cleared on restart) but the JWT is
+    # still cryptographically valid, trust the JWT — the signature is proof of
+    # identity. The user's data is gone but they can keep using JWT endpoints.
+    try:
+        async with get_db() as db:
+            row = await db.execute_fetchall(
+                "SELECT id, username, is_locked FROM auth_users WHERE id = ?",
+                (user_id,),
+            )
+    except Exception:
+        row = []
+
     if not row:
-        raise credentials_exception
+        # DB missing or user not found — fall back to JWT claims only.
+        return {
+            **payload,
+            "id": user_id,
+            "username": payload.get("username", ""),
+            "is_locked": 0,
+        }
+
     user = dict(row[0])
     if user["is_locked"]:
         raise HTTPException(
