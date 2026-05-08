@@ -50,4 +50,6 @@ USER anatomai
 EXPOSE 8000 8501
 
 # Default: start FastAPI inference server
-CMD ["uvicorn", "src.serving.api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Use sh -c so $PORT (injected by Railway) is shell-expanded at runtime.
+# Falls back to 8000 for local Docker runs where PORT is not set.
+CMD ["sh", "-c", "uvicorn src.serving.api:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1"]

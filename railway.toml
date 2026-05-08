@@ -3,9 +3,7 @@
 builder = "dockerfile"
 
 [deploy]
-# Start the FastAPI server via Uvicorn with 2 workers.
-# $PORT is injected by Railway at runtime.
-startCommand = "uvicorn src.serving.api:app --host 0.0.0.0 --port $PORT --workers 1"
+# CMD in Dockerfile handles startup with sh -c so $PORT expands correctly.
 healthcheckPath = "/health"
 healthcheckTimeout = 120
 restartPolicyType = "ON_FAILURE"
