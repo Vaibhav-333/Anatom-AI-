@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, LogIn, AlertCircle, Brain, Loader2, Lock, User } from "lucide-react";
 import { authApi, ApiError } from "@/lib/authApi";
 import { useAuthStore } from "@/lib/authStore";
+import { devSkip } from "@/lib/devSkip";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -241,6 +242,22 @@ export default function LoginPage() {
             <span className="text-[11px] font-mono" style={{ color: "#48484A" }}>OR</span>
             <div className="flex-1 h-px" style={{ background: "rgba(84,84,88,0.30)" }} />
           </div>
+
+          {/* DEV BYPASS */}
+          <button
+            type="button"
+            onClick={() => devSkip(router)}
+            className="w-full py-2.5 rounded-xl text-[13px] font-medium mb-5 transition-all"
+            style={{
+              background: "rgba(84,84,88,0.14)",
+              border: "1px solid rgba(84,84,88,0.30)",
+              color: "#8E8E93",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(84,84,88,0.22)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(84,84,88,0.14)"; }}
+          >
+            Skip — Continue as Guest (Dev)
+          </button>
 
           <p className="text-center text-[13px]" style={{ color: "#8E8E93" }}>
             Don&apos;t have an account?{" "}
