@@ -149,19 +149,29 @@ async function request<T>(
   if (!res.ok) {
     let detail = `HTTP ${res.status}`;
     try {
-      const body = await res.json();
-      if (Array.isArray(body.detail)) {
-        // FastAPI/Pydantic validation errors — extract human-readable messages
-        detail = body.detail
-          .map((e: { msg: string }) => e.msg.replace(/^Value error,\s*/i, ""))
-          .join(". ");
-      } else if (typeof body.detail === "string") {
-        detail = body.detail;
-      } else {
-        detail = JSON.stringify(body);
+      // Read body as text first — calling res.json() then res.text() throws
+      // "body stream already read". Read once, then JSON.parse manually.
+      const text = await res.text();
+      if (text) {
+        try {
+          const body = JSON.parse(text);
+          if (Array.isArray(body.detail)) {
+            // FastAPI/Pydantic validation errors
+            detail = body.detail
+              .map((e: { msg: string }) => e.msg.replace(/^Value error,\s*/i, ""))
+              .join(". ");
+          } else if (typeof body.detail === "string") {
+            detail = body.detail;
+          } else {
+            detail = text;
+          }
+        } catch {
+          // Not JSON — use raw text (HTML error page, plain text, etc.)
+          detail = text.slice(0, 200); // cap length for display
+        }
       }
     } catch {
-      detail = await res.text();
+      // Body unreadable — keep default "HTTP NNN"
     }
     throw new ApiError(res.status, detail);
   }
