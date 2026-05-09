@@ -115,7 +115,7 @@ function Step1({ onNext }: Step1Props) {
       const res = await authApi.signup({ username, password });
       onNext(res.user_id, res.username, password);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : "Sign up failed. Please try again.");
+      setError(err instanceof ApiError ? err.message : `Sign up failed: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setLoading(false);
     }

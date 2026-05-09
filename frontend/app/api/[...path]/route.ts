@@ -1,86 +1,101 @@
 /**
  * Catch-all API proxy — forwards every /api/* request to the backend.
  *
- * WHY this exists instead of next.config.mjs rewrites:
- *   - next.config.mjs rewrites bake the destination URL at BUILD TIME.
- *     When using ngrok (URL changes on every restart) the rewrite becomes
- *     stale and all API calls fail without a redeploy.
- *   - This Edge runtime handler reads process.env.API_URL at REQUEST TIME,
- *     so updating the env var in Vercel takes effect on the next request
- *     without rebuilding the app.
- *   - It also sets `ngrok-skip-browser-warning` which bypasses the ngrok
- *     interstitial HTML page that otherwise poisons JSON/SSE responses.
- *   - Runs in Edge runtime for full streaming support (SSE for AI copilot).
+ * Uses Node.js runtime (NOT Edge) because Edge runtime has known issues
+ * with forwarding POST/PUT/PATCH request bodies (ReadableStream duplex).
+ * Node.js runtime reads the body fully before forwarding, which is more
+ * reliable for standard REST endpoints.
  *
  * ENV VARS (set in Vercel project settings → Environment Variables):
- *   API_URL              — your Render backend URL, e.g. https://anatom-ai.onrender.com
- *   NEXT_PUBLIC_API_URL  — alternative / fallback (kept for backward compatibility)
+ *   API_URL              — your Railway/Render backend URL
+ *   NEXT_PUBLIC_API_URL  — alternative fallback
  */
 
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge";
+// Node.js runtime — reliable body forwarding for POST/PUT/PATCH
+export const runtime = "nodejs";
 
 /** Read backend URL at request time — NOT baked at build time. */
 function getBackendUrl(): string {
   return (
     process.env.API_URL ??
     process.env.NEXT_PUBLIC_API_URL ??
-    // Production Railway backend — used automatically when no env var is set.
-    // Override with API_URL in Vercel env vars if the Railway URL ever changes.
     "https://web-production-698ce.up.railway.app"
   );
 }
 
 async function proxy(
   req: NextRequest,
-  { params }: { params: { path: string[] } }
+  context: { params: Promise<{ path: string[] }> | { path: string[] } }
 ) {
+  // Support both Next.js 14 (sync params) and Next.js 15 (async params)
+  const params = await Promise.resolve(context.params);
   const path = (params.path ?? []).join("/");
-  const search = req.nextUrl.search; // preserves query params (?foo=bar)
+  const search = req.nextUrl.search;
   const target = `${getBackendUrl()}/${path}${search}`;
 
-  // Build forwarded headers — strip hop-by-hop headers that confuse proxies
-  const headers = new Headers(req.headers);
-  headers.delete("host");
-  headers.delete("connection");
-  headers.delete("keep-alive");
-  headers.delete("proxy-authenticate");
-  headers.delete("proxy-authorization");
-  headers.delete("te");
-  headers.delete("trailers");
-  headers.delete("transfer-encoding");
-  headers.delete("upgrade");
+  // Build forwarded headers — strip hop-by-hop headers
+  const forwardHeaders: Record<string, string> = {};
+  req.headers.forEach((value, key) => {
+    const lower = key.toLowerCase();
+    if (
+      lower === "host" ||
+      lower === "connection" ||
+      lower === "keep-alive" ||
+      lower === "te" ||
+      lower === "trailers" ||
+      lower === "transfer-encoding" ||
+      lower === "upgrade" ||
+      lower === "proxy-authenticate" ||
+      lower === "proxy-authorization"
+    ) {
+      return; // skip hop-by-hop
+    }
+    forwardHeaders[key] = value;
+  });
 
-  // ── ngrok-specific ────────────────────────────────────────────────────────
-  // Without this header, ngrok (free tier) returns an HTML interstitial page
-  // instead of your actual JSON/SSE response, which crashes every API call.
-  headers.set("ngrok-skip-browser-warning", "true");
-  // A non-browser User-Agent also suppresses the interstitial
-  headers.set("User-Agent", "AnatomAI-Proxy/1.0");
-
-  const body =
-    req.method !== "GET" && req.method !== "HEAD" ? req.body : undefined;
+  // Read the body fully as text before forwarding — avoids Edge ReadableStream issues
+  let body: string | undefined;
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    try {
+      body = await req.text();
+    } catch {
+      body = undefined;
+    }
+  }
 
   let upstream: Response;
   try {
-    upstream = await fetch(target, { method: req.method, headers, body });
-  } catch {
+    upstream = await fetch(target, {
+      method: req.method,
+      headers: forwardHeaders,
+      body: body,
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json(
       {
-        detail:
-          "Backend unreachable — the server may be starting up or the API_URL env var is not configured. Please try again in a moment.",
+        detail: `Backend unreachable (${message}). The server may be starting up — please try again in a moment.`,
       },
       { status: 503 }
     );
   }
 
-  // Forward the upstream response (including streaming body for SSE)
-  const resHeaders = new Headers(upstream.headers);
-  resHeaders.delete("transfer-encoding"); // Next.js handles this
-  resHeaders.delete("connection");
+  // Forward the response
+  const resBody = await upstream.text();
+  const resHeaders = new Headers();
+  upstream.headers.forEach((value, key) => {
+    const lower = key.toLowerCase();
+    if (lower === "transfer-encoding" || lower === "connection") return;
+    resHeaders.set(key, value);
+  });
+  // Ensure content-type is preserved
+  if (!resHeaders.has("content-type")) {
+    resHeaders.set("content-type", "application/json");
+  }
 
-  return new NextResponse(upstream.body, {
+  return new NextResponse(resBody, {
     status: upstream.status,
     statusText: upstream.statusText,
     headers: resHeaders,
