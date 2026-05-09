@@ -9,7 +9,6 @@ import {
   fetchSuggestedQuestions,
   deleteConversation,
   fetchConversations,
-  checkAuth,
 } from "@/lib/copilotApi";
 import { MessageBubble } from "./MessageBubble";
 import { TypingIndicator } from "./TypingIndicator";
@@ -64,14 +63,10 @@ export function ChatWindow() {
       const query = text.trim();
       if (!query || isStreaming) return;
 
-      // Gate on auth before doing anything visible
-      const authed = await checkAuth();
-      if (!authed) {
-        setNotLoggedIn(true);
-        return;
-      }
+      // Clear any previous auth error and attempt the request.
+      // The stream itself handles 401 with a token-refresh retry; we only
+      // show the login overlay if the backend confirms auth failure.
       setNotLoggedIn(false);
-
       setInput("");
       abortRef.current?.abort();
       abortRef.current = new AbortController();
@@ -100,10 +95,9 @@ export function ChatWindow() {
             fetchConversations().then(setConversations);
           },
           onError: (msg) => {
-            const isAuthError =
-              msg.toLowerCase().includes("authentication") ||
-              msg.toLowerCase().includes("session") ||
-              msg.toLowerCase().includes("unauthorized");
+            // Only show the login overlay for definitive auth failures (401/403).
+            // "Authentication failed" is the exact string set by the stream client.
+            const isAuthError = msg.toLowerCase().includes("authentication failed");
             if (isAuthError) {
               setNotLoggedIn(true);
               finalizeStreamingMessage(aiMsgId);
