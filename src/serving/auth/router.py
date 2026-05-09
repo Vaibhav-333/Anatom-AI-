@@ -420,47 +420,65 @@ async def refresh_token(body: RefreshRequest):
         payload = decode_token(body.refresh_token)
         if payload.get("type") != "refresh":
             raise credentials_exc
-        user_id = payload.get("sub")
+        user_id: str = payload.get("sub") or ""
+        username: str = payload.get("username", "")
         if not user_id:
             raise credentials_exc
     except JWTError:
         raise credentials_exc
 
-    async with get_db() as db:
-        rows = await db.execute_fetchall(
-            "SELECT * FROM auth_sessions WHERE refresh_token = ? AND is_revoked = 0",
-            (body.refresh_token,),
-        )
-        if not rows or is_expired(dict(rows[0])["expires_at"]):
-            raise credentials_exc
+    # Try DB-backed session lookup; fall back to JWT claims on DB miss
+    # (handles Railway /tmp wipe where SQLite is reset but JWT is still valid)
+    db_session_found = False
+    user_data: Optional[dict] = None
+    try:
+        async with get_db() as db:
+            rows = await db.execute_fetchall(
+                "SELECT * FROM auth_sessions WHERE refresh_token = ? AND is_revoked = 0",
+                (body.refresh_token,),
+            )
+            if rows:
+                if is_expired(dict(rows[0])["expires_at"]):
+                    raise credentials_exc  # Explicitly expired — honour revocation
+                db_session_found = True
+                user_data = await _fetch_user_by_id(db, user_id)
+    except HTTPException:
+        raise
+    except Exception:
+        pass  # DB unavailable — fall through to JWT-only path
 
-        user = await _fetch_user_by_id(db, user_id)
-        if not user:
-            raise credentials_exc
+    now = _now_iso()
+    eff_id = user_data["id"] if user_data else user_id
+    eff_username = user_data["username"] if user_data else username
+    eff_hp_done = bool(user_data["health_profile_done"]) if user_data else False
 
-        # Rotate refresh token
-        now = _now_iso()
-        new_access, expires_in = create_access_token(user["id"], user["username"])
-        new_refresh, new_refresh_expiry = create_refresh_token(user["id"], user["username"])
+    new_access, expires_in = create_access_token(eff_id, eff_username)
+    new_refresh, new_refresh_expiry = create_refresh_token(eff_id, eff_username)
 
-        await db.execute(
-            "UPDATE auth_sessions SET is_revoked = 1 WHERE refresh_token = ?",
-            (body.refresh_token,),
-        )
-        await db.execute(
-            """INSERT INTO auth_sessions
-               (id, user_id, refresh_token, expires_at, created_at)
-               VALUES (?, ?, ?, ?, ?)""",
-            (str(uuid.uuid4()), user["id"], new_refresh, dt_iso(new_refresh_expiry), now),
-        )
-        await db.commit()
+    # Rotate session record — best-effort (non-fatal if DB unavailable)
+    try:
+        async with get_db() as db:
+            if db_session_found:
+                await db.execute(
+                    "UPDATE auth_sessions SET is_revoked = 1 WHERE refresh_token = ?",
+                    (body.refresh_token,),
+                )
+            await db.execute(
+                """INSERT INTO auth_sessions
+                   (id, user_id, refresh_token, expires_at, created_at)
+                   VALUES (?, ?, ?, ?, ?)""",
+                (str(uuid.uuid4()), eff_id, new_refresh, dt_iso(new_refresh_expiry), now),
+            )
+            await db.commit()
+    except Exception:
+        pass
 
     return TokenResponse(
         access_token=new_access,
         refresh_token=new_refresh,
-        user_id=user["id"],
-        username=user["username"],
-        health_profile_done=bool(user["health_profile_done"]),
+        user_id=eff_id,
+        username=eff_username,
+        health_profile_done=eff_hp_done,
         expires_in=expires_in,
     )
 
