@@ -18,11 +18,16 @@ export const runtime = "nodejs";
 
 /** Read backend URL at request time — NOT baked at build time. */
 function getBackendUrl(): string {
-  return (
+  const raw =
     process.env.API_URL ??
     process.env.NEXT_PUBLIC_API_URL ??
-    "https://web-production-698ce.up.railway.app"
-  );
+    "https://web-production-698ce.up.railway.app";
+
+  // Guard against env vars set without a protocol (e.g. "web-production-xxx.up.railway.app")
+  if (!raw.startsWith("http://") && !raw.startsWith("https://")) {
+    return `https://${raw}`;
+  }
+  return raw.replace(/\/$/, ""); // also strip any trailing slash
 }
 
 async function proxy(
