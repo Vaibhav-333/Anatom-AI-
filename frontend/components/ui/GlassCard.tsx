@@ -27,12 +27,24 @@ export function GlassCard({
       onClick={onClick}
       className={cn(
         "glass-panel p-5",
-        hover && "cursor-pointer transition-all duration-200",
+        hover && "cursor-pointer",
         className
       )}
-      style={hover ? { "--hover-bg": "var(--card-hover-bg)" } as React.CSSProperties : undefined}
-      onMouseOver={hover ? (e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--card-hover-bg)"; } : undefined}
-      onMouseOut={hover ? (e) => { (e.currentTarget as HTMLElement).style.backgroundColor = ""; } : undefined}
+      style={{ willChange: hover ? "transform" : undefined }}
+      onMouseOver={hover ? (e) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.backgroundColor = "var(--card-hover-bg)";
+        el.style.transform = "translateY(-2px)";
+        el.style.boxShadow = "var(--elevation-md)";
+        el.style.borderColor = "var(--border-default)";
+      } : undefined}
+      onMouseOut={hover ? (e) => {
+        const el = e.currentTarget as HTMLElement;
+        el.style.backgroundColor = "";
+        el.style.transform = "";
+        el.style.boxShadow = "";
+        el.style.borderColor = "";
+      } : undefined}
     >
       {children}
     </motion.div>

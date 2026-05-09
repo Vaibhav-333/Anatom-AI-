@@ -35,8 +35,8 @@ function Sparkline({ data, color }: { data: number[]; color: string }) {
     <svg width={W} height={H} className="overflow-visible">
       <defs>
         <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%"   stopColor={color} stopOpacity="0.18" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
+          <stop offset="0%"   stopColor={color} stopOpacity="0.35" />
+          <stop offset="100%" stopColor={color} stopOpacity="0.03" />
         </linearGradient>
       </defs>
       <polygon fill={`url(#${gradId})`} points={`0,${H} ${pts} ${W},${H}`} />
@@ -126,7 +126,7 @@ export function HealthScoreCard({ score, history, bodyAge }: HealthScoreCardProp
                 initial={{ strokeDashoffset: circumference }}
                 animate={{ strokeDashoffset: circumference * (1 - score / 100) }}
                 transition={{ duration: 1.4, ease: [0.4, 0, 0.2, 1] }}
-                style={{ filter: `drop-shadow(0 0 4px ${cfg.hex}80)` }}
+                style={{ filter: `drop-shadow(0 0 6px ${cfg.hex}AA) drop-shadow(0 0 12px ${cfg.hex}40)` }}
               />
             )}
           </svg>

@@ -38,9 +38,11 @@ export function TopBar() {
     <header className="fixed top-0 right-0 left-60 z-30 h-14">
       {/* Background */}
       <div
-        className="absolute inset-0 backdrop-blur-xl"
+        className="absolute inset-0"
         style={{
           background: "var(--bg-topbar)",
+          backdropFilter: "blur(20px) saturate(180%)",
+          WebkitBackdropFilter: "blur(20px) saturate(180%)",
           borderBottom: "1px solid var(--border-default)",
           transition: "background 0.3s ease, border-color 0.3s ease",
         }}
