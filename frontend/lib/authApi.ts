@@ -7,7 +7,14 @@
 
 import { useAuthStore } from "@/lib/authStore";
 
-const BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// In production (Vercel), NEXT_PUBLIC_API_URL is often not set.
+// Fall back to "/api" so every call is routed through the Next.js proxy
+// at app/api/[...path]/route.ts, which reads the server-side API_URL env var
+// at request time — no rebuild needed when the backend URL changes.
+const BASE =
+  process.env.NEXT_PUBLIC_API_URL && process.env.NEXT_PUBLIC_API_URL !== "http://localhost:8000"
+    ? process.env.NEXT_PUBLIC_API_URL
+    : "/api";
 
 // ---------------------------------------------------------------------------
 // Types

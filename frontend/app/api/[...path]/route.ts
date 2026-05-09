@@ -12,9 +12,9 @@
  *     interstitial HTML page that otherwise poisons JSON/SSE responses.
  *   - Runs in Edge runtime for full streaming support (SSE for AI copilot).
  *
- * ENV VARS (set in Vercel project settings):
- *   API_URL              — preferred: your current ngrok URL, e.g. https://abc.ngrok-free.app
- *   NEXT_PUBLIC_API_URL  — fallback (kept for backward compatibility)
+ * ENV VARS (set in Vercel project settings → Environment Variables):
+ *   API_URL              — your Render backend URL, e.g. https://anatom-ai.onrender.com
+ *   NEXT_PUBLIC_API_URL  — alternative / fallback (kept for backward compatibility)
  */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -66,8 +66,8 @@ async function proxy(
   } catch {
     return NextResponse.json(
       {
-        error:
-          "Backend unreachable — make sure your local server and ngrok tunnel are running.",
+        detail:
+          "Backend unreachable — the server may be starting up or the API_URL env var is not configured. Please try again in a moment.",
       },
       { status: 503 }
     );

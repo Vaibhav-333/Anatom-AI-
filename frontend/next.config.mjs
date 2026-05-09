@@ -20,8 +20,14 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        // Railway backend — accepts any subdomain of up.railway.app
+        // Railway backend
         hostname: "*.up.railway.app",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        // Render backend
+        hostname: "*.onrender.com",
         pathname: "/**",
       },
       {
