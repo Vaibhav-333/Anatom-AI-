@@ -72,7 +72,7 @@ export function AlertBox({
             {title}
           </p>
         )}
-        <div className="text-[12.5px] leading-relaxed" style={{ color: "#8E8E93" }}>
+        <div className="text-[12.5px] leading-relaxed" style={{ color: "var(--label-secondary)" }}>
           {children}
         </div>
       </div>
@@ -80,9 +80,9 @@ export function AlertBox({
         <button
           onClick={onDismiss}
           className="shrink-0 transition-colors"
-          style={{ color: "#636366" }}
-          onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#FFFFFF")}
-          onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "#636366")}
+          style={{ color: "var(--label-tertiary)" }}
+          onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--label-primary)")}
+          onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--label-tertiary)")}
         >
           <X className="w-3.5 h-3.5" />
         </button>

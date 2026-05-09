@@ -44,8 +44,8 @@ export function RecoveryTrendCard({ history }: RecoveryTrendCardProps) {
       : null;
 
   const trending = delta === null ? "none" : delta > 0 ? "up" : delta < 0 ? "down" : "none";
-  const colorHex = trending === "up" ? "#32D74B" : trending === "down" ? "#FF453A" : "#636366";
-  const textTw   = trending === "up" ? "text-[#32D74B]" : trending === "down" ? "text-[#FF453A]" : "text-[#636366]";
+  const colorHex = trending === "up" ? "#32D74B" : trending === "down" ? "#FF453A" : "var(--label-tertiary)";
+  const textTw   = trending === "up" ? "text-[#32D74B]" : trending === "down" ? "text-[#FF453A]" : "text-[color:var(--label-tertiary)]";
   const statusLabel = trending === "up" ? "Improving" : trending === "down" ? "Declining" : hasData ? "Stable" : "No history";
 
   return (
@@ -56,7 +56,7 @@ export function RecoveryTrendCard({ history }: RecoveryTrendCardProps) {
           <div className="flex items-center gap-1.5 mt-1.5">
             {trending === "up"   ? <TrendingUp   className="w-5 h-5 text-[#32D74B]" /> :
              trending === "down" ? <TrendingDown  className="w-5 h-5 text-[#FF453A]" /> :
-                                   <Minus         className="w-5 h-5 text-[#636366]" />}
+                                   <Minus         className="w-5 h-5 text-[color:var(--label-tertiary)]" />}
             <span className={cn("font-mono text-[24px] font-bold leading-none tracking-tight", textTw)}>
               {pctStr !== null ? `${delta! > 0 ? "+" : ""}${pctStr}%` : "—"}
             </span>
@@ -69,23 +69,23 @@ export function RecoveryTrendCard({ history }: RecoveryTrendCardProps) {
         <div
           className="p-2 rounded-xl shrink-0"
           style={{
-            background: "rgba(255,255,255,0.06)",
+            background: "var(--bg-elevated)",
           }}
         >
-          <Activity className="w-5 h-5" style={{ color: "#8E8E93" }} />
+          <Activity className="w-5 h-5" style={{ color: "var(--label-secondary)" }} />
         </div>
       </div>
 
-      <div className="mt-auto pt-2.5" style={{ borderTop: "1px solid rgba(84,84,88,0.35)" }}>
+      <div className="mt-auto pt-2.5" style={{ borderTop: "1px solid var(--border-default)" }}>
         {hasData ? (
           <div className="flex items-end justify-between">
             <Sparkline data={sparkData} color={colorHex} />
-            <span className="text-[10px] font-mono" style={{ color: "#636366" }}>
+            <span className="text-[10px] font-mono" style={{ color: "var(--label-tertiary)" }}>
               {history.length}d span
             </span>
           </div>
         ) : (
-          <p className="text-[10px] font-mono" style={{ color: "#636366" }}>
+          <p className="text-[10px] font-mono" style={{ color: "var(--label-tertiary)" }}>
             upload a report to track trends
           </p>
         )}

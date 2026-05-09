@@ -99,15 +99,15 @@ export default function SymptomLogForm({ userId, onSubmit, loading }: Props) {
 
       {/* Fatigue */}
       <div>
-        <label className="text-xs text-gray-400 mb-2 block">Fatigue</label>
+        <label className="text-xs mb-2 block" style={{ color: "var(--label-secondary)" }}>Fatigue</label>
         <div className="flex gap-2">
           {(["low", "medium", "high"] as const).map((f) => (
             <button key={f} type="button"
               onClick={() => set("fatigue", form.fatigue === f ? "" : f)}
               className="flex-1 py-1.5 rounded-lg text-xs font-medium capitalize transition-all"
               style={{
-                background: form.fatigue === f ? (f === "high" ? "#FF3B3B33" : f === "medium" ? "#FFB80033" : "#00FF8833") : "rgba(255,255,255,0.05)",
-                color: form.fatigue === f ? (f === "high" ? "#FF3B3B" : f === "medium" ? "#FFB800" : "#00FF88") : "#8899AA",
+                background: form.fatigue === f ? (f === "high" ? "#FF3B3B33" : f === "medium" ? "#FFB80033" : "#00FF8833") : "var(--bg-elevated)",
+                color: form.fatigue === f ? (f === "high" ? "#FF3B3B" : f === "medium" ? "#FFB800" : "#00FF88") : "var(--label-secondary)",
                 border: `1px solid ${form.fatigue === f ? (f === "high" ? "#FF3B3B" : f === "medium" ? "#FFB800" : "#00FF88") : "transparent"}`,
               }}>
               {f}
@@ -118,15 +118,15 @@ export default function SymptomLogForm({ userId, onSubmit, loading }: Props) {
 
       {/* Mood */}
       <div>
-        <label className="text-xs text-gray-400 mb-2 block">Mood: <span className="text-white">{["😞","😕","😐","🙂","😊"][form.mood - 1]}</span></label>
+        <label className="text-xs mb-2 block" style={{ color: "var(--label-secondary)" }}>Mood: <span style={{ color: "var(--label-primary)" }}>{["😞","😕","😐","🙂","😊"][form.mood - 1]}</span></label>
         <div className="flex gap-2">
           {[1,2,3,4,5].map((m) => (
             <button key={m} type="button" onClick={() => set("mood", m)}
               className="flex-1 py-1.5 rounded-lg text-xs transition-all"
               style={{
-                background: form.mood === m ? "rgba(0,212,255,0.2)" : "rgba(255,255,255,0.05)",
+                background: form.mood === m ? "rgba(0,212,255,0.2)" : "var(--bg-elevated)",
                 border: `1px solid ${form.mood === m ? "#00D4FF" : "transparent"}`,
-                color: form.mood === m ? "#00D4FF" : "#8899AA",
+                color: form.mood === m ? "#00D4FF" : "var(--label-secondary)",
               }}>
               {m}
             </button>

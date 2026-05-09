@@ -21,9 +21,9 @@ export function SuggestedQuestions({ questions, onSelect }: Props) {
           onClick={() => onSelect(q)}
           className="text-[12px] px-3 py-1.5 rounded-full transition-all cursor-pointer whitespace-nowrap"
           style={{
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(84,84,88,0.35)",
-            color: "#8E8E93",
+            background: "var(--bg-elevated)",
+            border: "1px solid var(--border-default)",
+            color: "var(--label-secondary)",
           }}
           onMouseEnter={(e) => {
             (e.currentTarget as HTMLButtonElement).style.background = "rgba(10,132,255,0.12)";
@@ -31,9 +31,9 @@ export function SuggestedQuestions({ questions, onSelect }: Props) {
             (e.currentTarget as HTMLButtonElement).style.color = "#0A84FF";
           }}
           onMouseLeave={(e) => {
-            (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.06)";
-            (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(84,84,88,0.35)";
-            (e.currentTarget as HTMLButtonElement).style.color = "#8E8E93";
+            (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-elevated)";
+            (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border-default)";
+            (e.currentTarget as HTMLButtonElement).style.color = "var(--label-secondary)";
           }}
         >
           {q}

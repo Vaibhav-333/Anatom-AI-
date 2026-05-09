@@ -51,7 +51,7 @@ function HealthGauge({ score }: { score: number }) {
         <path
           d="M 7 55 A 48 48 0 0 1 103 55"
           fill="none"
-          stroke="rgba(255,255,255,0.07)"
+          stroke="var(--bg-elevated)"
           strokeWidth={stroke}
           strokeLinecap="round"
         />

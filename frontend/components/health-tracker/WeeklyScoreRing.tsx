@@ -34,7 +34,7 @@ export default function WeeklyScoreRing({ score, size = "md", label, trend }: Pr
         <svg width={dim} height={dim} className="-rotate-90">
           <circle
             cx={dim / 2} cy={dim / 2} r={r}
-            stroke="rgba(255,255,255,0.08)" strokeWidth={stroke} fill="none"
+            stroke="var(--bg-elevated)" strokeWidth={stroke} fill="none"
           />
           <motion.circle
             cx={dim / 2} cy={dim / 2} r={r}
@@ -54,7 +54,7 @@ export default function WeeklyScoreRing({ score, size = "md", label, trend }: Pr
           )}
         </div>
       </div>
-      {label && <span className="text-xs text-gray-400">{label}</span>}
+      {label && <span className="text-xs" style={{ color: "var(--label-secondary)" }}>{label}</span>}
     </div>
   );
 }

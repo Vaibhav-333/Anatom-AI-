@@ -113,8 +113,8 @@ export function AIInsightsPanel({
     <div
       className="relative overflow-hidden rounded-2xl"
       style={{
-        background: "#1C1C1E",
-        boxShadow: "0 2px 16px rgba(0,0,0,0.50), inset 0 0.5px 0 rgba(255,255,255,0.05)",
+        background: "var(--glass-bg)",
+        boxShadow: "var(--glass-shadow)",
       }}
     >
       {/* Background image */}
@@ -130,7 +130,7 @@ export function AIInsightsPanel({
         />
         <div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(to right, #1C1C1E 0%, rgba(28,28,30,0.7) 50%, rgba(28,28,30,0.2) 100%)" }}
+          style={{ background: "linear-gradient(to right, var(--glass-bg) 0%, rgba(28,28,30,0.7) 50%, rgba(28,28,30,0.2) 100%)" }}
         />
       </div>
 
@@ -147,14 +147,14 @@ export function AIInsightsPanel({
               </div>
               <span
                 className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 status-pulse"
-                style={{ background: "#32D74B", borderColor: "#1C1C1E" }}
+                style={{ background: "#32D74B", borderColor: "var(--glass-bg)" }}
               />
             </div>
             <div>
-              <h3 className="font-semibold text-white text-[14px] tracking-tight">
+              <h3 className="font-semibold text-[14px] tracking-tight" style={{ color: "var(--label-primary)" }}>
                 AI Intelligence
               </h3>
-              <p className="text-[10px] font-mono" style={{ color: "#636366" }}>
+              <p className="text-[10px] font-mono" style={{ color: "var(--label-tertiary)" }}>
                 Powered by Gemini AI · Live
               </p>
             </div>
@@ -172,8 +172,8 @@ export function AIInsightsPanel({
           <div
             className={cn("rounded-xl p-4 transition-opacity duration-200", fading ? "opacity-0" : "opacity-100")}
             style={{
-              background: "rgba(0,0,0,0.25)",
-              border: "1px solid rgba(84,84,88,0.3)",
+              background: "var(--bg-elevated)",
+              border: "1px solid var(--border-default)",
             }}
           >
             <div className="flex items-start gap-3">
@@ -187,14 +187,14 @@ export function AIInsightsPanel({
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
                   <span
                     className="text-[9.5px] font-semibold uppercase tracking-widest"
-                    style={{ color: "#8E8E93" }}
+                    style={{ color: "var(--label-secondary)" }}
                   >
                     AI Insight
                   </span>
                   <span className={ts.badge}>{ts.label}</span>
                 </div>
-                <p className="text-[13px] font-semibold text-white mb-1.5">{active.headline}</p>
-                <p className="text-[12.5px] leading-relaxed" style={{ color: "#8E8E93" }}>
+                <p className="text-[13px] font-semibold mb-1.5" style={{ color: "var(--label-primary)" }}>{active.headline}</p>
+                <p className="text-[12.5px] leading-relaxed" style={{ color: "var(--label-secondary)" }}>
                   {active.text}
                 </p>
               </div>
@@ -210,11 +210,11 @@ export function AIInsightsPanel({
                   style={{
                     width: i === activeIdx ? 22 : 6,
                     height: 6,
-                    background: i === activeIdx ? "#0A84FF" : "rgba(255,255,255,0.15)",
+                    background: i === activeIdx ? "#0A84FF" : "var(--border-default)",
                   }}
                 />
               ))}
-              <span className="ml-auto text-[10px] font-mono" style={{ color: "#636366" }}>
+              <span className="ml-auto text-[10px] font-mono" style={{ color: "var(--label-tertiary)" }}>
                 {activeIdx + 1}/{insights.length}
               </span>
             </div>
@@ -224,7 +224,7 @@ export function AIInsightsPanel({
           <div className="lg:w-64 flex flex-col gap-2">
             <p
               className="text-[9.5px] font-semibold uppercase tracking-widest flex items-center gap-1.5"
-              style={{ color: "#8E8E93" }}
+              style={{ color: "var(--label-secondary)" }}
             >
               <Brain className="w-3 h-3" />
               Smart Suggestions
@@ -242,17 +242,17 @@ export function AIInsightsPanel({
                   key={i}
                   className="flex items-start gap-2 p-2.5 rounded-xl transition-all duration-200 cursor-default"
                   style={{
-                    background: "rgba(255,255,255,0.04)",
+                    background: "var(--bg-hover)",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.07)";
+                    (e.currentTarget as HTMLDivElement).style.background = "var(--bg-active)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.04)";
+                    (e.currentTarget as HTMLDivElement).style.background = "var(--bg-hover)";
                   }}
                 >
                   <ChevronRight className="w-3 h-3 shrink-0 mt-0.5" style={{ color: "#0A84FF" }} />
-                  <p className="text-[12px] leading-snug" style={{ color: "#8E8E93" }}>{s}</p>
+                  <p className="text-[12px] leading-snug" style={{ color: "var(--label-secondary)" }}>{s}</p>
                 </div>
               ))}
             </div>

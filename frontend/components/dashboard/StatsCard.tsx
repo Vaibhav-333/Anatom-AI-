@@ -43,8 +43,8 @@ export function StatsCard({ totalReports, activeConditions, lastUpload }: StatsC
       label: "Last Upload",
       value: lastUpload,
       icon: Clock,
-      color: "#8E8E93",
-      iconBg: "rgba(255,255,255,0.07)",
+      color: "var(--label-secondary)" as string,
+      iconBg: "var(--bg-elevated)",
       href: "/history",
     },
   ];
@@ -59,7 +59,7 @@ export function StatsCard({ totalReports, activeConditions, lastUpload }: StatsC
             <div
               className={cn(
                 "flex items-center gap-2.5 px-2 py-2 rounded-xl transition-all duration-160",
-                s.href ? "hover:bg-white/[0.04] cursor-pointer" : ""
+                s.href ? "cursor-pointer" : ""
               )}
             >
               <div
@@ -70,21 +70,21 @@ export function StatsCard({ totalReports, activeConditions, lastUpload }: StatsC
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[9.5px] font-mono font-semibold uppercase tracking-widest leading-none"
-                   style={{ color: "#636366" }}>
+                   style={{ color: "var(--label-tertiary)" }}>
                   {s.label}
                 </p>
                 <p className="text-[13px] font-mono font-bold mt-0.5 leading-none"
                    style={{ color: s.color }}>
                   {s.value}
                   {s.unit && (
-                    <span className="text-[10px] font-normal ml-1" style={{ color: "#636366" }}>
+                    <span className="text-[10px] font-normal ml-1" style={{ color: "var(--label-tertiary)" }}>
                       {s.unit}
                     </span>
                   )}
                 </p>
               </div>
               {s.href && (
-                <ChevronRight className="w-3 h-3 shrink-0" style={{ color: "#48484A" }} />
+                <ChevronRight className="w-3 h-3 shrink-0" style={{ color: "var(--nav-group-label)" }} />
               )}
             </div>
           );

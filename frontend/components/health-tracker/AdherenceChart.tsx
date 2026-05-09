@@ -13,7 +13,7 @@ interface Props {
 export default function AdherenceChart({ data }: Props) {
   if (!data.length) {
     return (
-      <div className="flex items-center justify-center h-40 text-gray-500 text-sm">
+      <div className="flex items-center justify-center h-40 text-sm" style={{ color: "var(--label-secondary)" }}>
         No adherence data yet.
       </div>
     );
@@ -22,7 +22,7 @@ export default function AdherenceChart({ data }: Props) {
   return (
     <ResponsiveContainer width="100%" height={200}>
       <BarChart data={data} margin={{ top: 5, right: 10, left: -15, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
         <XAxis dataKey="date" tick={{ fontSize: 9, fill: "#8899AA" }}
           tickFormatter={(v: string) => v.slice(5)} />
         <YAxis tick={{ fontSize: 9, fill: "#8899AA" }} />

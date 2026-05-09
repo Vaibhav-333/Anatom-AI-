@@ -6,7 +6,7 @@ export function TypingIndicator() {
   return (
     <div
       className="flex items-center gap-1.5 px-4 py-3 rounded-2xl rounded-bl-sm w-fit"
-      style={{ background: "#1C1C1E" }}
+      style={{ background: "var(--bg-elevated)" }}
     >
       {[0, 1, 2].map((i) => (
         <motion.span

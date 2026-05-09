@@ -35,7 +35,7 @@ export function PageHeader({
           <div className="flex items-center gap-2.5 flex-wrap">
             <h1
               className="text-[28px] font-extrabold tracking-tight leading-tight"
-              style={{ color: "#fff", letterSpacing: "-0.025em" }}
+              style={{ color: "var(--label-primary)", letterSpacing: "-0.025em" }}
             >
               {title}
             </h1>
@@ -44,7 +44,7 @@ export function PageHeader({
           {subtitle && (
             <p
               className="text-sm mt-1 leading-relaxed"
-              style={{ color: "#8E8E93" }}
+              style={{ color: "var(--label-secondary)" }}
             >
               {subtitle}
             </p>
@@ -69,25 +69,19 @@ export function SectionDivider({
     <div className={cn("flex items-center gap-3 my-5", className)}>
       <div
         className="h-px flex-1"
-        style={{
-          background:
-            "linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)",
-        }}
+        style={{ background: "var(--border-subtle)" }}
       />
       {label && (
         <span
           className="text-[10.5px] font-semibold uppercase tracking-widest px-2"
-          style={{ color: "#8E8E93" }}
+          style={{ color: "var(--label-secondary)" }}
         >
           {label}
         </span>
       )}
       <div
         className="h-px flex-1"
-        style={{
-          background:
-            "linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)",
-        }}
+        style={{ background: "var(--border-subtle)" }}
       />
     </div>
   );

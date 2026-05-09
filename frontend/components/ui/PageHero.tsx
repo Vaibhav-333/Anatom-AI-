@@ -23,8 +23,8 @@ export function PageHero({
     <div
       className={`relative rounded-2xl overflow-hidden ${className}`}
       style={{
-        background: "#1C1C1E",
-        boxShadow: "0 2px 20px rgba(0,0,0,0.65), inset 0 0.5px 0 rgba(255,255,255,0.05)",
+        background: "var(--glass-bg)",
+        boxShadow: "var(--glass-shadow)",
       }}
     >
       {/* Background photo */}
@@ -39,12 +39,12 @@ export function PageHero({
         style={{ opacity: opacity / 100, objectPosition }}
       />
 
-      {/* Left-to-right vignette */}
+      {/* Left-to-right vignette — adapts to theme via var */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background:
-            "linear-gradient(90deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.40) 55%, rgba(0,0,0,0.10) 100%)",
+            "linear-gradient(90deg, var(--bg-card) 0%, rgba(0,0,0,0.30) 55%, transparent 100%)",
         }}
       />
 
@@ -52,7 +52,7 @@ export function PageHero({
       <div
         className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
         style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0) 100%)",
+          background: "linear-gradient(to top, var(--bg-card) 0%, transparent 100%)",
         }}
       />
 

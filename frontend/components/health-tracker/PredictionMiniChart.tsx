@@ -35,10 +35,10 @@ export default function PredictionMiniChart({ historical, prediction }: Props) {
           <Line dataKey="pain" stroke="#FF3B3B" strokeWidth={2} dot={{ r: 2 }} connectNulls name="Actual" />
           <Line dataKey="predicted" stroke="#FFB800" strokeWidth={2} strokeDasharray="4 3"
             dot={{ r: 3, fill: "#FFB800" }} name="Predicted" />
-          <ReferenceLine x={lastDate.slice(5)} stroke="rgba(255,255,255,0.15)" strokeDasharray="3 3" />
+          <ReferenceLine x={lastDate.slice(5)} stroke="var(--border-default)" strokeDasharray="3 3" />
         </LineChart>
       </ResponsiveContainer>
-      <p className="text-xs text-gray-500 mt-1">
+      <p className="text-xs mt-1" style={{ color: "var(--label-tertiary)" }}>
         Predicted avg pain next 3 days: <span className="text-amber-400 font-semibold">{prediction.pain.toFixed(1)}/10</span>
       </p>
     </div>

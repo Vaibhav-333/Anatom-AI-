@@ -40,8 +40,9 @@ export function TopBar() {
       <div
         className="absolute inset-0 backdrop-blur-xl"
         style={{
-          background: "rgba(0,0,0,0.90)",
-          borderBottom: "1px solid rgba(84,84,88,0.28)",
+          background: "var(--bg-topbar)",
+          borderBottom: "1px solid var(--border-default)",
+          transition: "background 0.3s ease, border-color 0.3s ease",
         }}
       />
 
@@ -50,17 +51,17 @@ export function TopBar() {
         <div className="flex items-center gap-3">
           <h2
             className="font-semibold tracking-tight"
-            style={{ color: "#fff", fontSize: "14px", letterSpacing: "-0.01em" }}
+            style={{ color: "var(--label-primary)", fontSize: "14px", letterSpacing: "-0.01em" }}
           >
             {title}
           </h2>
           <div
             className="w-px h-4"
-            style={{ background: "rgba(255,255,255,0.12)" }}
+            style={{ background: "var(--separator)" }}
           />
           <span
             className="text-[11px] font-mono"
-            style={{ color: "#636366" }}
+            style={{ color: "var(--label-tertiary)" }}
           >
             {new Date().toLocaleDateString("en-US", {
               weekday: "short",
@@ -77,11 +78,15 @@ export function TopBar() {
             <button
               onClick={handleBellClick}
               className={cn(
-                "p-2 rounded-xl transition-all duration-160 relative",
-                panelOpen
-                  ? "bg-[rgba(10,132,255,0.16)] text-[#0A84FF]"
-                  : "hover:text-white hover:bg-white/[0.07]"
+                "p-2 rounded-xl transition-all duration-160 relative"
               )}
+              style={
+                panelOpen
+                  ? { background: "rgba(10,132,255,0.16)", color: "#0A84FF" }
+                  : { color: "var(--label-secondary)" }
+              }
+              onMouseOver={(e) => { if (!panelOpen) (e.currentTarget as HTMLElement).style.background = "var(--bg-hover)"; (e.currentTarget as HTMLElement).style.color = "var(--label-primary)"; }}
+              onMouseOut={(e) => { if (!panelOpen) { (e.currentTarget as HTMLElement).style.background = ""; (e.currentTarget as HTMLElement).style.color = "var(--label-secondary)"; } }}
               aria-label="Notifications"
             >
               <Bell className="w-4 h-4" />
@@ -102,10 +107,10 @@ export function TopBar() {
 
           <Link
             href="/profile"
-            className={cn(
-              "p-2 rounded-xl transition-all duration-200",
-              "text-[#8E8E93] hover:text-white hover:bg-white/[0.07]"
-            )}
+            className="p-2 rounded-xl transition-all duration-200"
+            style={{ color: "var(--label-secondary)" }}
+            onMouseOver={(e) => { (e.currentTarget as HTMLElement).style.background = "var(--bg-hover)"; (e.currentTarget as HTMLElement).style.color = "var(--label-primary)"; }}
+            onMouseOut={(e) => { (e.currentTarget as HTMLElement).style.background = ""; (e.currentTarget as HTMLElement).style.color = "var(--label-secondary)"; }}
             aria-label="Profile"
           >
             <User className="w-4 h-4" />

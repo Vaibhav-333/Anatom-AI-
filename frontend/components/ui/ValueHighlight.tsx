@@ -39,7 +39,7 @@ export function ValueHighlight({
       )}
     >
       {label && (
-        <span className="text-xs text-slate-400 font-medium">{label}</span>
+        <span className="text-xs font-medium" style={{ color: "var(--label-secondary)" }}>{label}</span>
       )}
       <div className="flex items-center gap-2">
         <span className={cn("w-2 h-2 rounded-full shrink-0", dotMap[severity])} />
@@ -51,7 +51,7 @@ export function ValueHighlight({
         </span>
       </div>
       {referenceRange && (
-        <span className="text-xs text-slate-500 font-mono">
+        <span className="text-xs font-mono" style={{ color: "var(--label-tertiary)" }}>
           ref: {referenceRange}
         </span>
       )}

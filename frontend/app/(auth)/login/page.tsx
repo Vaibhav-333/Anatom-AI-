@@ -72,7 +72,7 @@ export default function LoginPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: "#000000" }}
+      style={{ background: "var(--bg-base)" }}
     >
       {/* Subtle top ambient glow */}
       <div
@@ -96,7 +96,7 @@ export default function LoginPage() {
           >
             <Brain className="w-5 h-5" style={{ color: "#0A84FF" }} />
           </div>
-          <span className="text-[22px] font-bold tracking-tight text-white">
+          <span className="text-[22px] font-bold tracking-tight" style={{ color: "var(--label-primary)" }}>
             Anatom<span style={{ color: "#0A84FF" }}>-AI</span>
           </span>
         </div>
@@ -105,28 +105,31 @@ export default function LoginPage() {
         <div
           className="rounded-2xl p-8"
           style={{
-            background: "#111113",
-            border: "1px solid rgba(84,84,88,0.35)",
-            boxShadow: "0 8px 40px rgba(0,0,0,0.70)",
+            background: "var(--bg-card)",
+            border: "1px solid var(--border-default)",
+            boxShadow: "var(--glass-shadow-lg)",
           }}
         >
-          <h1 className="text-[26px] font-bold text-white tracking-tight mb-1" style={{ letterSpacing: "-0.025em" }}>
+          <h1
+            className="text-[26px] font-bold tracking-tight mb-1"
+            style={{ letterSpacing: "-0.025em", color: "var(--label-primary)" }}
+          >
             Welcome back
           </h1>
-          <p className="text-sm mb-8" style={{ color: "#8E8E93" }}>
+          <p className="text-sm mb-8" style={{ color: "var(--label-secondary)" }}>
             Sign in to your Anatom-AI account
           </p>
 
           <form onSubmit={handleSubmit} noValidate className="space-y-4">
             {/* Username */}
             <div>
-              <label className="block text-[13px] font-medium mb-2" style={{ color: "#8E8E93" }}>
+              <label className="block text-[13px] font-medium mb-2" style={{ color: "var(--label-secondary)" }}>
                 Username
               </label>
               <div className="relative">
                 <User
                   className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-                  style={{ color: "#48484A" }}
+                  style={{ color: "var(--input-placeholder)" }}
                 />
                 <input
                   type="text"
@@ -143,13 +146,13 @@ export default function LoginPage() {
 
             {/* Password */}
             <div>
-              <label className="block text-[13px] font-medium mb-2" style={{ color: "#8E8E93" }}>
+              <label className="block text-[13px] font-medium mb-2" style={{ color: "var(--label-secondary)" }}>
                 Password
               </label>
               <div className="relative">
                 <Lock
                   className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
-                  style={{ color: "#48484A" }}
+                  style={{ color: "var(--input-placeholder)" }}
                 />
                 <input
                   type={showPassword ? "text" : "password"}
@@ -165,9 +168,9 @@ export default function LoginPage() {
                   onClick={() => setShowPassword((v) => !v)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
-                  style={{ color: "#48484A" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#8E8E93"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#48484A"; }}
+                  style={{ color: "var(--input-placeholder)" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--label-secondary)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--input-placeholder)"; }}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -184,7 +187,7 @@ export default function LoginPage() {
                   className="w-4 h-4 rounded"
                   style={{ accentColor: "#0A84FF" }}
                 />
-                <span className="text-[13px]" style={{ color: "#8E8E93" }}>Remember me</span>
+                <span className="text-[13px]" style={{ color: "var(--label-secondary)" }}>Remember me</span>
               </label>
               <Link
                 href="/forgot-password"
@@ -238,9 +241,9 @@ export default function LoginPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-3 my-6">
-            <div className="flex-1 h-px" style={{ background: "rgba(84,84,88,0.30)" }} />
-            <span className="text-[11px] font-mono" style={{ color: "#48484A" }}>OR</span>
-            <div className="flex-1 h-px" style={{ background: "rgba(84,84,88,0.30)" }} />
+            <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
+            <span className="text-[11px] font-mono" style={{ color: "var(--nav-group-label)" }}>OR</span>
+            <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
           </div>
 
           {/* DEV BYPASS */}
@@ -249,17 +252,17 @@ export default function LoginPage() {
             onClick={() => devSkip(router)}
             className="w-full py-2.5 rounded-xl text-[13px] font-medium mb-5 transition-all"
             style={{
-              background: "rgba(84,84,88,0.14)",
-              border: "1px solid rgba(84,84,88,0.30)",
-              color: "#8E8E93",
+              background: "var(--bg-hover)",
+              border: "1px solid var(--border-default)",
+              color: "var(--label-secondary)",
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(84,84,88,0.22)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(84,84,88,0.14)"; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-active)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-hover)"; }}
           >
             Skip — Continue as Guest (Dev)
           </button>
 
-          <p className="text-center text-[13px]" style={{ color: "#8E8E93" }}>
+          <p className="text-center text-[13px]" style={{ color: "var(--label-secondary)" }}>
             Don&apos;t have an account?{" "}
             <Link
               href="/signup"
@@ -271,7 +274,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <p className="mt-6 text-center text-[11px] font-mono" style={{ color: "#48484A" }}>
+        <p className="mt-6 text-center text-[11px] font-mono" style={{ color: "var(--nav-group-label)" }}>
           AES-256 encrypted · HIPAA-aligned
         </p>
       </motion.div>

@@ -169,17 +169,17 @@ export function ChatWindow() {
           <div
             className="flex flex-col h-full rounded-2xl overflow-hidden"
             style={{
-              background: "rgba(0,0,0,0.94)",
+              background: "var(--glass-bg)",
               backdropFilter: "blur(28px)",
               WebkitBackdropFilter: "blur(28px)",
-              border: "1px solid rgba(84,84,88,0.30)",
-              boxShadow: "0 32px 64px rgba(0,0,0,0.70), 0 8px 24px rgba(0,0,0,0.50)",
+              border: "1px solid var(--border-default)",
+              boxShadow: "var(--glass-shadow-lg)",
             }}
           >
             {/* Header */}
             <div
               className="flex items-center gap-3 px-4 py-3 shrink-0"
-              style={{ borderBottom: "1px solid rgba(84,84,88,0.22)" }}
+              style={{ borderBottom: "1px solid var(--border-subtle)" }}
             >
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white text-xs font-bold"
@@ -188,8 +188,8 @@ export function ChatWindow() {
                 AI
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] font-semibold text-white">AI Health Copilot</p>
-                <p className="text-[11px] truncate" style={{ color: "#636366" }}>
+                <p className="text-[13px] font-semibold" style={{ color: "var(--label-primary)" }}>AI Health Copilot</p>
+                <p className="text-[11px] truncate" style={{ color: "var(--label-tertiary)" }}>
                   {isStreaming ? "Thinking…" : "Ask me anything about your health"}
                 </p>
               </div>
@@ -199,13 +199,13 @@ export function ChatWindow() {
                     onClick={handleDelete}
                     title="Clear conversation"
                     className="p-1.5 rounded-lg transition-all"
-                    style={{ color: "#48484A" }}
+                    style={{ color: "var(--nav-group-label)" }}
                     onMouseEnter={(e) => {
                       (e.currentTarget as HTMLButtonElement).style.color = "#FF453A";
                       (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,69,58,0.10)";
                     }}
                     onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLButtonElement).style.color = "#48484A";
+                      (e.currentTarget as HTMLButtonElement).style.color = "var(--nav-group-label)";
                       (e.currentTarget as HTMLButtonElement).style.background = "transparent";
                     }}
                   >
@@ -216,13 +216,13 @@ export function ChatWindow() {
                   onClick={newConversation}
                   title="New conversation"
                   className="p-1.5 rounded-lg transition-all"
-                  style={{ color: "#48484A" }}
+                  style={{ color: "var(--nav-group-label)" }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLButtonElement).style.color = "#0A84FF";
                     (e.currentTarget as HTMLButtonElement).style.background = "rgba(10,132,255,0.10)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.color = "#48484A";
+                    (e.currentTarget as HTMLButtonElement).style.color = "var(--nav-group-label)";
                     (e.currentTarget as HTMLButtonElement).style.background = "transparent";
                   }}
                 >
@@ -232,13 +232,13 @@ export function ChatWindow() {
                   onClick={closeAll}
                   title="Close"
                   className="p-1.5 rounded-lg transition-all"
-                  style={{ color: "#48484A" }}
+                  style={{ color: "var(--nav-group-label)" }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.color = "#fff";
-                    (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.08)";
+                    (e.currentTarget as HTMLButtonElement).style.color = "var(--label-primary)";
+                    (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-hover)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.color = "#48484A";
+                    (e.currentTarget as HTMLButtonElement).style.color = "var(--nav-group-label)";
                     (e.currentTarget as HTMLButtonElement).style.background = "transparent";
                   }}
                 >
@@ -251,7 +251,7 @@ export function ChatWindow() {
             <div
               ref={scrollRef}
               className="flex-1 overflow-y-auto px-4 py-4 space-y-1"
-              style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(84,84,88,0.3) transparent" }}
+              style={{ scrollbarWidth: "thin", scrollbarColor: "var(--scrollbar-thumb) transparent" }}
             >
               {/* Session expired / not logged in */}
               {notLoggedIn && (
@@ -286,7 +286,7 @@ export function ChatWindow() {
                   >
                     🧠
                   </div>
-                  <p className="text-[13px] leading-relaxed" style={{ color: "#8E8E93" }}>
+                  <p className="text-[13px] leading-relaxed" style={{ color: "var(--label-secondary)" }}>
                     Hi! I&apos;m your AI health companion.
                     <br />
                     Ask me about your reports, symptoms, or lifestyle.
@@ -322,7 +322,7 @@ export function ChatWindow() {
             {/* Disclaimer */}
             {!notLoggedIn && (
               <div className="px-4 py-1.5 shrink-0">
-                <p className="text-[11px] text-center" style={{ color: "#48484A" }}>
+                <p className="text-[11px] text-center" style={{ color: "var(--label-tertiary)" }}>
                   ⚠️ Health information only — not medical advice
                 </p>
               </div>
@@ -333,15 +333,15 @@ export function ChatWindow() {
               <div
                 className="flex items-end gap-2 rounded-xl px-3 py-2 transition-all"
                 style={{
-                  background: "#1C1C1E",
-                  border: "1px solid rgba(84,84,88,0.35)",
+                  background: "var(--bg-input)",
+                  border: "1px solid var(--border-default)",
                 }}
                 onFocusCapture={(e) => {
                   (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(10,132,255,0.40)";
                   (e.currentTarget as HTMLDivElement).style.boxShadow = "0 0 0 3px rgba(10,132,255,0.08)";
                 }}
                 onBlurCapture={(e) => {
-                  (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(84,84,88,0.35)";
+                  (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border-default)";
                   (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
                 }}
               >
@@ -353,10 +353,10 @@ export function ChatWindow() {
                   placeholder="Ask about your health…"
                   disabled={isStreaming}
                   rows={1}
-                  className="flex-1 resize-none bg-transparent text-[13px] text-white outline-none max-h-32 overflow-y-auto leading-relaxed disabled:opacity-50"
+                  className="flex-1 resize-none bg-transparent text-[13px] outline-none max-h-32 overflow-y-auto leading-relaxed disabled:opacity-50"
                   style={{
                     minHeight: "24px",
-                    color: "#FFFFFF",
+                    color: "var(--label-primary)",
                   }}
                 />
                 <VoiceInputButton

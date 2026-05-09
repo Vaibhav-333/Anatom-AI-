@@ -37,28 +37,28 @@ export default function ShareHealthReportModal({ userId, open, onClose }: Props)
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div className="relative z-10 w-full max-w-md rounded-2xl p-6"
-        style={{ background: "#0D1627", border: "1px solid rgba(0,212,255,0.2)" }}>
+        style={{ background: "var(--glass-bg)", border: "1px solid rgba(0,212,255,0.2)" }}>
         <div className="flex justify-between items-center mb-5">
           <div className="flex items-center gap-2">
             <Share2 size={16} className="text-cyan-400" />
-            <h3 className="text-sm font-semibold text-white">Share Health Report</h3>
+            <h3 className="text-sm font-semibold" style={{ color: "var(--label-primary)" }}>Share Health Report</h3>
           </div>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-300"><X size={16} /></button>
+          <button onClick={onClose} style={{ color: "var(--label-tertiary)" }}><X size={16} /></button>
         </div>
 
-        <p className="text-xs text-gray-400 mb-4">
+        <p className="text-xs mb-4" style={{ color: "var(--label-secondary)" }}>
           Generate a secure read-only link to share your symptom report with your doctor or care team.
         </p>
 
         <div className="mb-4">
-          <label className="text-xs text-gray-400 mb-2 block">Link expires after</label>
+          <label className="text-xs mb-2 block" style={{ color: "var(--label-secondary)" }}>Link expires after</label>
           <div className="flex gap-2">
             {[24, 48, 72, 168].map((h) => (
               <button key={h} onClick={() => setExpiryHours(h)}
                 className="flex-1 py-2 rounded-lg text-xs font-medium transition-all"
                 style={{
-                  background: expiryHours === h ? "rgba(0,212,255,0.2)" : "rgba(255,255,255,0.04)",
-                  color: expiryHours === h ? "#00D4FF" : "#8899AA",
+                  background: expiryHours === h ? "rgba(0,212,255,0.2)" : "var(--bg-elevated)",
+                  color: expiryHours === h ? "#00D4FF" : "var(--label-secondary)",
                   border: `1px solid ${expiryHours === h ? "#00D4FF" : "transparent"}`,
                 }}>
                 {h < 48 ? `${h}h` : h === 168 ? "7d" : `${h/24}d`}
@@ -84,7 +84,7 @@ export default function ShareHealthReportModal({ userId, open, onClose }: Props)
                 {copied ? "Copied!" : "Copy"}
               </button>
             </div>
-            <p className="text-xs text-gray-500 text-center">Link expires in {expiryHours} hours</p>
+            <p className="text-xs text-center" style={{ color: "var(--label-tertiary)" }}>Link expires in {expiryHours} hours</p>
           </div>
         )}
       </div>

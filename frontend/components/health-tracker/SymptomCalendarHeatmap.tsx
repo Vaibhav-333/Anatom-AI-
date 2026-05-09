@@ -6,7 +6,7 @@ const DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
 function intensityToColor(v: number) {
-  if (v === 0) return "rgba(255,255,255,0.04)";
+  if (v === 0) return "var(--bg-elevated)";
   if (v < 0.3) return "#00FF8833";
   if (v < 0.6) return "#FFB80055";
   return "#FF3B3B66";
@@ -32,13 +32,13 @@ export default function SymptomCalendarHeatmap({ data, year, month, onMonthChang
   return (
     <div className="rounded-2xl p-5" style={{ background: "rgba(13,22,39,0.7)", border: "1px solid rgba(0,212,255,0.12)" }}>
       <div className="flex items-center justify-between mb-4">
-        <button onClick={prev} className="p-1 rounded-lg hover:bg-white/5 text-gray-400"><ChevronLeft size={16} /></button>
-        <span className="text-sm font-medium text-white">{MONTHS[month - 1]} {year}</span>
-        <button onClick={next} className="p-1 rounded-lg hover:bg-white/5 text-gray-400"><ChevronRight size={16} /></button>
+        <button onClick={prev} className="p-1 rounded-lg" style={{ color: "var(--label-secondary)" }}><ChevronLeft size={16} /></button>
+        <span className="text-sm font-medium" style={{ color: "var(--label-primary)" }}>{MONTHS[month - 1]} {year}</span>
+        <button onClick={next} className="p-1 rounded-lg" style={{ color: "var(--label-secondary)" }}><ChevronRight size={16} /></button>
       </div>
 
       <div className="grid grid-cols-7 gap-1 mb-1">
-        {DAYS.map((d) => <div key={d} className="text-center text-xs text-gray-500">{d}</div>)}
+        {DAYS.map((d) => <div key={d} className="text-center text-xs" style={{ color: "var(--label-tertiary)" }}>{d}</div>)}
       </div>
 
       <div className="grid grid-cols-7 gap-1">
@@ -58,11 +58,11 @@ export default function SymptomCalendarHeatmap({ data, year, month, onMonthChang
       </div>
 
       <div className="flex items-center gap-3 mt-4 justify-end">
-        <span className="text-xs text-gray-500">Severity:</span>
+        <span className="text-xs" style={{ color: "var(--label-tertiary)" }}>Severity:</span>
         {[0,0.25,0.55,0.85].map((v, i) => (
           <div key={i} className="flex items-center gap-1">
             <div className="w-3 h-3 rounded-sm" style={{ background: intensityToColor(v) }} />
-            <span className="text-xs text-gray-500">{["None","Low","Med","High"][i]}</span>
+            <span className="text-xs" style={{ color: "var(--label-tertiary)" }}>{["None","Low","Med","High"][i]}</span>
           </div>
         ))}
       </div>

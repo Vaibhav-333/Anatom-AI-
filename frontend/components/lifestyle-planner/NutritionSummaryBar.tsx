@@ -30,10 +30,10 @@ export default function NutritionSummaryBar({ nutrition }: Props) {
           return (
             <div key={m.key}>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-gray-400">{m.label}</span>
+                <span style={{ color: "var(--label-secondary)" }}>{m.label}</span>
                 <span style={{ color: m.color }}>{val}{m.unit}</span>
               </div>
-              <div className="h-2 rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
+              <div className="h-2 rounded-full" style={{ background: "var(--bg-elevated)" }}>
                 <div className="h-full rounded-full transition-all duration-700"
                   style={{ width: `${pct}%`, background: m.color, boxShadow: `0 0 6px ${m.color}66` }} />
               </div>

@@ -47,17 +47,17 @@ export default function LifestylePlannerForm({ userId, onGenerate, loading, init
 
       {/* Goal */}
       <div>
-        <label className="text-xs text-gray-400 mb-2 block">Your Goal</label>
+        <label className="text-xs mb-2 block" style={{ color: "var(--label-secondary)" }}>Your Goal</label>
         <div className="grid grid-cols-3 gap-3">
           {GOALS.map((g) => (
             <button key={g.value} type="button" onClick={() => setGoal(g.value)}
               className="rounded-xl p-3 text-left transition-all"
               style={{
-                background: goal === g.value ? `${g.color}22` : "rgba(255,255,255,0.04)",
+                background: goal === g.value ? `${g.color}22` : "var(--bg-elevated)",
                 border: `1px solid ${goal === g.value ? g.color : "transparent"}`,
               }}>
-              <p className="text-xs font-semibold" style={{ color: goal === g.value ? g.color : "#fff" }}>{g.label}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{g.desc}</p>
+              <p className="text-xs font-semibold" style={{ color: goal === g.value ? g.color : "var(--label-primary)" }}>{g.label}</p>
+              <p className="text-xs mt-0.5" style={{ color: "var(--label-tertiary)" }}>{g.desc}</p>
             </button>
           ))}
         </div>
@@ -65,14 +65,14 @@ export default function LifestylePlannerForm({ userId, onGenerate, loading, init
 
       {/* Diet */}
       <div>
-        <label className="text-xs text-gray-400 mb-2 block">Dietary Preference</label>
+        <label className="text-xs mb-2 block" style={{ color: "var(--label-secondary)" }}>Dietary Preference</label>
         <div className="grid grid-cols-4 gap-2">
           {DIET_PREFS.map((d) => (
             <button key={d} type="button" onClick={() => setDiet(d)}
               className="py-2 rounded-xl text-xs font-medium capitalize transition-all"
               style={{
-                background: diet === d ? "rgba(0,212,255,0.2)" : "rgba(255,255,255,0.05)",
-                color: diet === d ? "#00D4FF" : "#8899AA",
+                background: diet === d ? "rgba(0,212,255,0.2)" : "var(--bg-elevated)",
+                color: diet === d ? "#00D4FF" : "var(--label-secondary)",
                 border: `1px solid ${diet === d ? "#00D4FF" : "transparent"}`,
               }}>
               {d.replace("_", " ")}
@@ -83,14 +83,14 @@ export default function LifestylePlannerForm({ userId, onGenerate, loading, init
 
       {/* Activity */}
       <div>
-        <label className="text-xs text-gray-400 mb-2 block">Activity Level</label>
+        <label className="text-xs mb-2 block" style={{ color: "var(--label-secondary)" }}>Activity Level</label>
         <div className="grid grid-cols-4 gap-2">
           {ACTIVITY_LEVELS.map((al) => (
             <button key={al.value} type="button" onClick={() => setActivity(al.value)}
               className="py-2 rounded-xl text-xs font-medium transition-all"
               style={{
-                background: activity === al.value ? "rgba(0,255,136,0.2)" : "rgba(255,255,255,0.05)",
-                color: activity === al.value ? "#00FF88" : "#8899AA",
+                background: activity === al.value ? "rgba(0,255,136,0.2)" : "var(--bg-elevated)",
+                color: activity === al.value ? "#00FF88" : "var(--label-secondary)",
                 border: `1px solid ${activity === al.value ? "#00FF88" : "transparent"}`,
               }}>
               {al.label}
@@ -101,14 +101,14 @@ export default function LifestylePlannerForm({ userId, onGenerate, loading, init
 
       {/* Restrictions */}
       <div>
-        <label className="text-xs text-gray-400 mb-2 block">Dietary Restrictions</label>
+        <label className="text-xs mb-2 block" style={{ color: "var(--label-secondary)" }}>Dietary Restrictions</label>
         <div className="flex flex-wrap gap-2">
           {RESTRICTIONS.map((r) => (
             <button key={r} type="button" onClick={() => toggleRestriction(r)}
               className="px-3 py-1 rounded-full text-xs font-medium transition-all"
               style={{
-                background: restrictions.includes(r) ? "rgba(255,184,0,0.2)" : "rgba(255,255,255,0.04)",
-                color: restrictions.includes(r) ? "#FFB800" : "#8899AA",
+                background: restrictions.includes(r) ? "rgba(255,184,0,0.2)" : "var(--bg-elevated)",
+                color: restrictions.includes(r) ? "#FFB800" : "var(--label-secondary)",
                 border: `1px solid ${restrictions.includes(r) ? "#FFB800" : "transparent"}`,
               }}>
               {r}

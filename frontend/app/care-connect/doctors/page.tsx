@@ -80,7 +80,7 @@ function DoctorsPageContent() {
       {/* Tabs */}
       <div
         className="flex items-center gap-1 p-1 rounded-xl w-fit"
-        style={{ background: "rgba(28,28,30,0.80)", border: "1px solid rgba(84,84,88,0.35)" }}
+        style={{ background: "var(--glass-bg)", border: "1px solid var(--border-default)" }}
       >
         {[{ label: "All Doctors", value: "all", icon: Users }, { label: "Saved", value: "saved", icon: Bookmark }].map((t) => {
           const Icon = t.icon;
@@ -93,7 +93,7 @@ function DoctorsPageContent() {
               style={
                 isActive
                   ? { background: "#0A84FF", color: "#fff" }
-                  : { color: "#8E8E93" }
+                  : { color: "var(--label-secondary)" }
               }
             >
               <Icon className="w-3.5 h-3.5" />
@@ -107,30 +107,30 @@ function DoctorsPageContent() {
       <div
         className="rounded-2xl px-6 py-5 flex items-center justify-between"
         style={{
-          background: "#1C1C1E",
-          border: "1px solid rgba(84,84,88,0.28)",
-          boxShadow: "0 2px 12px rgba(0,0,0,0.40)",
+          background: "var(--glass-bg)",
+          border: "1px solid var(--border-default)",
+          boxShadow: "var(--glass-shadow)",
         }}
       >
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-widest mb-1" style={{ color: "#0A84FF" }}>CareConnect AI</p>
-          <h3 className="text-white font-bold text-[17px] tracking-tight">Trusted Medical Network</h3>
-          <p className="text-[13px] mt-0.5" style={{ color: "#8E8E93" }}>
+          <h3 className="font-bold text-[17px] tracking-tight" style={{ color: "var(--label-primary)" }}>Trusted Medical Network</h3>
+          <p className="text-[13px] mt-0.5" style={{ color: "var(--label-secondary)" }}>
             Verified specialists across all major disciplines, available online &amp; in-clinic.
           </p>
         </div>
         <div className="flex gap-8 shrink-0">
           <div className="text-center">
             <p className="text-[22px] font-bold font-mono" style={{ color: "#0A84FF" }}>500+</p>
-            <p className="text-[11px]" style={{ color: "#636366" }}>Doctors</p>
+            <p className="text-[11px]" style={{ color: "var(--label-tertiary)" }}>Doctors</p>
           </div>
           <div className="text-center">
             <p className="text-[22px] font-bold font-mono" style={{ color: "#FF9F0A" }}>4.8★</p>
-            <p className="text-[11px]" style={{ color: "#636366" }}>Avg Rating</p>
+            <p className="text-[11px]" style={{ color: "var(--label-tertiary)" }}>Avg Rating</p>
           </div>
           <div className="text-center">
             <p className="text-[22px] font-bold font-mono" style={{ color: "#32D74B" }}>15+</p>
-            <p className="text-[11px]" style={{ color: "#636366" }}>Specialties</p>
+            <p className="text-[11px]" style={{ color: "var(--label-tertiary)" }}>Specialties</p>
           </div>
         </div>
       </div>
@@ -138,7 +138,7 @@ function DoctorsPageContent() {
       {/* Search + filter bar */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#48484A" }} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--nav-group-label)" }} />
           <input value={search} onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name or specialization..."
             className="auth-input pl-9"
@@ -150,7 +150,7 @@ function DoctorsPageContent() {
           style={
             showFilters
               ? { background: "rgba(10,132,255,0.14)", color: "#0A84FF", border: "1px solid rgba(10,132,255,0.25)" }
-              : { background: "rgba(255,255,255,0.06)", color: "#8E8E93", border: "1px solid rgba(84,84,88,0.35)" }
+              : { background: "var(--bg-elevated)", color: "var(--label-secondary)", border: "1px solid var(--border-default)" }
           }
         >
           <SlidersHorizontal className="w-4 h-4" /> Filters
@@ -161,7 +161,7 @@ function DoctorsPageContent() {
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <GlassCard className="p-5 space-y-4">
             <div>
-              <p className="text-xs text-slate-500 mb-2">Specialization</p>
+              <p className="text-xs mb-2" style={{ color: "var(--label-secondary)" }}>Specialization</p>
               <div className="flex flex-wrap gap-2">
                 {SPECIALIZATIONS.map((s) => (
                   <button
@@ -171,7 +171,7 @@ function DoctorsPageContent() {
                     style={
                       spec === s
                         ? { background: "rgba(10,132,255,0.14)", border: "1px solid rgba(10,132,255,0.30)", color: "#0A84FF" }
-                        : { background: "rgba(255,255,255,0.04)", border: "1px solid rgba(84,84,88,0.35)", color: "#8E8E93" }
+                        : { background: "var(--bg-elevated)", border: "1px solid var(--border-default)", color: "var(--label-secondary)" }
                     }
                   >
                     {s}
@@ -181,7 +181,7 @@ function DoctorsPageContent() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-slate-500 mb-2">Consultation Mode</p>
+                <p className="text-xs mb-2" style={{ color: "var(--label-secondary)" }}>Consultation Mode</p>
                 <div className="flex gap-2">
                   {MODE_OPTIONS.map((m) => (
                     <button
@@ -191,7 +191,7 @@ function DoctorsPageContent() {
                       style={
                         mode === m.value
                           ? { background: "rgba(10,132,255,0.14)", border: "1px solid rgba(10,132,255,0.30)", color: "#0A84FF" }
-                          : { background: "rgba(255,255,255,0.04)", border: "1px solid rgba(84,84,88,0.35)", color: "#8E8E93" }
+                          : { background: "var(--bg-elevated)", border: "1px solid var(--border-default)", color: "var(--label-secondary)" }
                       }
                     >
                       {m.label}
@@ -200,7 +200,7 @@ function DoctorsPageContent() {
                 </div>
               </div>
               <div>
-                <p className="text-xs text-slate-500 mb-2">Max Fee: ₹{maxFee.toLocaleString()}</p>
+                <p className="text-xs mb-2" style={{ color: "var(--label-secondary)" }}>Max Fee: ₹{maxFee.toLocaleString()}</p>
                 <input type="range" min={200} max={5000} step={100} value={maxFee}
                   onChange={(e) => setMaxFee(parseInt(e.target.value))}
                   className="w-full" style={{ accentColor: "#0A84FF" }} />
@@ -211,7 +211,7 @@ function DoctorsPageContent() {
       )}
 
       {/* Results count */}
-      <p className="text-sm text-slate-500">
+      <p className="text-sm" style={{ color: "var(--label-secondary)" }}>
         {loading ? "Loading..." : `${filtered.length} doctor${filtered.length !== 1 ? "s" : ""} found`}
       </p>
 

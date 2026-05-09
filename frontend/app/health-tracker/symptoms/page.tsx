@@ -91,8 +91,8 @@ export default function SymptomsPage() {
                 <button key={p} onClick={() => setTrendPeriod(p)}
                   className="px-2 py-0.5 rounded-lg text-xs transition-all capitalize"
                   style={{
-                    background: trendPeriod === p ? "rgba(0,212,255,0.2)" : "rgba(255,255,255,0.04)",
-                    color: trendPeriod === p ? "#00D4FF" : "#8899AA",
+                    background: trendPeriod === p ? "rgba(0,212,255,0.2)" : "var(--bg-elevated)",
+                    color: trendPeriod === p ? "#00D4FF" : "var(--label-secondary)",
                   }}>
                   {p}
                 </button>

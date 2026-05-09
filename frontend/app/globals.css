@@ -4,18 +4,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── CSS variables ─────────────────────────────────────────────────────────── */
+/* ── Semantic token system — dark defaults ──────────────────────────────────── */
 :root {
   --font-inter: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-jetbrains: "JetBrains Mono", "SF Mono", "Consolas", monospace;
 
-  /* Background layers — true Apple dark */
+  /* Background layers */
   --bg-base:     #000000;
   --bg-sidebar:  #0B0B0F;
   --bg-card:     #1C1C1E;
   --bg-elevated: #2C2C2E;
   --bg-input:    #1C1C1E;
+  --bg-topbar:   rgba(0, 0, 0, 0.90);
+  --bg-hover:    rgba(255, 255, 255, 0.05);
+  --bg-active:   rgba(255, 255, 255, 0.08);
 
+  /* Legacy aliases kept for compat */
   --background: #000000;
   --foreground: #ffffff;
 
@@ -23,13 +27,58 @@
   --label-primary:    #FFFFFF;
   --label-secondary:  #8E8E93;
   --label-tertiary:   #636366;
-  --label-quaternary: rgba(255,255,255,0.12);
+  --label-quaternary: rgba(255, 255, 255, 0.12);
 
-  /* Separators */
-  --border-default: rgba(84,84,88,0.35);
-  --border-strong:  rgba(84,84,88,0.55);
+  /* Separators / borders */
+  --border-default: rgba(84, 84, 88, 0.35);
+  --border-strong:  rgba(84, 84, 88, 0.55);
+  --border-subtle:  rgba(84, 84, 88, 0.20);
+  --separator:      rgba(255, 255, 255, 0.12);
 
-  /* Apple system colours */
+  /* Glass panels */
+  --glass-bg:        #1C1C1E;
+  --glass-shadow:    0 2px 20px rgba(0, 0, 0, 0.65), inset 0 0.5px 0 rgba(255, 255, 255, 0.05);
+  --glass-shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.75), inset 0 0.5px 0 rgba(255, 255, 255, 0.06);
+  --card-hover-bg:   #2C2C2E;
+
+  /* Scrollbar */
+  --scrollbar-thumb:       rgba(255, 255, 255, 0.08);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.16);
+
+  /* Nav */
+  --nav-group-label: #48484A;
+  --nav-item-border: rgba(84, 84, 88, 0.22);
+
+  /* Buttons */
+  --btn-secondary-bg:          rgba(255, 255, 255, 0.08);
+  --btn-secondary-color:       #8E8E93;
+  --btn-secondary-hover-bg:    rgba(255, 255, 255, 0.12);
+  --btn-secondary-hover-color: #ffffff;
+
+  /* Inputs */
+  --input-bg:             #1C1C1E;
+  --input-border:         rgba(84, 84, 88, 0.45);
+  --input-placeholder:    #48484A;
+  --input-color:          #FFFFFF;
+  --input-field-bg:       rgba(255, 255, 255, 0.05);
+  --input-field-hover-bg: rgba(255, 255, 255, 0.08);
+
+  /* Badges */
+  --badge-critical-bg:    rgba(255, 69, 58, 0.15);
+  --badge-critical-color: #FF6961;
+  --badge-warning-bg:     rgba(255, 159, 10, 0.15);
+  --badge-warning-color:  #FFAC30;
+  --badge-normal-bg:      rgba(50, 215, 75, 0.15);
+  --badge-normal-color:   #4CD964;
+  --badge-info-bg:        rgba(10, 132, 255, 0.15);
+  --badge-info-color:     #5AC8FA;
+
+  /* Misc */
+  --tooltip-bg:            #1C1C1E;
+  --animated-grid-opacity: 0.25;
+  --metric-value-color:    #FFFFFF;
+
+  /* Apple system accent colours — unchanged in both themes */
   --accent-blue:   #0A84FF;
   --accent-green:  #32D74B;
   --accent-amber:  #FF9F0A;
@@ -37,6 +86,67 @@
   --accent-pink:   #FF2D55;
   --accent-purple: #BF5AF2;
   --accent-teal:   #64D2FF;
+}
+
+/* ── Light theme overrides ──────────────────────────────────────────────────── */
+.light {
+  --bg-base:     #F5F7FA;
+  --bg-sidebar:  #FFFFFF;
+  --bg-card:     #FFFFFF;
+  --bg-elevated: #EEF2F7;
+  --bg-input:    #F5F7FA;
+  --bg-topbar:   rgba(255, 255, 255, 0.92);
+  --bg-hover:    rgba(0, 0, 0, 0.04);
+  --bg-active:   rgba(10, 132, 255, 0.08);
+
+  --background: #F5F7FA;
+  --foreground: #1C1C1E;
+
+  --label-primary:    #1C1C1E;
+  --label-secondary:  #6C6C70;
+  --label-tertiary:   #AEAEB2;
+  --label-quaternary: rgba(0, 0, 0, 0.08);
+
+  --border-default: rgba(0, 0, 0, 0.09);
+  --border-strong:  rgba(0, 0, 0, 0.15);
+  --border-subtle:  rgba(0, 0, 0, 0.06);
+  --separator:      rgba(0, 0, 0, 0.08);
+
+  --glass-bg:        #FFFFFF;
+  --glass-shadow:    0 2px 16px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04), inset 0 0.5px 0 rgba(255, 255, 255, 0.80);
+  --glass-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04), inset 0 0.5px 0 rgba(255, 255, 255, 0.80);
+  --card-hover-bg:   #EEF2F7;
+
+  --scrollbar-thumb:       rgba(0, 0, 0, 0.12);
+  --scrollbar-thumb-hover: rgba(0, 0, 0, 0.22);
+
+  --nav-group-label: #AEAEB2;
+  --nav-item-border: rgba(0, 0, 0, 0.07);
+
+  --btn-secondary-bg:          rgba(0, 0, 0, 0.05);
+  --btn-secondary-color:       #6C6C70;
+  --btn-secondary-hover-bg:    rgba(0, 0, 0, 0.08);
+  --btn-secondary-hover-color: #1C1C1E;
+
+  --input-bg:             #FFFFFF;
+  --input-border:         rgba(0, 0, 0, 0.14);
+  --input-placeholder:    #AEAEB2;
+  --input-color:          #1C1C1E;
+  --input-field-bg:       rgba(0, 0, 0, 0.04);
+  --input-field-hover-bg: rgba(0, 0, 0, 0.06);
+
+  --badge-critical-bg:    rgba(255, 69, 58, 0.10);
+  --badge-critical-color: #D93025;
+  --badge-warning-bg:     rgba(255, 159, 10, 0.12);
+  --badge-warning-color:  #C57A07;
+  --badge-normal-bg:      rgba(50, 215, 75, 0.10);
+  --badge-normal-color:   #1E8A2E;
+  --badge-info-bg:        rgba(10, 132, 255, 0.10);
+  --badge-info-color:     #0066CC;
+
+  --tooltip-bg:            #FFFFFF;
+  --animated-grid-opacity: 0.07;
+  --metric-value-color:    #1C1C1E;
 }
 
 /* ── Base reset ─────────────────────────────────────────────────────────────── */
@@ -49,26 +159,27 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background-color: #000000;
-  color: #FFFFFF;
+  background-color: var(--bg-base);
+  color: var(--label-primary);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* ── Scrollbar ──────────────────────────────────────────────────────────────── */
 ::-webkit-scrollbar          { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track    { background: transparent; }
-::-webkit-scrollbar-thumb    { background: rgba(255,255,255,0.08); border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.16); }
+::-webkit-scrollbar-thumb    { background: var(--scrollbar-thumb); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
 
 /* ── Selection ──────────────────────────────────────────────────────────────── */
 ::selection {
-  background: rgba(10,132,255,0.28);
-  color: #ffffff;
+  background: rgba(10, 132, 255, 0.28);
+  color: var(--label-primary);
 }
 
 /* ── AI Copilot streaming cursor ─────────────────────────────────────────────── */
@@ -80,7 +191,7 @@ body {
   display: inline-block;
   width: 2px;
   height: 1em;
-  background: #0A84FF;
+  background: var(--accent-blue);
   margin-left: 2px;
   vertical-align: text-bottom;
   border-radius: 1px;
@@ -90,31 +201,29 @@ body {
 /* ── Component layer ────────────────────────────────────────────────────────── */
 @layer components {
 
-  /* Apple Health–style — no border, depth from bg contrast only */
+  /* Apple Health–style depth from bg contrast only */
   .glass-panel {
-    background-color: #1C1C1E;
+    background-color: var(--glass-bg);
     border-radius: 16px;
-    box-shadow:
-      0 2px 20px rgba(0, 0, 0, 0.65),
-      inset 0 0.5px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: var(--glass-shadow);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
 
   .glass-panel-lg {
-    background-color: #1C1C1E;
+    background-color: var(--glass-bg);
     border-radius: 20px;
-    box-shadow:
-      0 8px 40px rgba(0, 0, 0, 0.75),
-      inset 0 0.5px 0 rgba(255, 255, 255, 0.06);
+    box-shadow: var(--glass-shadow-lg);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .neon-text-cyan  { color: #0A84FF; }
-  .neon-text-green { color: #32D74B; }
+  .neon-text-cyan  { color: var(--accent-blue); }
+  .neon-text-green { color: var(--accent-green); }
 
   /* ── Buttons ─────────────────────────────────────────────────────── */
   .btn-primary {
     @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm
            transition-all duration-200 cursor-pointer;
-    background: #0A84FF;
+    background: var(--accent-blue);
     color: #FFFFFF;
   }
   .btn-primary:hover { background: #0A73E0; }
@@ -122,12 +231,12 @@ body {
   .btn-secondary {
     @apply inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm
            transition-all duration-200 cursor-pointer;
-    background: rgba(255, 255, 255, 0.08);
-    color: #8E8E93;
+    background: var(--btn-secondary-bg);
+    color: var(--btn-secondary-color);
   }
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
+    background: var(--btn-secondary-hover-bg);
+    color: var(--btn-secondary-hover-color);
   }
 
   .btn-danger {
@@ -143,7 +252,7 @@ body {
     font-family: "JetBrains Mono", "SF Mono", monospace;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--metric-value-color);
     letter-spacing: -0.03em;
   }
 
@@ -152,40 +261,41 @@ body {
     font-weight: 600;
     letter-spacing: 0.07em;
     text-transform: uppercase;
-    color: #8E8E93;
+    color: var(--label-secondary);
   }
 
   .section-title {
     font-size: 15px;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--label-primary);
     letter-spacing: -0.01em;
   }
 
-  /* ── Auth input (used on login/signup pages) ──────────────────────── */
+  /* ── Auth input (login/signup pages) ──────────────────────────────── */
   .auth-input {
-    @apply w-full px-4 py-3 rounded-xl text-sm text-white placeholder:text-[#48484A]
-           transition-all duration-200 outline-none;
-    background: #1C1C1E;
-    border: 1px solid rgba(84, 84, 88, 0.45);
+    @apply w-full px-4 py-3 rounded-xl text-sm transition-all duration-200 outline-none;
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    color: var(--input-color);
   }
+  .auth-input::placeholder { color: var(--input-placeholder); }
   .auth-input:focus {
     border-color: rgba(10, 132, 255, 0.60);
     box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.14);
   }
 
-  /* ── Input ────────────────────────────────────────────────────────── */
+  /* ── Input field ──────────────────────────────────────────────────── */
   .input-field {
     @apply w-full px-4 py-2.5 text-sm transition-all duration-200;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(84, 84, 88, 0.35);
+    background: var(--input-field-bg);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
-    color: #ffffff;
+    color: var(--label-primary);
   }
-  .input-field::placeholder { color: #48484A; }
+  .input-field::placeholder { color: var(--input-placeholder); }
   .input-field:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--input-field-hover-bg);
     border-color: rgba(10, 132, 255, 0.50);
     box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.12);
   }
@@ -193,23 +303,23 @@ body {
   /* ── Badges ───────────────────────────────────────────────────────── */
   .badge-critical {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide;
-    background: rgba(255, 69, 58, 0.15);
-    color: #FF6961;
+    background: var(--badge-critical-bg);
+    color: var(--badge-critical-color);
   }
   .badge-warning {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide;
-    background: rgba(255, 159, 10, 0.15);
-    color: #FFAC30;
+    background: var(--badge-warning-bg);
+    color: var(--badge-warning-color);
   }
   .badge-normal {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide;
-    background: rgba(50, 215, 75, 0.15);
-    color: #4CD964;
+    background: var(--badge-normal-bg);
+    color: var(--badge-normal-color);
   }
   .badge-info {
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wide;
-    background: rgba(10, 132, 255, 0.15);
-    color: #5AC8FA;
+    background: var(--badge-info-bg);
+    color: var(--badge-info-color);
   }
 }
 
@@ -225,11 +335,24 @@ body {
 
 /* ── Recharts tooltip ───────────────────────────────────────────────────────── */
 .recharts-tooltip-wrapper .recharts-default-tooltip {
-  background: #1C1C1E !important;
-  border: 1px solid rgba(84, 84, 88, 0.35) !important;
+  background: var(--tooltip-bg) !important;
+  border: 1px solid var(--border-default) !important;
   border-radius: 12px !important;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65) !important;
+  box-shadow: var(--glass-shadow) !important;
   font-size: 12px !important;
+  color: var(--label-primary) !important;
+}
+
+/* ── Recharts axis/grid legibility in light mode ────────────────────────────── */
+.light .recharts-cartesian-axis-tick-value {
+  fill: var(--label-secondary);
+}
+.light .recharts-cartesian-grid-horizontal line,
+.light .recharts-cartesian-grid-vertical line {
+  stroke: var(--border-default);
+}
+.light .recharts-legend-item-text {
+  color: var(--label-secondary) !important;
 }
 
 /* ── Three.js canvas ────────────────────────────────────────────────────────── */

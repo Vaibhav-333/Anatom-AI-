@@ -11,7 +11,7 @@ const COLORS = {
   good:     { hex: "#32D74B", label: "Good",     tw: "text-[#32D74B]" },
   moderate: { hex: "#FF9F0A", label: "Moderate",  tw: "text-[#FF9F0A]" },
   critical: { hex: "#FF453A", label: "Critical",  tw: "text-[#FF453A]" },
-  none:     { hex: "#636366", label: "No data",   tw: "text-[#636366]" },
+  none:     { hex: "#636366", label: "No data",   tw: "text-[color:var(--label-tertiary)]" },
 };
 
 function getScoreConfig(score: number | null) {
@@ -94,7 +94,7 @@ export function HealthScoreCard({ score, history, bodyAge }: HealthScoreCardProp
               {score !== null ? display : "—"}
             </span>
             {score !== null && (
-              <span className="text-[13px] mb-0.5 font-mono" style={{ color: "#636366" }}>
+              <span className="text-[13px] mb-0.5 font-mono" style={{ color: "var(--label-tertiary)" }}>
                 /100
               </span>
             )}
@@ -103,7 +103,7 @@ export function HealthScoreCard({ score, history, bodyAge }: HealthScoreCardProp
             {cfg.label}
           </span>
           {bodyAge !== undefined && (
-            <span className="text-[10px] font-mono mt-0.5 block" style={{ color: "#636366" }}>
+            <span className="text-[10px] font-mono mt-0.5 block" style={{ color: "var(--label-tertiary)" }}>
               body age {bodyAge}y
             </span>
           )}
@@ -113,7 +113,7 @@ export function HealthScoreCard({ score, history, bodyAge }: HealthScoreCardProp
         <div className="relative w-14 h-14 shrink-0">
           <svg viewBox="0 0 44 44" className="w-full h-full -rotate-90">
             {/* Track */}
-            <circle cx="22" cy="22" r={R} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="4.5" />
+            <circle cx="22" cy="22" r={R} fill="none" stroke="var(--bg-elevated)" strokeWidth="4.5" />
             {/* Fill */}
             {score !== null && (
               <motion.circle
@@ -137,12 +137,12 @@ export function HealthScoreCard({ score, history, bodyAge }: HealthScoreCardProp
       {/* Sparkline + delta */}
       <div
         className="flex items-end justify-between mt-auto pt-2.5"
-        style={{ borderTop: "1px solid rgba(84,84,88,0.35)" }}
+        style={{ borderTop: "1px solid var(--border-default)" }}
       >
         {sparkData.length >= 2 ? (
           <Sparkline data={sparkData} color={cfg.hex} />
         ) : (
-          <span className="text-[10px] font-mono" style={{ color: "#8E8E93" }}>
+          <span className="text-[10px] font-mono" style={{ color: "var(--label-secondary)" }}>
             no history
           </span>
         )}
@@ -150,7 +150,7 @@ export function HealthScoreCard({ score, history, bodyAge }: HealthScoreCardProp
           <div
             className={cn(
               "flex items-center gap-0.5 text-[11px] font-mono font-semibold",
-              delta > 0 ? "text-[#32D74B]" : delta < 0 ? "text-[#FF453A]" : "text-[#636366]"
+              delta > 0 ? "text-[#32D74B]" : delta < 0 ? "text-[#FF453A]" : "text-[color:var(--label-tertiary)]"
             )}
           >
             {delta > 0 ? <TrendingUp className="w-3 h-3" /> : delta < 0 ? <TrendingDown className="w-3 h-3" /> : <Minus className="w-3 h-3" />}

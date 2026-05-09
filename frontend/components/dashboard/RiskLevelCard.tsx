@@ -87,7 +87,7 @@ export function RiskLevelCard({ riskLevel, healthScore }: RiskLevelCardProps) {
       <div className="mt-auto space-y-2">
         <div
           className="flex justify-between text-[9.5px] font-mono font-semibold px-0.5 tracking-widest"
-          style={{ color: "#636366" }}
+          style={{ color: "var(--label-tertiary)" }}
         >
           <span>LOW</span>
           <span>MED</span>
@@ -97,7 +97,7 @@ export function RiskLevelCard({ riskLevel, healthScore }: RiskLevelCardProps) {
         {/* Track */}
         <div
           className="relative h-[5px] w-full rounded-full overflow-hidden"
-          style={{ background: "rgba(255,255,255,0.06)" }}
+          style={{ background: "var(--bg-elevated)" }}
         >
           {/* Gradient backdrop */}
           <div
@@ -115,7 +115,7 @@ export function RiskLevelCard({ riskLevel, healthScore }: RiskLevelCardProps) {
         </div>
 
         <div className="flex justify-between items-center px-0.5">
-          <span className="text-[10px] font-mono" style={{ color: "#636366" }}>
+          <span className="text-[10px] font-mono" style={{ color: "var(--label-tertiary)" }}>
             {riskLevel ? "from report" : healthScore ? "from score" : "no data"}
           </span>
           <span className={cn("text-[11px] font-mono font-bold", cfg.tw)}>{cfg.pct}%</span>

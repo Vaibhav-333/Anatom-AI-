@@ -92,7 +92,7 @@ export function MessageBubble({ message }: Props) {
           }`}
           style={
             isAI
-              ? { background: "#1C1C1E", color: "#E5E5EA" }
+              ? { background: "var(--bg-elevated)", color: "var(--label-primary)" }
               : {
                   background: "linear-gradient(135deg, #0A84FF 0%, #0066CC 100%)",
                   color: "#FFFFFF",
@@ -105,7 +105,7 @@ export function MessageBubble({ message }: Props) {
                 components={{
                   p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
                   strong: ({ children }) => (
-                    <strong className="text-white font-semibold">{children}</strong>
+                    <strong className="font-semibold" style={{ color: "var(--label-primary)" }}>{children}</strong>
                   ),
                   em: ({ children }) => (
                     <em style={{ color: "#64D2FF" }}>{children}</em>
@@ -117,12 +117,12 @@ export function MessageBubble({ message }: Props) {
                     <ol className="list-decimal pl-4 mb-2 space-y-0.5">{children}</ol>
                   ),
                   li: ({ children }) => (
-                    <li style={{ color: "#AEAEB2" }}>{children}</li>
+                    <li style={{ color: "var(--label-secondary)" }}>{children}</li>
                   ),
                   code: ({ children }) => (
                     <code
                       className="px-1 py-0.5 rounded text-xs font-mono"
-                      style={{ background: "rgba(255,255,255,0.08)", color: "#64D2FF" }}
+                      style={{ background: "var(--bg-elevated)", color: "#64D2FF" }}
                     >
                       {children}
                     </code>
@@ -144,10 +144,10 @@ export function MessageBubble({ message }: Props) {
           <button
             onClick={toggleSpeak}
             className="mt-1 ml-1 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-[11px]"
-            style={{ color: "#636366" }}
+            style={{ color: "var(--label-tertiary)" }}
             title={isSpeaking ? "Stop" : "Listen"}
             onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#0A84FF"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#636366"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--label-tertiary)"; }}
           >
             {isSpeaking ? <VolumeX size={12} /> : <Volume2 size={12} />}
             <span>{isSpeaking ? "Stop" : "Listen"}</span>

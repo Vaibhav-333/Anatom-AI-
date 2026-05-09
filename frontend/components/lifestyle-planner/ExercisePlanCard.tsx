@@ -18,8 +18,8 @@ export default function ExercisePlanCard({ exercises, activityLevel }: Props) {
 
   if (!exercises.length) {
     return (
-      <div className="rounded-2xl p-6 text-center text-gray-500 text-sm"
-        style={{ background: "rgba(13,22,39,0.8)", border: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="rounded-2xl p-6 text-center text-sm"
+        style={{ background: "var(--glass-bg)", border: "1px solid var(--border-subtle)", color: "var(--label-secondary)" }}>
         Rest day recommended. Focus on recovery and light stretching.
       </div>
     );
@@ -31,9 +31,9 @@ export default function ExercisePlanCard({ exercises, activityLevel }: Props) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Zap size={16} className="text-green-400" />
-          <span className="text-sm font-semibold text-white">Exercise Plan</span>
+          <span className="text-sm font-semibold" style={{ color: "var(--label-primary)" }}>Exercise Plan</span>
         </div>
-        <span className="text-xs text-gray-400 flex items-center gap-1">
+        <span className="text-xs flex items-center gap-1" style={{ color: "var(--label-secondary)" }}>
           <Timer size={11} />{totalMin} min total
         </span>
       </div>
@@ -43,17 +43,17 @@ export default function ExercisePlanCard({ exercises, activityLevel }: Props) {
           const sty = INTENSITY_STYLE[ex.intensity] ?? INTENSITY_STYLE.light;
           return (
             <div key={i} className="rounded-xl p-4"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              style={{ background: "var(--bg-hover)", border: "1px solid var(--border-subtle)" }}>
               <div className="flex justify-between items-start mb-2">
-                <p className="text-sm font-medium text-white">{ex.name}</p>
+                <p className="text-sm font-medium" style={{ color: "var(--label-primary)" }}>{ex.name}</p>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-400">{ex.duration_min} min</span>
+                  <span className="text-xs" style={{ color: "var(--label-secondary)" }}>{ex.duration_min} min</span>
                   <span className="px-2 py-0.5 rounded-full text-xs" style={{ background: sty.bg, color: sty.color }}>
                     {sty.label}
                   </span>
                 </div>
               </div>
-              <p className="text-xs text-gray-400">{ex.instructions}</p>
+              <p className="text-xs" style={{ color: "var(--label-secondary)" }}>{ex.instructions}</p>
             </div>
           );
         })}

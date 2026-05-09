@@ -14,15 +14,9 @@ import { devSkip } from "@/lib/devSkip";
 import { PasswordStrengthBar } from "@/components/auth/PasswordStrengthBar";
 import { OtpInput } from "@/components/auth/OtpInput";
 
-// ---------------------------------------------------------------------------
-// Step types
-// ---------------------------------------------------------------------------
-
 type Step = 1 | 2 | 3;
 
-// ---------------------------------------------------------------------------
-// Step indicator
-// ---------------------------------------------------------------------------
+// ── Step indicator ────────────────────────────────────────────────────────────
 
 function StepBar({ current }: { current: Step }) {
   const steps = [
@@ -43,7 +37,7 @@ function StepBar({ current }: { current: Step }) {
                   ? { background: "#32D74B", color: "#fff" }
                   : current === s.n
                   ? { background: "#0A84FF", color: "#fff" }
-                  : { background: "rgba(84,84,88,0.25)", color: "#636366", border: "1px solid rgba(84,84,88,0.35)" }
+                  : { background: "var(--bg-elevated)", color: "var(--label-tertiary)", border: "1px solid var(--border-default)" }
               }
             >
               {current > s.n ? <CheckCircle2 className="w-3.5 h-3.5" /> : s.n}
@@ -51,7 +45,7 @@ function StepBar({ current }: { current: Step }) {
             <span
               className="text-[10px] font-medium whitespace-nowrap"
               style={{
-                color: current === s.n ? "#0A84FF" : current > s.n ? "#32D74B" : "#48484A",
+                color: current === s.n ? "#0A84FF" : current > s.n ? "#32D74B" : "var(--nav-group-label)",
               }}
             >
               {s.label}
@@ -60,7 +54,7 @@ function StepBar({ current }: { current: Step }) {
           {i < steps.length - 1 && (
             <div
               className="flex-1 h-px mx-2 mt-[-14px] rounded transition-all duration-500"
-              style={{ background: current > s.n ? "#32D74B" : "rgba(84,84,88,0.35)" }}
+              style={{ background: current > s.n ? "#32D74B" : "var(--border-default)" }}
             />
           )}
         </div>
@@ -69,9 +63,7 @@ function StepBar({ current }: { current: Step }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Step 1 — account details
-// ---------------------------------------------------------------------------
+// ── Step 1 — account details ──────────────────────────────────────────────────
 
 interface Step1Props {
   onNext: (userId: string, username: string, password: string) => void;
@@ -130,18 +122,15 @@ function Step1({ onNext }: Step1Props) {
   }
 
   const usernameStatusIcon = () => {
-    if (usernameStatus === "checking") return <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#8E8E93" }} />;
+    if (usernameStatus === "checking") return <Loader2 className="w-4 h-4 animate-spin" style={{ color: "var(--label-secondary)" }} />;
     if (usernameStatus === "available") return <CheckCircle2 className="w-4 h-4" style={{ color: "#32D74B" }} />;
     if (usernameStatus === "taken") return <AlertCircle className="w-4 h-4" style={{ color: "#FF453A" }} />;
     return null;
   };
 
   const pwBorderColor =
-    confirmPassword && password !== confirmPassword
-      ? "#FF453A"
-      : confirmPassword && password === confirmPassword
-      ? "#32D74B"
-      : undefined;
+    confirmPassword && password !== confirmPassword ? "#FF453A" :
+    confirmPassword && password === confirmPassword ? "#32D74B" : undefined;
 
   const usernameBorderColor =
     usernameStatus === "available" ? "#32D74B" :
@@ -151,9 +140,9 @@ function Step1({ onNext }: Step1Props) {
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
       {/* Username */}
       <div>
-        <label className="block text-[13px] font-medium mb-2" style={{ color: "#8E8E93" }}>Username</label>
+        <label className="block text-[13px] font-medium mb-2" style={{ color: "var(--label-secondary)" }}>Username</label>
         <div className="relative">
-          <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#48484A" }} />
+          <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--input-placeholder)" }} />
           <input
             type="text"
             value={username}
@@ -180,9 +169,9 @@ function Step1({ onNext }: Step1Props) {
 
       {/* Password */}
       <div>
-        <label className="block text-[13px] font-medium mb-2" style={{ color: "#8E8E93" }}>Password</label>
+        <label className="block text-[13px] font-medium mb-2" style={{ color: "var(--label-secondary)" }}>Password</label>
         <div className="relative">
-          <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#48484A" }} />
+          <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--input-placeholder)" }} />
           <input
             type={showPw ? "text" : "password"}
             value={password}
@@ -198,9 +187,9 @@ function Step1({ onNext }: Step1Props) {
             onClick={() => setShowPw((v) => !v)}
             aria-label={showPw ? "Hide password" : "Show password"}
             className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
-            style={{ color: "#48484A" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#8E8E93"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#48484A"; }}
+            style={{ color: "var(--input-placeholder)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--label-secondary)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--input-placeholder)"; }}
           >
             {showPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
@@ -210,9 +199,9 @@ function Step1({ onNext }: Step1Props) {
 
       {/* Confirm password */}
       <div>
-        <label className="block text-[13px] font-medium mb-2" style={{ color: "#8E8E93" }}>Confirm Password</label>
+        <label className="block text-[13px] font-medium mb-2" style={{ color: "var(--label-secondary)" }}>Confirm Password</label>
         <div className="relative">
-          <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "#48484A" }} />
+          <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: "var(--input-placeholder)" }} />
           <input
             type={showCpw ? "text" : "password"}
             value={confirmPassword}
@@ -229,9 +218,9 @@ function Step1({ onNext }: Step1Props) {
             onClick={() => setShowCpw((v) => !v)}
             aria-label={showCpw ? "Hide password" : "Show password"}
             className="absolute right-3.5 top-1/2 -translate-y-1/2 transition-colors"
-            style={{ color: "#48484A" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#8E8E93"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#48484A"; }}
+            style={{ color: "var(--input-placeholder)" }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--label-secondary)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "var(--input-placeholder)"; }}
           >
             {showCpw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
           </button>
@@ -271,9 +260,7 @@ function Step1({ onNext }: Step1Props) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Step 2 — OTP verification
-// ---------------------------------------------------------------------------
+// ── Step 2 — OTP verification ─────────────────────────────────────────────────
 
 interface Step2Props {
   userId: string;
@@ -338,14 +325,14 @@ function Step2({ userId, onNext }: Step2Props) {
 
   return (
     <div className="space-y-4">
-      <p className="text-[13px]" style={{ color: "#8E8E93" }}>
+      <p className="text-[13px]" style={{ color: "var(--label-secondary)" }}>
         Verify at least one contact method to secure your account.
       </p>
 
       {/* Contact type toggle */}
       <div
         className="flex rounded-xl p-1 gap-1"
-        style={{ background: "rgba(28,28,30,0.80)", border: "1px solid rgba(84,84,88,0.35)" }}
+        style={{ background: "var(--bg-elevated)", border: "1px solid var(--border-default)" }}
       >
         {(["email", "phone"] as const).map((t) => (
           <button
@@ -356,7 +343,7 @@ function Step2({ userId, onNext }: Step2Props) {
             style={
               contactType === t
                 ? { background: "#0A84FF", color: "#fff" }
-                : { color: "#8E8E93" }
+                : { color: "var(--label-secondary)" }
             }
           >
             {t === "email" ? <Mail className="w-4 h-4" /> : <Phone className="w-4 h-4" />}
@@ -367,7 +354,7 @@ function Step2({ userId, onNext }: Step2Props) {
 
       {/* Contact input */}
       <div>
-        <label className="block text-[13px] font-medium mb-2" style={{ color: "#8E8E93" }}>
+        <label className="block text-[13px] font-medium mb-2" style={{ color: "var(--label-secondary)" }}>
           {contactType === "email" ? "Email Address" : "Phone Number"}
         </label>
         <div className="flex gap-2">
@@ -385,7 +372,7 @@ function Step2({ userId, onNext }: Step2Props) {
             onClick={handleSendOtp}
             disabled={loading || cooldown > 0 || verified}
             className="px-4 py-2.5 rounded-xl text-[13px] font-medium transition-all flex items-center gap-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ background: "rgba(255,255,255,0.08)", color: "#8E8E93" }}
+            style={{ background: "var(--btn-secondary-bg)", color: "var(--btn-secondary-color)" }}
           >
             {loading && !otpSent ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -423,7 +410,7 @@ function Step2({ userId, onNext }: Step2Props) {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-4"
           >
-            <p className="text-[13px] text-center" style={{ color: "#8E8E93" }}>
+            <p className="text-[13px] text-center" style={{ color: "var(--label-secondary)" }}>
               Enter the 6-digit code sent to your {contactType}
             </p>
             <OtpInput value={otp} onChange={setOtp} disabled={loading || verified} />
@@ -473,9 +460,7 @@ function Step2({ userId, onNext }: Step2Props) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Step 3 — completion / auto-login
-// ---------------------------------------------------------------------------
+// ── Step 3 — completion / auto-login ─────────────────────────────────────────
 
 interface Step3Props {
   userId: string;
@@ -523,8 +508,8 @@ function Step3({ userId, username, password }: Step3Props) {
         <CheckCircle2 className="w-10 h-10" style={{ color: "#32D74B" }} />
       </motion.div>
       <div>
-        <h2 className="text-[22px] font-bold text-white mb-2">Account Created!</h2>
-        <p className="text-[13px]" style={{ color: "#8E8E93" }}>
+        <h2 className="text-[22px] font-bold mb-2" style={{ color: "var(--label-primary)" }}>Account Created!</h2>
+        <p className="text-[13px]" style={{ color: "var(--label-secondary)" }}>
           Welcome to Anatom-AI,{" "}
           <span style={{ color: "#0A84FF" }} className="font-medium">{username}</span>.
           <br />
@@ -538,9 +523,7 @@ function Step3({ userId, username, password }: Step3Props) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Main signup page
-// ---------------------------------------------------------------------------
+// ── Main signup page ──────────────────────────────────────────────────────────
 
 export default function SignupPage() {
   const router = useRouter();
@@ -564,7 +547,7 @@ export default function SignupPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4"
-      style={{ background: "#000000" }}
+      style={{ background: "var(--bg-base)" }}
     >
       {/* Subtle top ambient glow */}
       <div
@@ -588,7 +571,7 @@ export default function SignupPage() {
           >
             <Brain className="w-5 h-5" style={{ color: "#0A84FF" }} />
           </div>
-          <span className="text-[22px] font-bold tracking-tight text-white">
+          <span className="text-[22px] font-bold tracking-tight" style={{ color: "var(--label-primary)" }}>
             Anatom<span style={{ color: "#0A84FF" }}>-AI</span>
           </span>
         </div>
@@ -597,19 +580,19 @@ export default function SignupPage() {
         <div
           className="rounded-2xl p-8"
           style={{
-            background: "#111113",
-            border: "1px solid rgba(84,84,88,0.35)",
-            boxShadow: "0 8px 40px rgba(0,0,0,0.70)",
+            background: "var(--bg-card)",
+            border: "1px solid var(--border-default)",
+            boxShadow: "var(--glass-shadow-lg)",
           }}
         >
           <StepBar current={step} />
 
           {step === 1 && (
             <>
-              <h1 className="text-[24px] font-bold text-white tracking-tight mb-1" style={{ letterSpacing: "-0.025em" }}>
+              <h1 className="text-[24px] font-bold tracking-tight mb-1" style={{ letterSpacing: "-0.025em", color: "var(--label-primary)" }}>
                 Create your account
               </h1>
-              <p className="text-[13px] mb-6" style={{ color: "#8E8E93" }}>
+              <p className="text-[13px] mb-6" style={{ color: "var(--label-secondary)" }}>
                 Choose a username and a strong password
               </p>
             </>
@@ -617,10 +600,10 @@ export default function SignupPage() {
 
           {step === 2 && (
             <>
-              <h1 className="text-[24px] font-bold text-white tracking-tight mb-1" style={{ letterSpacing: "-0.025em" }}>
+              <h1 className="text-[24px] font-bold tracking-tight mb-1" style={{ letterSpacing: "-0.025em", color: "var(--label-primary)" }}>
                 Verify your identity
               </h1>
-              <p className="text-[13px] mb-6" style={{ color: "#8E8E93" }}>
+              <p className="text-[13px] mb-6" style={{ color: "var(--label-secondary)" }}>
                 Secure your account with email or phone verification
               </p>
             </>
@@ -644,9 +627,9 @@ export default function SignupPage() {
             <>
               {/* Divider */}
               <div className="flex items-center gap-3 my-6">
-                <div className="flex-1 h-px" style={{ background: "rgba(84,84,88,0.30)" }} />
-                <span className="text-[11px] font-mono" style={{ color: "#48484A" }}>OR</span>
-                <div className="flex-1 h-px" style={{ background: "rgba(84,84,88,0.30)" }} />
+                <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
+                <span className="text-[11px] font-mono" style={{ color: "var(--nav-group-label)" }}>OR</span>
+                <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
               </div>
 
               {/* DEV BYPASS */}
@@ -655,17 +638,17 @@ export default function SignupPage() {
                 onClick={() => devSkip(router)}
                 className="w-full py-2.5 rounded-xl text-[13px] font-medium mb-5 transition-all"
                 style={{
-                  background: "rgba(84,84,88,0.14)",
-                  border: "1px solid rgba(84,84,88,0.30)",
-                  color: "#8E8E93",
+                  background: "var(--bg-hover)",
+                  border: "1px solid var(--border-default)",
+                  color: "var(--label-secondary)",
                 }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(84,84,88,0.22)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(84,84,88,0.14)"; }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-active)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-hover)"; }}
               >
                 Skip — Continue as Guest (Dev)
               </button>
 
-              <p className="text-center text-[13px]" style={{ color: "#8E8E93" }}>
+              <p className="text-center text-[13px]" style={{ color: "var(--label-secondary)" }}>
                 Already have an account?{" "}
                 <Link href="/login" className="font-semibold transition-colors" style={{ color: "#0A84FF" }}>
                   Sign in
@@ -675,7 +658,7 @@ export default function SignupPage() {
           )}
         </div>
 
-        <p className="mt-6 text-center text-[11px] font-mono" style={{ color: "#48484A" }}>
+        <p className="mt-6 text-center text-[11px] font-mono" style={{ color: "var(--nav-group-label)" }}>
           AES-256 encrypted · HIPAA-aligned
         </p>
       </motion.div>

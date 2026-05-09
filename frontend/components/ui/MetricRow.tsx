@@ -39,7 +39,7 @@ export function MetricRow({
           {value}
         </span>
         {unit && (
-          <span className="text-xs text-slate-500 font-mono">{unit}</span>
+          <span className="text-xs font-mono" style={{ color: "var(--label-secondary)" }}>{unit}</span>
         )}
       </div>
     </div>

@@ -24,10 +24,10 @@ export default function MedicationCard({ medication, adherence, todayStatus, onL
       style={{ background: "rgba(13,22,39,0.8)", border: "1px solid rgba(0,212,255,0.12)" }}>
       <div className="flex justify-between items-start">
         <div>
-          <h4 className="text-sm font-semibold text-white">{medication.name}</h4>
-          <p className="text-xs text-gray-400 mt-0.5">{medication.dosage} · {FREQ_LABEL[medication.frequency]}</p>
+          <h4 className="text-sm font-semibold" style={{ color: "var(--label-primary)" }}>{medication.name}</h4>
+          <p className="text-xs mt-0.5" style={{ color: "var(--label-secondary)" }}>{medication.dosage} · {FREQ_LABEL[medication.frequency]}</p>
           {medication.end_date && (
-            <p className="text-xs text-gray-500 mt-0.5">Until {medication.end_date}</p>
+            <p className="text-xs mt-0.5" style={{ color: "var(--label-tertiary)" }}>Until {medication.end_date}</p>
           )}
         </div>
         <WeeklyScoreRing score={pct} size="sm" label={`${pct}%`} />
@@ -37,15 +37,15 @@ export default function MedicationCard({ medication, adherence, todayStatus, onL
         <div className="grid grid-cols-3 gap-2 text-center">
           <div className="rounded-lg py-2" style={{ background: "rgba(0,255,136,0.08)" }}>
             <p className="text-sm font-bold text-green-400">{adherence.taken}</p>
-            <p className="text-xs text-gray-500">Taken</p>
+            <p className="text-xs" style={{ color: "var(--label-tertiary)" }}>Taken</p>
           </div>
           <div className="rounded-lg py-2" style={{ background: "rgba(255,59,59,0.08)" }}>
             <p className="text-sm font-bold text-red-400">{adherence.missed}</p>
-            <p className="text-xs text-gray-500">Missed</p>
+            <p className="text-xs" style={{ color: "var(--label-tertiary)" }}>Missed</p>
           </div>
           <div className="rounded-lg py-2" style={{ background: "rgba(0,212,255,0.08)" }}>
             <p className="text-sm font-bold text-cyan-400">{adherence.total_doses}</p>
-            <p className="text-xs text-gray-500">Total</p>
+            <p className="text-xs" style={{ color: "var(--label-tertiary)" }}>Total</p>
           </div>
         </div>
       )}
@@ -73,7 +73,7 @@ export default function MedicationCard({ medication, adherence, todayStatus, onL
         </button>
         <button onClick={() => onDeactivate(medication.id)}
           className="flex items-center justify-center px-3 py-2 rounded-xl"
-          style={{ background: "rgba(255,255,255,0.04)", color: "#8899AA" }}
+          style={{ background: "var(--bg-elevated)", color: "var(--label-secondary)" }}
           title="Stop medication">
           <StopCircle size={13} />
         </button>

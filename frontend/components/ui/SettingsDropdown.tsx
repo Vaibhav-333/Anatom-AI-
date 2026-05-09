@@ -23,14 +23,17 @@ type SystemStatus = "online" | "offline" | null;
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="px-3 pt-3 pb-1 text-[10px] font-semibold tracking-widest uppercase text-slate-500">
+    <p
+      className="px-3 pt-3 pb-1 text-[10px] font-semibold tracking-widest uppercase"
+      style={{ color: "var(--label-tertiary)" }}
+    >
       {children}
     </p>
   );
 }
 
 function Divider() {
-  return <div className="my-1 border-t border-glass-border" />;
+  return <div className="my-1" style={{ borderTop: "1px solid var(--border-subtle)" }} />;
 }
 
 function MenuItem({
@@ -54,11 +57,30 @@ function MenuItem({
       disabled={disabled}
       className={cn(
         "w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors duration-150",
-        danger
-          ? "text-red-400 hover:bg-red-400/10 hover:text-red-300"
-          : "text-slate-300 hover:bg-white/5 hover:text-slate-100",
         disabled && "opacity-40 cursor-not-allowed"
       )}
+      style={
+        danger
+          ? { color: "#FF453A" }
+          : { color: "var(--label-secondary)" }
+      }
+      onMouseOver={(e) => {
+        if (!disabled) {
+          if (danger) {
+            (e.currentTarget as HTMLElement).style.background = "rgba(255,69,58,0.10)";
+            (e.currentTarget as HTMLElement).style.color = "#FF453A";
+          } else {
+            (e.currentTarget as HTMLElement).style.background = "var(--bg-hover)";
+            (e.currentTarget as HTMLElement).style.color = "var(--label-primary)";
+          }
+        }
+      }}
+      onMouseOut={(e) => {
+        if (!disabled) {
+          (e.currentTarget as HTMLElement).style.background = "";
+          (e.currentTarget as HTMLElement).style.color = danger ? "#FF453A" : "var(--label-secondary)";
+        }
+      }}
     >
       <Icon className="w-4 h-4 shrink-0 opacity-70" />
       <span className="flex-1 text-left">{label}</span>
@@ -90,7 +112,6 @@ export function SettingsDropdown() {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  // Close on outside click
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
@@ -102,7 +123,6 @@ export function SettingsDropdown() {
     return () => document.removeEventListener("mousedown", handler);
   }, [open]);
 
-  // Fetch system status when dropdown opens
   useEffect(() => {
     if (!open) return;
     fetch("/api/health")
@@ -128,12 +148,14 @@ export function SettingsDropdown() {
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label="Settings"
-        className={cn(
-          "p-2 rounded-lg transition-colors",
+        className="p-2 rounded-lg transition-colors"
+        style={
           open
-            ? "text-cyan bg-cyan/10"
-            : "text-slate-500 hover:text-slate-300 hover:bg-navy-600/60"
-        )}
+            ? { color: "var(--accent-blue)", background: "rgba(10,132,255,0.12)" }
+            : { color: "var(--label-tertiary)" }
+        }
+        onMouseOver={(e) => { if (!open) { (e.currentTarget as HTMLElement).style.color = "var(--label-secondary)"; (e.currentTarget as HTMLElement).style.background = "var(--bg-hover)"; } }}
+        onMouseOut={(e) => { if (!open) { (e.currentTarget as HTMLElement).style.color = "var(--label-tertiary)"; (e.currentTarget as HTMLElement).style.background = ""; } }}
       >
         <Settings className={cn("w-4 h-4 transition-transform duration-300", open && "rotate-45")} />
       </button>
@@ -141,12 +163,12 @@ export function SettingsDropdown() {
       {/* Dropdown panel */}
       {open && (
         <div
-          className={cn(
-            "absolute right-0 top-full mt-2 w-64 z-50",
-            "bg-navy-800/95 backdrop-blur-xl",
-            "border border-glass-border rounded-xl shadow-2xl shadow-black/40",
-            "animate-in fade-in slide-in-from-top-2 duration-150"
-          )}
+          className="absolute right-0 top-full mt-2 w-64 z-50 rounded-xl"
+          style={{
+            background: "var(--glass-bg)",
+            border: "1px solid var(--border-default)",
+            boxShadow: "var(--glass-shadow-lg)",
+          }}
         >
           {/* USER */}
           <SectionLabel>User</SectionLabel>
@@ -174,12 +196,21 @@ export function SettingsDropdown() {
                 <button
                   key={value}
                   onClick={() => setTheme(value)}
-                  className={cn(
-                    "flex-1 flex flex-col items-center gap-1 py-1.5 rounded-lg text-xs transition-all duration-150",
+                  className="flex-1 flex flex-col items-center gap-1 py-1.5 rounded-lg text-xs transition-all duration-150"
+                  style={
                     theme === value
-                      ? "bg-cyan/15 text-cyan border border-cyan/30"
-                      : "text-slate-500 hover:text-slate-300 hover:bg-white/5 border border-transparent"
-                  )}
+                      ? {
+                          background: "rgba(10,132,255,0.15)",
+                          color: "var(--accent-blue)",
+                          border: "1px solid rgba(10,132,255,0.30)",
+                        }
+                      : {
+                          color: "var(--label-tertiary)",
+                          border: "1px solid transparent",
+                        }
+                  }
+                  onMouseOver={(e) => { if (theme !== value) { (e.currentTarget as HTMLElement).style.background = "var(--bg-hover)"; (e.currentTarget as HTMLElement).style.color = "var(--label-secondary)"; } }}
+                  onMouseOut={(e) => { if (theme !== value) { (e.currentTarget as HTMLElement).style.background = ""; (e.currentTarget as HTMLElement).style.color = "var(--label-tertiary)"; } }}
                 >
                   <Icon className="w-3.5 h-3.5" />
                   {label}
@@ -207,11 +238,12 @@ export function SettingsDropdown() {
             ].map((sys) => (
               <div
                 key={sys.label}
-                className="flex items-center justify-between py-1.5 border-b border-glass-border last:border-0"
+                className="flex items-center justify-between py-1.5 last:border-0"
+                style={{ borderBottom: "1px solid var(--border-subtle)" }}
               >
                 <div>
-                  <p className="text-xs text-slate-300">{sys.label}</p>
-                  <p className="text-[10px] text-slate-600 font-mono">{sys.detail}</p>
+                  <p className="text-xs" style={{ color: "var(--label-secondary)" }}>{sys.label}</p>
+                  <p className="text-[10px] font-mono" style={{ color: "var(--label-tertiary)" }}>{sys.detail}</p>
                 </div>
                 <StatusBadge status={sys.status} />
               </div>
@@ -229,10 +261,12 @@ export function SettingsDropdown() {
               onClick={toggleNotifications}
               rightEl={
                 <span
-                  className={cn(
-                    "text-[10px] font-mono px-1.5 py-0.5 rounded",
-                    notifications ? "bg-cyan/15 text-cyan" : "bg-slate-700 text-slate-500"
-                  )}
+                  className="text-[10px] font-mono px-1.5 py-0.5 rounded"
+                  style={
+                    notifications
+                      ? { background: "rgba(10,132,255,0.15)", color: "var(--accent-blue)" }
+                      : { background: "var(--bg-elevated)", color: "var(--label-tertiary)" }
+                  }
                 >
                   {notifications ? "ON" : "OFF"}
                 </span>
@@ -243,7 +277,7 @@ export function SettingsDropdown() {
               label="Language"
               disabled
               rightEl={
-                <span className="flex items-center gap-1 text-[10px] text-slate-600">
+                <span className="flex items-center gap-1 text-[10px]" style={{ color: "var(--label-tertiary)" }}>
                   EN <ChevronRight className="w-3 h-3" />
                 </span>
               }

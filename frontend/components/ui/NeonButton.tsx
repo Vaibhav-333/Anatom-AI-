@@ -36,10 +36,9 @@ const variantStyles: Record<string, string> = {
   ].join(" "),
 
   ghost: [
-    "text-[#8E8E93]",
-    "bg-[rgba(255,255,255,0.07)]",
-    "hover:bg-[rgba(255,255,255,0.12)]",
-    "hover:text-white",
+    "text-[color:var(--label-secondary)]",
+    "bg-[color:var(--btn-secondary-bg)]",
+    "hover:text-[color:var(--label-primary)]",
   ].join(" "),
 };
 

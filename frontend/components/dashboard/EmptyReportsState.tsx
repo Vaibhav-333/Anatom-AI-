@@ -18,7 +18,7 @@ export function EmptyReportsState() {
         transition={{ duration: 0.5 }}
         className="relative w-full max-w-[260px] h-[130px] rounded-2xl overflow-hidden mb-6 group"
         style={{
-          boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+          boxShadow: "var(--glass-shadow-lg)",
         }}
       >
         {/* Photo */}
@@ -44,7 +44,7 @@ export function EmptyReportsState() {
         {/* Static border */}
         <div
           className="absolute inset-0 rounded-2xl"
-          style={{ border: "1px solid rgba(84,84,88,0.3)" }}
+          style={{ border: "1px solid var(--border-default)" }}
         />
 
         {/* Floating badge */}
@@ -52,22 +52,22 @@ export function EmptyReportsState() {
           className="absolute top-3 left-3 flex items-center gap-1.5 px-2 py-1 rounded-full backdrop-blur-sm"
           style={{
             background: "rgba(0,0,0,0.60)",
-            border: "1px solid rgba(84,84,88,0.3)",
+            border: "1px solid var(--border-default)",
           }}
         >
           <span
             className="w-1.5 h-1.5 rounded-full animate-pulse"
             style={{ background: "rgba(10,132,255,0.7)" }}
           />
-          <span className="text-[10px] font-mono" style={{ color: "#8E8E93" }}>AI-Ready</span>
+          <span className="text-[10px] font-mono" style={{ color: "var(--label-secondary)" }}>AI-Ready</span>
         </div>
 
         {/* Bottom label */}
         <div className="absolute bottom-3 left-3 right-3">
-          <p className="text-xs font-medium" style={{ color: "#FFFFFF" }}>
+          <p className="text-xs font-medium" style={{ color: "var(--label-primary)" }}>
             Upload a report to begin
           </p>
-          <p className="text-[10px] font-mono mt-0.5" style={{ color: "#8E8E93" }}>
+          <p className="text-[10px] font-mono mt-0.5" style={{ color: "var(--label-secondary)" }}>
             MRI · X-Ray · Blood Panel · CT
           </p>
         </div>
@@ -79,10 +79,10 @@ export function EmptyReportsState() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.15 }}
       >
-        <h3 className="font-semibold text-base mb-1.5" style={{ color: "#FFFFFF" }}>
+        <h3 className="font-semibold text-base mb-1.5" style={{ color: "var(--label-primary)" }}>
           No reports yet
         </h3>
-        <p className="text-sm max-w-[260px] leading-relaxed mb-5" style={{ color: "#8E8E93" }}>
+        <p className="text-sm max-w-[260px] leading-relaxed mb-5" style={{ color: "var(--label-secondary)" }}>
           Start by uploading your first medical report to unlock AI-powered insights,
           3D visualization, and a personalized care plan.
         </p>
@@ -103,9 +103,9 @@ export function EmptyReportsState() {
         <Link
           href="/profile"
           className="flex items-center gap-1 text-xs transition-colors"
-          style={{ color: "#8E8E93" }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#FFFFFF"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "#8E8E93"; }}
+          style={{ color: "var(--label-secondary)" }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--label-primary)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--label-secondary)"; }}
         >
           Set up profile
           <ArrowRight className="w-3 h-3" />
@@ -123,10 +123,10 @@ export function EmptyReportsState() {
           <div
             key={f}
             className="flex items-center gap-1 px-2.5 py-1 rounded-full"
-            style={{ background: "rgba(255,255,255,0.06)" }}
+            style={{ background: "var(--bg-elevated)" }}
           >
-            <Sparkles className="w-2.5 h-2.5" style={{ color: "#636366" }} />
-            <span className="text-[10px] font-mono" style={{ color: "#8E8E93" }}>{f}</span>
+            <Sparkles className="w-2.5 h-2.5" style={{ color: "var(--label-tertiary)" }} />
+            <span className="text-[10px] font-mono" style={{ color: "var(--label-secondary)" }}>{f}</span>
           </div>
         ))}
       </motion.div>

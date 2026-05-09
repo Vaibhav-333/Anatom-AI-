@@ -51,12 +51,12 @@ export function RecentActivityCard({ activities }: RecentActivityCardProps) {
         <div className="flex-1 flex flex-col items-center justify-center py-6 text-center">
           <div
             className="w-10 h-10 rounded-full flex items-center justify-center mb-3"
-            style={{ background: "rgba(255,255,255,0.06)" }}
+            style={{ background: "var(--bg-elevated)" }}
           >
-            <CheckCircle2 className="w-5 h-5" style={{ color: "#636366" }} />
+            <CheckCircle2 className="w-5 h-5" style={{ color: "var(--label-tertiary)" }} />
           </div>
-          <p className="text-sm" style={{ color: "#8E8E93" }}>No activity yet</p>
-          <p className="text-[10px] font-mono mt-1" style={{ color: "#636366" }}>
+          <p className="text-sm" style={{ color: "var(--label-secondary)" }}>No activity yet</p>
+          <p className="text-[10px] font-mono mt-1" style={{ color: "var(--label-tertiary)" }}>
             events appear after your first upload
           </p>
         </div>
@@ -65,7 +65,7 @@ export function RecentActivityCard({ activities }: RecentActivityCardProps) {
           {/* Vertical connector line */}
           <div
             className="absolute left-[13px] top-6 bottom-6 w-px"
-            style={{ background: "rgba(84,84,88,0.35)" }}
+            style={{ background: "var(--border-default)" }}
           />
 
           {activities.map((item) => {
@@ -76,7 +76,7 @@ export function RecentActivityCard({ activities }: RecentActivityCardProps) {
                 key={item.id}
                 className="flex gap-3 items-start px-1 py-2 rounded-lg transition-colors"
                 style={{ cursor: "default" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.02)"; }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.background = "var(--bg-hover)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.background = "transparent"; }}
               >
                 <div
@@ -86,12 +86,12 @@ export function RecentActivityCard({ activities }: RecentActivityCardProps) {
                   <Icon className="w-3 h-3" style={{ color: cfg.color }} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium leading-snug truncate" style={{ color: "#FFFFFF" }}>
+                  <p className="text-sm font-medium leading-snug truncate" style={{ color: "var(--label-primary)" }}>
                     {item.title}
                   </p>
-                  <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "#8E8E93" }}>{item.subtitle}</p>
+                  <p className="text-[11px] mt-0.5 leading-snug" style={{ color: "var(--label-secondary)" }}>{item.subtitle}</p>
                 </div>
-                <span className="text-[10px] font-mono shrink-0 mt-0.5" style={{ color: "#636366" }}>
+                <span className="text-[10px] font-mono shrink-0 mt-0.5" style={{ color: "var(--label-tertiary)" }}>
                   {item.time}
                 </span>
               </div>

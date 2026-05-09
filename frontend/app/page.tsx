@@ -142,9 +142,9 @@ export default function DashboardPage() {
         <div
           className="relative rounded-2xl overflow-hidden"
           style={{
-            background: "#1C1C1E",
-            border: "1px solid rgba(255,255,255,0.08)",
-            boxShadow: "0 2px 16px rgba(0,0,0,0.45), inset 0 0.5px 0 rgba(255,255,255,0.07)",
+            background: "var(--glass-bg)",
+            border: "1px solid var(--border-default)",
+            boxShadow: "var(--glass-shadow)",
           }}
         >
           {/* Hero background image */}
@@ -162,7 +162,7 @@ export default function DashboardPage() {
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(90deg, rgba(28,28,30,0.75) 0%, rgba(28,28,30,0) 65%)",
+              background: "linear-gradient(90deg, var(--glass-bg) 0%, transparent 65%)",
             }}
           />
           {/* Bottom shimmer line */}
@@ -237,9 +237,7 @@ export default function DashboardPage() {
           <h2 className="section-title">Quick Actions</h2>
           <div
             className="flex-1 h-px"
-            style={{
-              background: "linear-gradient(to right, rgba(255,255,255,0.08), transparent)",
-            }}
+            style={{ background: "var(--border-subtle)" }}
           />
         </div>
 
@@ -253,25 +251,22 @@ export default function DashboardPage() {
                   whileTap={{ scale: 0.988 }}
                   className="relative flex items-start gap-4 overflow-hidden cursor-pointer group"
                   style={{
-                    background: "#1C1C1E",
-                    border: `1px solid rgba(255,255,255,0.08)`,
+                    background: "var(--glass-bg)",
+                    border: "1px solid var(--border-default)",
                     borderRadius: 16,
                     padding: "16px 18px",
-                    boxShadow: "0 2px 12px rgba(0,0,0,0.35), inset 0 0.5px 0 rgba(255,255,255,0.06)",
+                    boxShadow: "var(--glass-shadow)",
                     transition: "border-color 0.2s, box-shadow 0.2s, background 0.2s",
                   }}
                   onMouseEnter={(e) => {
                     const el = e.currentTarget as HTMLDivElement;
-                    el.style.borderColor = "rgba(84,84,88,0.35)";
-                    el.style.background = "#2C2C2E";
-                    el.style.boxShadow = `0 4px 20px rgba(0,0,0,0.45), inset 0 0.5px 0 rgba(255,255,255,0.07)`;
+                    el.style.background = "var(--card-hover-bg)";
+                    el.style.boxShadow = "var(--glass-shadow-lg)";
                   }}
                   onMouseLeave={(e) => {
                     const el = e.currentTarget as HTMLDivElement;
-                    el.style.borderColor = "rgba(255,255,255,0.08)";
-                    el.style.background = "#1C1C1E";
-
-                    el.style.boxShadow = "0 2px 12px rgba(0,0,0,0.35), inset 0 0.5px 0 rgba(255,255,255,0.06)";
+                    el.style.background = "var(--glass-bg)";
+                    el.style.boxShadow = "var(--glass-shadow)";
                   }}
                 >
                   {/* Per-card background image */}
@@ -290,7 +285,7 @@ export default function DashboardPage() {
                     className="absolute right-0 top-0 bottom-0 w-28 pointer-events-none"
                     style={{
                       background:
-                        "linear-gradient(to right, #1C1C1E 0%, rgba(28,28,30,0.6) 55%, rgba(28,28,30,0.12) 100%)",
+                        "linear-gradient(to right, var(--glass-bg) 0%, transparent 100%)",
                     }}
                   />
 
@@ -310,7 +305,7 @@ export default function DashboardPage() {
                     <p className="font-semibold text-[13px]" style={{ color: action.accent }}>
                       {action.title}
                     </p>
-                    <p className="text-[11.5px] mt-0.5 leading-snug" style={{ color: "#8E8E93" }}>
+                    <p className="text-[11.5px] mt-0.5 leading-snug" style={{ color: "var(--label-secondary)" }}>
                       {action.description}
                     </p>
                   </div>
@@ -318,7 +313,7 @@ export default function DashboardPage() {
                   {/* Arrow */}
                   <ArrowRight
                     className="relative z-10 w-4 h-4 shrink-0 mt-0.5 transition-all duration-200 group-hover:translate-x-0.5"
-                    style={{ color: "#636366" }}
+                    style={{ color: "var(--label-tertiary)" }}
                   />
                 </motion.div>
               </Link>
@@ -331,20 +326,15 @@ export default function DashboardPage() {
       <motion.div variants={itemAnim}>
         <div className="flex items-center gap-3 mb-4">
           <h2 className="section-title">Overview</h2>
-          <div
-            className="flex-1 h-px"
-            style={{
-              background: "linear-gradient(to right, rgba(255,255,255,0.08), transparent)",
-            }}
-          />
+          <div className="flex-1 h-px" style={{ background: "var(--border-subtle)" }} />
         </div>
 
         {/* Overview banner */}
         <div
           className="relative rounded-2xl overflow-hidden h-28 mb-4"
           style={{
-            background: "#1C1C1E",
-            border: "1px solid rgba(255,255,255,0.08)",
+            background: "var(--glass-bg)",
+            border: "1px solid var(--border-default)",
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -360,7 +350,7 @@ export default function DashboardPage() {
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(to right, rgba(28,28,30,0.92) 0%, rgba(28,28,30,0.55) 55%, rgba(28,28,30,0.18) 100%)",
+              background: "linear-gradient(to right, var(--glass-bg) 0%, transparent 65%)",
             }}
           />
           <div
@@ -377,10 +367,10 @@ export default function DashboardPage() {
               >
                 Health Overview
               </p>
-              <h3 className="text-white font-bold text-[15px] tracking-tight">
+              <h3 className="font-bold text-[15px] tracking-tight" style={{ color: "var(--label-primary)" }}>
                 Activity &amp; Recent Reports
               </h3>
-              <p className="text-[12.5px] mt-0.5" style={{ color: "#8E8E93" }}>
+              <p className="text-[12.5px] mt-0.5" style={{ color: "var(--label-secondary)" }}>
                 Your recent health activity and uploaded reports at a glance.
               </p>
             </div>
@@ -414,13 +404,11 @@ export default function DashboardPage() {
       <motion.div variants={itemAnim}>
         <div
           className="h-px w-full mb-4"
-          style={{
-            background: "linear-gradient(to right, transparent, rgba(255,255,255,0.07), transparent)",
-          }}
+          style={{ background: "var(--border-subtle)" }}
         />
         <p
           className="text-[10.5px] text-center font-mono leading-relaxed"
-          style={{ color: "#636366" }}
+          style={{ color: "var(--label-tertiary)" }}
         >
           ANATOM-AI is a wellness tool, not a regulated medical device. All AI outputs are for
           informational purposes only. Always consult a qualified healthcare professional.

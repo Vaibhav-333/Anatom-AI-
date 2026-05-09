@@ -23,7 +23,7 @@ interface Props {
 export default function SymptomTrendChart({ data, metrics, onMetricToggle }: Props) {
   if (!data.length) {
     return (
-      <div className="flex items-center justify-center h-48 text-gray-500 text-sm">
+      <div className="flex items-center justify-center h-48 text-sm" style={{ color: "var(--label-secondary)" }}>
         Not enough data to show trends yet. Keep logging!
       </div>
     );
@@ -38,8 +38,8 @@ export default function SymptomTrendChart({ data, metrics, onMetricToggle }: Pro
             <button key={m} onClick={() => onMetricToggle(m)}
               className="px-3 py-1 rounded-full text-xs font-medium transition-all"
               style={{
-                background: active ? `${METRIC_CONFIG[m].color}22` : "rgba(255,255,255,0.05)",
-                color: active ? METRIC_CONFIG[m].color : "#8899AA",
+                background: active ? `${METRIC_CONFIG[m].color}22` : "var(--bg-elevated)",
+                color: active ? METRIC_CONFIG[m].color : "var(--label-secondary)",
                 border: `1px solid ${active ? METRIC_CONFIG[m].color : "transparent"}`,
               }}>
               {METRIC_CONFIG[m].label}
@@ -50,7 +50,7 @@ export default function SymptomTrendChart({ data, metrics, onMetricToggle }: Pro
 
       <ResponsiveContainer width="100%" height={220}>
         <LineChart data={data} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
           <XAxis dataKey="date" tick={{ fill: "#8899AA", fontSize: 10 }}
             tickFormatter={(v: string) => v.substring(5)} />
           <YAxis tick={{ fill: "#8899AA", fontSize: 10 }} />
