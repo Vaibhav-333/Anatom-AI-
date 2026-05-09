@@ -7,14 +7,12 @@
 
 import { useAuthStore } from "@/lib/authStore";
 
-// In production (Vercel), NEXT_PUBLIC_API_URL is often not set.
-// Fall back to "/api" so every call is routed through the Next.js proxy
-// at app/api/[...path]/route.ts, which reads the server-side API_URL env var
-// at request time — no rebuild needed when the backend URL changes.
-const BASE =
-  process.env.NEXT_PUBLIC_API_URL && process.env.NEXT_PUBLIC_API_URL !== "http://localhost:8000"
-    ? process.env.NEXT_PUBLIC_API_URL
-    : "/api";
+// Always route through the Next.js proxy at /api so that:
+//   • There are ZERO browser↔Railway CORS issues (proxy is server-to-server)
+//   • The backend URL is read at request time from Railway env vars — no rebuild needed
+// The proxy lives at app/api/[...path]/route.ts and resolves the real backend URL
+// via API_URL (server-side) → NEXT_PUBLIC_API_URL → "http://localhost:8000".
+const BASE = "/api";
 
 // ---------------------------------------------------------------------------
 // Types

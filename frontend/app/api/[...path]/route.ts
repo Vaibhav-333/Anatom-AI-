@@ -26,7 +26,9 @@ function getBackendUrl(): string {
   return (
     process.env.API_URL ??
     process.env.NEXT_PUBLIC_API_URL ??
-    "http://localhost:8000"
+    // Production Railway backend — used automatically when no env var is set.
+    // Override with API_URL in Vercel env vars if the Railway URL ever changes.
+    "https://web-production-698ce.up.railway.app"
   );
 }
 
