@@ -8,6 +8,11 @@
       "main": true
     }
   },
+  "functions": {
+    "app/api/[...path]/route.ts": {
+      "maxDuration": 60
+    }
+  },
   "headers": [
     {
       "source": "/assets/:path*.glb",

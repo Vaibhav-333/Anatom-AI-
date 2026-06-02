@@ -16,6 +16,10 @@ import { NextRequest, NextResponse } from "next/server";
 // Node.js runtime — reliable body forwarding for POST/PUT/PATCH
 export const runtime = "nodejs";
 
+// Extend Vercel serverless function timeout to 60 s (Hobby plan max).
+// Gemini PDF analysis + Railway cold-start can easily exceed the default 10 s.
+export const maxDuration = 60;
+
 /** Read backend URL at request time — NOT baked at build time. */
 function getBackendUrl(): string {
   const raw =
@@ -70,14 +74,30 @@ async function proxy(
     }
   }
 
+  // Abort the upstream fetch 4 s before Vercel's hard function cutoff so we
+  // can return a friendly JSON error instead of a bare platform-level 504.
+  const controller = new AbortController();
+  const abortTimer = setTimeout(() => controller.abort(), 56_000); // 56 s
+
   let upstream: Response;
   try {
     upstream = await fetch(target, {
       method: req.method,
       headers: forwardHeaders,
       body: body,
+      signal: controller.signal,
     });
   } catch (err) {
+    clearTimeout(abortTimer);
+    if (err instanceof Error && err.name === "AbortError") {
+      return NextResponse.json(
+        {
+          detail:
+            "The AI analysis is taking longer than expected (the server may be waking up from sleep). Please wait 30 seconds and try again.",
+        },
+        { status: 504 }
+      );
+    }
     const message = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json(
       {
@@ -85,6 +105,8 @@ async function proxy(
       },
       { status: 503 }
     );
+  } finally {
+    clearTimeout(abortTimer);
   }
 
   // Forward the response
