@@ -34,12 +34,47 @@ import google.generativeai as genai
 from fastapi import HTTPException
 
 # ---------------------------------------------------------------------------
-# In-memory response cache (avoids re-calling Gemini for identical files)
-# Key: sha256(file_bytes) + mode  → Value: (result_dict, timestamp)
-# TTL: 24 hours (medical reports don't change between requests)
+# Persistent disk cache + in-memory layer
+#
+# Layout:  data/interpret_cache.json  →  {cache_key: result_dict}
+#
+# - On startup  : disk cache is loaded into memory automatically.
+# - On new hit  : result is written to disk immediately (atomic rename).
+# - No TTL on disk entries — pre-cached demo files stay valid forever so
+#   the app works without internet at interviews / demos.
 # ---------------------------------------------------------------------------
-_CACHE_TTL_SECONDS = 60 * 60 * 24        # 24 h
+
+_CACHE_TTL_SECONDS = 60 * 60 * 24 * 365  # 1 year effective TTL in memory
+_DISK_CACHE_PATH   = Path("data/interpret_cache.json")
+
+# in-memory layer: key → (result_dict, monotonic_timestamp)
 _response_cache: dict[str, tuple[dict, float]] = {}
+
+
+def _load_disk_cache() -> None:
+    """Load persisted results from disk into the in-memory cache on startup."""
+    if not _DISK_CACHE_PATH.exists():
+        return
+    try:
+        data: dict[str, dict] = json.loads(_DISK_CACHE_PATH.read_text(encoding="utf-8"))
+        now = time.monotonic()
+        for key, result in data.items():
+            _response_cache[key] = (result, now)
+        print(f"[cache] Loaded {len(data)} pre-cached result(s) from {_DISK_CACHE_PATH}")
+    except Exception as exc:
+        print(f"[cache] Could not load disk cache: {exc}")
+
+
+def _save_disk_cache() -> None:
+    """Atomically write the current in-memory cache to disk."""
+    try:
+        _DISK_CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        payload = {key: result for key, (result, _) in _response_cache.items()}
+        tmp = _DISK_CACHE_PATH.with_suffix(".tmp")
+        tmp.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        tmp.replace(_DISK_CACHE_PATH)  # atomic on all major OS
+    except Exception as exc:
+        print(f"[cache] Could not save disk cache: {exc}")
 
 
 def _cache_get(key: str) -> dict | None:
@@ -54,11 +89,16 @@ def _cache_get(key: str) -> dict | None:
 
 
 def _cache_set(key: str, result: dict) -> None:
-    # Keep cache bounded at 200 entries — evict oldest when full
+    # Keep memory cache bounded at 200 entries — evict oldest when full
     if len(_response_cache) >= 200:
         oldest_key = min(_response_cache, key=lambda k: _response_cache[k][1])
         del _response_cache[oldest_key]
     _response_cache[key] = (result, time.monotonic())
+    _save_disk_cache()   # persist every new result immediately
+
+
+# Load disk cache as soon as this module is imported
+_load_disk_cache()
 
 # ---------------------------------------------------------------------------
 # Prompts
