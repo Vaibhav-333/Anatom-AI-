@@ -57,16 +57,16 @@ async def cache_file(filepath: Path, mode: str) -> bool:
 
     # Already cached — skip Gemini call
     if _cache_get(cache_key) is not None:
-        print(f"  [SKIP]  {filepath.name}  ({mode}) — already in cache")
+        print(f"  [SKIP]  {filepath.name}  ({mode}) - already in cache")
         return True
 
-    print(f"  [CALL]  {filepath.name}  ({mode}) — calling Gemini…", end=" ", flush=True)
+    print(f"  [CALL]  {filepath.name}  ({mode}) - calling Gemini...", end=" ", flush=True)
     try:
         await interpret_document(file_bytes, mime, filepath.name, mode)  # type: ignore[arg-type]
-        print("✓ cached")
+        print("OK cached")
         return True
     except Exception as exc:
-        print(f"✗ FAILED: {exc}")
+        print(f"FAILED: {exc}")
         return False
 
 
@@ -110,8 +110,8 @@ async def main() -> None:
                 fail += 1
 
     from src.serving.ai_interpreter import _DISK_CACHE_PATH
-    print(f"\n{'─'*50}")
-    print(f"Done.  ✓ {ok} cached   ✗ {fail} failed")
+    print(f"\n{'-'*50}")
+    print(f"Done.  OK:{ok} cached   FAILED:{fail}")
     print(f"Cache saved to: {_DISK_CACHE_PATH.resolve()}")
     print("\nYou can now run the backend offline — these files will be served")
     print("instantly from disk without any internet connection.\n")
