@@ -4,8 +4,7 @@ import { Suspense, useRef, useState, useCallback, useEffect, useMemo } from "rea
 import type { Vector3 } from "three";
 import { Canvas, useThree } from "@react-three/fiber";
 import { Environment, ContactShadows, useGLTF } from "@react-three/drei";
-// EffectComposer/Bloom removed — post-processing on a full-viewport canvas is
-// expensive locally and the visual difference is negligible at 0.05 intensity.
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { ChevronDown } from "lucide-react";
 import { SkeletonModel } from "./SkeletonModel";
 import { CameraController } from "./CameraController";
@@ -224,9 +223,7 @@ export function BodyScene() {
         // "demand" only re-renders when state changes — ~60 % GPU savings
         // on static scenes.  Interactions (orbit, click) still trigger redraws.
         frameloop="demand"
-        // Cap DPR at 1.5 — locally reduces pixel count by ~44 % vs dpr=2
-        // with no visible quality difference at normal viewing distance.
-        dpr={[1, 1.5]}
+        dpr={[1, 2]}
         camera={{ position: [0, 2, 4], fov: 60, near: 0.001, far: 1000 }}
         gl={{
           antialias: true,
@@ -245,19 +242,17 @@ export function BodyScene() {
           intensity={0.80}
           color="#ffd090"
           castShadow
-          // 512 shadow map — 4× less GPU memory than 1024, imperceptible at this scale
-          shadow-mapSize-width={512}
-          shadow-mapSize-height={512}
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
           shadow-camera-near={0.1}
           shadow-camera-far={80}
           shadow-bias={-0.001}
         />
-        {/* Fill lights removed — 1 key light + ambient is sufficient and
-            halves the per-frame lighting cost */}
+        <directionalLight position={[-3, 3, 1]} intensity={0.08} color="#b0c8e8" />
+        <directionalLight position={[0, 4, -6]} intensity={0.12} color="#ffc870" />
 
         <Environment preset="apartment" />
-        {/* blur=1 halves shadow render passes vs blur=2; scale=4 tightens the area */}
-        <ContactShadows position={[0, 0, 0]} opacity={0.50} scale={4} blur={1} far={5} color="#0a0a0a" />
+        <ContactShadows position={[0, 0, 0]} opacity={0.55} scale={6} blur={2} far={5} color="#0a0a0a" />
 
         <Suspense fallback={null}>
           <SkeletonModel
@@ -288,7 +283,11 @@ export function BodyScene() {
 
         <CameraController />
 
-        {/* Bloom removed — adds a full post-process pass with negligible visual gain */}
+        {typeof window !== "undefined" && window.devicePixelRatio <= 2 && (
+          <EffectComposer multisampling={0}>
+            <Bloom intensity={0.05} luminanceThreshold={0.95} luminanceSmoothing={0.9} mipmapBlur />
+          </EffectComposer>
+        )}
       </Canvas>
 
       {/* Fade overlay */}

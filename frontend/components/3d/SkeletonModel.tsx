@@ -51,10 +51,9 @@ const SYSTEMS: Record<string, string[]> = {
 // ─────────────────────────────────────────────────────────────────────────────
 // DISEASE HIGHLIGHT — pulsing additive glow sphere around a selected organ
 // ─────────────────────────────────────────────────────────────────────────────
-// Static glow sphere — no useFrame, no continuous re-render.
-// Pulsing was removed because it forced a new frame every tick and defeated
-// frameloop="demand", causing constant GPU load even when the scene was idle.
 function OrganHighlight({ mesh, color }: { mesh: THREE.Mesh; color: string }) {
+  const ref = useRef<THREE.Mesh>(null);
+
   const { position, radius } = useMemo(() => {
     const pos = new THREE.Vector3();
     mesh.getWorldPosition(pos);
@@ -63,13 +62,18 @@ function OrganHighlight({ mesh, color }: { mesh: THREE.Mesh; color: string }) {
     return { position: pos, radius: r };
   }, [mesh]);
 
+  useFrame(({ clock }) => {
+    if (!ref.current) return;
+    ref.current.scale.setScalar(1 + Math.sin(clock.elapsedTime * 2) * 0.05);
+  });
+
   return (
-    <mesh position={position} raycast={() => null}>
-      <sphereGeometry args={[radius, 12, 12]} />
+    <mesh ref={ref} position={position} raycast={() => null}>
+      <sphereGeometry args={[radius, 32, 32]} />
       <meshBasicMaterial
         color={color}
         transparent
-        opacity={0.14}
+        opacity={0.12}
         blending={THREE.AdditiveBlending}
         depthWrite={false}
         side={THREE.FrontSide}
