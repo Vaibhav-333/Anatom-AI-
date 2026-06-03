@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Upload,
@@ -53,6 +53,26 @@ type FlowStep = "idle" | "uploading" | "initial_result" | "chatting" | "generati
 export default function UploadPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const addNotification = useNotificationStore((s) => s.addNotification);
+
+  // Backend warm-up state
+  // "warming" → ping in flight  |  "ready" → server responded  |  "error" → unreachable
+  const [backendStatus, setBackendStatus] = useState<"warming" | "ready" | "error">("warming");
+
+  // Silently ping /health on mount so Railway wakes up before the user clicks Analyze.
+  // No retry loop — one ping is enough to start the cold-start sequence.
+  useEffect(() => {
+    let cancelled = false;
+    async function wake() {
+      try {
+        const res = await fetch("/api/health", { method: "GET" });
+        if (!cancelled) setBackendStatus(res.ok ? "ready" : "error");
+      } catch {
+        if (!cancelled) setBackendStatus("error");
+      }
+    }
+    wake();
+    return () => { cancelled = true; };
+  }, []);
 
   // Upload state
   const [file, setFile] = useState<File | null>(null);
@@ -340,16 +360,31 @@ export default function UploadPage() {
               </AlertBox>
             )}
 
+            {/* Backend warm-up status badge */}
+            {backendStatus === "warming" && (
+              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-navy-700 border border-glass-border w-fit">
+                <Loader2 className="w-3.5 h-3.5 text-cyan animate-spin" />
+                <span className="text-xs text-slate-400">Waking up AI server… this takes ~20 s after inactivity</span>
+              </div>
+            )}
+
             {file && (
-              <div className="flex justify-end">
+              <div className="flex items-center justify-end gap-3">
+                {backendStatus === "warming" && (
+                  <span className="text-xs text-slate-500">Server is starting — please wait</span>
+                )}
                 <NeonButton
                   onClick={handleAnalyze}
                   loading={step === "uploading"}
-                  disabled={step === "uploading"}
+                  disabled={step === "uploading" || backendStatus === "warming"}
                   icon={<Sparkles className="w-4 h-4" />}
                   size="lg"
                 >
-                  {step === "uploading" ? "Analyzing…" : "Analyze with AI"}
+                  {step === "uploading"
+                    ? "Analyzing…"
+                    : backendStatus === "warming"
+                    ? "Waiting for server…"
+                    : "Analyze with AI"}
                 </NeonButton>
               </div>
             )}
