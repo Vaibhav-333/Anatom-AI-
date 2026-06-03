@@ -51,9 +51,10 @@ const SYSTEMS: Record<string, string[]> = {
 // ─────────────────────────────────────────────────────────────────────────────
 // DISEASE HIGHLIGHT — pulsing additive glow sphere around a selected organ
 // ─────────────────────────────────────────────────────────────────────────────
+// Static glow sphere — no useFrame, no continuous re-render.
+// Pulsing was removed because it forced a new frame every tick and defeated
+// frameloop="demand", causing constant GPU load even when the scene was idle.
 function OrganHighlight({ mesh, color }: { mesh: THREE.Mesh; color: string }) {
-  const ref = useRef<THREE.Mesh>(null);
-
   const { position, radius } = useMemo(() => {
     const pos = new THREE.Vector3();
     mesh.getWorldPosition(pos);
@@ -62,18 +63,13 @@ function OrganHighlight({ mesh, color }: { mesh: THREE.Mesh; color: string }) {
     return { position: pos, radius: r };
   }, [mesh]);
 
-  useFrame(({ clock }) => {
-    if (!ref.current) return;
-    ref.current.scale.setScalar(1 + Math.sin(clock.elapsedTime * 2) * 0.05);
-  });
-
   return (
-    <mesh ref={ref} position={position} raycast={() => null}>
-      <sphereGeometry args={[radius, 32, 32]} />
+    <mesh position={position} raycast={() => null}>
+      <sphereGeometry args={[radius, 12, 12]} />
       <meshBasicMaterial
         color={color}
         transparent
-        opacity={0.12}
+        opacity={0.14}
         blending={THREE.AdditiveBlending}
         depthWrite={false}
         side={THREE.FrontSide}
@@ -466,14 +462,23 @@ export function SkeletonModel({
   // animFrames hard-stop (150 frames ≈ 2.5 s) guarantees controls always
   // unlock even in degenerate cases.
   useFrame(() => {
-    // ── Body shift for cinematic organ extraction ─────────────────────────────
-    // Runs every frame regardless of camera animation state.
+    // ── Body shift — snap to target once close enough so this stops mutating ──
+    // Without the epsilon check the exponential decay never fully reaches the
+    // target, causing a tiny position.x mutation every frame that defeats
+    // frameloop="demand" and pegs the GPU at 60 fps even when the scene is idle.
+    let bodyMoving = false;
     if (groupRef.current) {
       const targetX = bodyShiftActiveRef.current ? -0.6 : 0;
-      groupRef.current.position.x += (targetX - groupRef.current.position.x) * 0.06;
+      const delta   = targetX - groupRef.current.position.x;
+      if (Math.abs(delta) > 0.0008) {
+        groupRef.current.position.x += delta * 0.06;
+        bodyMoving = true;
+      } else {
+        groupRef.current.position.x = targetX; // snap — stops the mutation loop
+      }
     }
 
-    if (!isAnimating.current) return;
+    if (!isAnimating.current && !bodyMoving) return;
 
     const ctrl = controls as unknown as OrbCtrl | null;
     const SPEED = 0.07;
