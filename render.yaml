@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: anatomai-backend
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+
+    # Environment variables — fill these in on the Render dashboard
+    # (Settings → Environment) after the first deploy.
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false          # set manually in dashboard — never commit the real key
+
+      - key: JWT_SECRET_KEY
+        generateValue: true  # Render auto-generates a secure random value
+
+      - key: JWT_ALGORITHM
+        value: HS256
+
+      - key: JWT_ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "30"
+
+      - key: JWT_REFRESH_TOKEN_EXPIRE_DAYS
+        value: "7"
+
+      # Add your Vercel URL here so CORS works
+      - key: ALLOWED_ORIGINS
+        value: "https://anatom-ai-5kyj.vercel.app,http://localhost:3000"
+
+      - key: ENVIRONMENT
+        value: production
+
+      - key: DATABASE_PATH
+        value: data/anatom_ai.db
+
+      - key: EMBED_DIR
+        value: data/embeddings
